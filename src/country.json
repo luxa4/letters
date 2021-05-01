@@ -1,0 +1,1752 @@
+[
+  {
+    "country": "Австралия",
+    "code": "AU",
+    "code2": "AUS",
+    "code3": "036",
+    "code4": "ISO 3166-2:AU"
+  },
+  {
+    "country": "Австрия",
+    "code": "AT",
+    "code2": "AUT",
+    "code3": "040",
+    "code4": "ISO 3166-2:AT"
+  },
+  {
+    "country": "Азербайджан",
+    "code": "AZ",
+    "code2": "AZE",
+    "code3": "031",
+    "code4": "ISO 3166-2:AZ"
+  },
+  {
+    "country": "Аландские острова",
+    "code": "AX",
+    "code2": "ALA",
+    "code3": 248,
+    "code4": "ISO 3166-2:AX"
+  },
+  {
+    "country": "Албания",
+    "code": "AL",
+    "code2": "ALB",
+    "code3": "008",
+    "code4": "ISO 3166-2:AL"
+  },
+  {
+    "country": "Алжир",
+    "code": "DZ",
+    "code2": "DZA",
+    "code3": "012",
+    "code4": "ISO 3166-2:DZ"
+  },
+  {
+    "country": "Виргинские Острова (США)",
+    "code": "VI",
+    "code2": "VIR",
+    "code3": 850,
+    "code4": "ISO 3166-2:VI"
+  },
+  {
+    "country": "Американское Самоа",
+    "code": "AS",
+    "code2": "ASM",
+    "code3": "016",
+    "code4": "ISO 3166-2:AS"
+  },
+  {
+    "country": "Ангилья",
+    "code": "AI",
+    "code2": "AIA",
+    "code3": 660,
+    "code4": "ISO 3166-2:AI"
+  },
+  {
+    "country": "Ангола",
+    "code": "AO",
+    "code2": "AGO",
+    "code3": "024",
+    "code4": "ISO 3166-2:AO"
+  },
+  {
+    "country": "Андорра",
+    "code": "AD",
+    "code2": "AND",
+    "code3": "020",
+    "code4": "ISO 3166-2:AD"
+  },
+  {
+    "country": "Антарктика",
+    "code": "AQ",
+    "code2": "ATA",
+    "code3": "010",
+    "code4": "ISO 3166-2:AQ"
+  },
+  {
+    "country": "Антигуа и Барбуда",
+    "code": "AG",
+    "code2": "ATG",
+    "code3": "028",
+    "code4": "ISO 3166-2:AG"
+  },
+  {
+    "country": "Аргентина",
+    "code": "AR",
+    "code2": "ARG",
+    "code3": "032",
+    "code4": "ISO 3166-2:AR"
+  },
+  {
+    "country": "Армения",
+    "code": "AM",
+    "code2": "ARM",
+    "code3": "051",
+    "code4": "ISO 3166-2:AM"
+  },
+  {
+    "country": "Аруба",
+    "code": "AW",
+    "code2": "ABW",
+    "code3": 533,
+    "code4": "ISO 3166-2:AW"
+  },
+  {
+    "country": "Афганистан",
+    "code": "AF",
+    "code2": "AFG",
+    "code3": "004",
+    "code4": "ISO 3166-2:AF"
+  },
+  {
+    "country": "Багамские Острова",
+    "code": "BS",
+    "code2": "BHS",
+    "code3": "044",
+    "code4": "ISO 3166-2:BS"
+  },
+  {
+    "country": "Бангладеш",
+    "code": "BD",
+    "code2": "BGD",
+    "code3": "050",
+    "code4": "ISO 3166-2:BD"
+  },
+  {
+    "country": "Барбадос",
+    "code": "BB",
+    "code2": "BRB",
+    "code3": "052",
+    "code4": "ISO 3166-2:BB"
+  },
+  {
+    "country": "Бахрейн",
+    "code": "BH",
+    "code2": "BHR",
+    "code3": "048",
+    "code4": "ISO 3166-2:BH"
+  },
+  {
+    "country": "Белиз",
+    "code": "BZ",
+    "code2": "BLZ",
+    "code3": "084",
+    "code4": "ISO 3166-2:BZ"
+  },
+  {
+    "country": "Белоруссия",
+    "code": "BY",
+    "code2": "BLR",
+    "code3": 112,
+    "code4": "ISO 3166-2:BY"
+  },
+  {
+    "country": "Бельгия",
+    "code": "BE",
+    "code2": "BEL",
+    "code3": "056",
+    "code4": "ISO 3166-2:BE"
+  },
+  {
+    "country": "Бенин",
+    "code": "BJ",
+    "code2": "BEN",
+    "code3": 204,
+    "code4": "ISO 3166-2:BJ"
+  },
+  {
+    "country": "Бермуды",
+    "code": "BM",
+    "code2": "BMU",
+    "code3": "060",
+    "code4": "ISO 3166-2:BM"
+  },
+  {
+    "country": "Болгария",
+    "code": "BG",
+    "code2": "BGR",
+    "code3": 100,
+    "code4": "ISO 3166-2:BG"
+  },
+  {
+    "country": "Боливия",
+    "code": "BO",
+    "code2": "BOL",
+    "code3": "068",
+    "code4": "ISO 3166-2:BO"
+  },
+  {
+    "country": "Бонэйр, Синт-Эстатиус и Саба",
+    "code": "BQ",
+    "code2": "BES",
+    "code3": 535,
+    "code4": "ISO 3166-2:BQ"
+  },
+  {
+    "country": "Босния и Герцеговина",
+    "code": "BA",
+    "code2": "BIH",
+    "code3": "070",
+    "code4": "ISO 3166-2:BA"
+  },
+  {
+    "country": "Ботсвана",
+    "code": "BW",
+    "code2": "BWA",
+    "code3": "072",
+    "code4": "ISO 3166-2:BW"
+  },
+  {
+    "country": "Бразилия",
+    "code": "BR",
+    "code2": "BRA",
+    "code3": "076",
+    "code4": "ISO 3166-2:BR"
+  },
+  {
+    "country": "Британская территория в Индийском океане",
+    "code": "IO",
+    "code2": "IOT",
+    "code3": "086",
+    "code4": "ISO 3166-2:IO"
+  },
+  {
+    "country": "Виргинские Острова (Великобритания)",
+    "code": "VG",
+    "code2": "VGB",
+    "code3": "092",
+    "code4": "ISO 3166-2:VG"
+  },
+  {
+    "country": "Бруней",
+    "code": "BN",
+    "code2": "BRN",
+    "code3": "096",
+    "code4": "ISO 3166-2:BN"
+  },
+  {
+    "country": "Буркина-Фасо",
+    "code": "BF",
+    "code2": "BFA",
+    "code3": 854,
+    "code4": "ISO 3166-2:BF"
+  },
+  {
+    "country": "Бурунди",
+    "code": "BI",
+    "code2": "BDI",
+    "code3": 108,
+    "code4": "ISO 3166-2:BI"
+  },
+  {
+    "country": "Бутан",
+    "code": "BT",
+    "code2": "BTN",
+    "code3": "064",
+    "code4": "ISO 3166-2:BT"
+  },
+  {
+    "country": "Вануату",
+    "code": "VU",
+    "code2": "VUT",
+    "code3": 548,
+    "code4": "ISO 3166-2:VU"
+  },
+  {
+    "country": "Ватикан",
+    "code": "VA",
+    "code2": "VAT",
+    "code3": 336,
+    "code4": "ISO 3166-2:VA"
+  },
+  {
+    "country": "Великобритания",
+    "code": "GB",
+    "code2": "GBR",
+    "code3": 826,
+    "code4": "ISO 3166-2:GB"
+  },
+  {
+    "country": "Венгрия",
+    "code": "HU",
+    "code2": "HUN",
+    "code3": 348,
+    "code4": "ISO 3166-2:HU"
+  },
+  {
+    "country": "Венесуэла",
+    "code": "VE",
+    "code2": "VEN",
+    "code3": 862,
+    "code4": "ISO 3166-2:VE"
+  },
+  {
+    "country": "Внешние малые острова США",
+    "code": "UM",
+    "code2": "UMI",
+    "code3": 581,
+    "code4": "ISO 3166-2:UM"
+  },
+  {
+    "country": "Восточный Тимор",
+    "code": "TL",
+    "code2": "TLS",
+    "code3": 626,
+    "code4": "ISO 3166-2:TL"
+  },
+  {
+    "country": "Вьетнам",
+    "code": "VN",
+    "code2": "VNM",
+    "code3": 704,
+    "code4": "ISO 3166-2:VN"
+  },
+  {
+    "country": "Габон",
+    "code": "GA",
+    "code2": "GAB",
+    "code3": 266,
+    "code4": "ISO 3166-2:GA"
+  },
+  {
+    "country": "Гаити",
+    "code": "HT",
+    "code2": "HTI",
+    "code3": 332,
+    "code4": "ISO 3166-2:HT"
+  },
+  {
+    "country": "Гайана",
+    "code": "GY",
+    "code2": "GUY",
+    "code3": 328,
+    "code4": "ISO 3166-2:GY"
+  },
+  {
+    "country": "Гамбия",
+    "code": "GM",
+    "code2": "GMB",
+    "code3": 270,
+    "code4": "ISO 3166-2:GM"
+  },
+  {
+    "country": "Гана",
+    "code": "GH",
+    "code2": "GHA",
+    "code3": 288,
+    "code4": "ISO 3166-2:GH"
+  },
+  {
+    "country": "Гваделупа",
+    "code": "GP",
+    "code2": "GLP",
+    "code3": 312,
+    "code4": "ISO 3166-2:GP"
+  },
+  {
+    "country": "Гватемала",
+    "code": "GT",
+    "code2": "GTM",
+    "code3": 320,
+    "code4": "ISO 3166-2:GT"
+  },
+  {
+    "country": "Гвиана",
+    "code": "GF",
+    "code2": "GUF",
+    "code3": 254,
+    "code4": "ISO 3166-2:GF"
+  },
+  {
+    "country": "Гвинея",
+    "code": "GN",
+    "code2": "GIN",
+    "code3": 324,
+    "code4": "ISO 3166-2:GN"
+  },
+  {
+    "country": "Гвинея-Бисау",
+    "code": "GW",
+    "code2": "GNB",
+    "code3": 624,
+    "code4": "ISO 3166-2:GW"
+  },
+  {
+    "country": "Германия",
+    "code": "DE",
+    "code2": "DEU",
+    "code3": 276,
+    "code4": "ISO 3166-2:DE"
+  },
+  {
+    "country": "Гернси",
+    "code": "GG",
+    "code2": "GGY",
+    "code3": 831,
+    "code4": "ISO 3166-2:GG"
+  },
+  {
+    "country": "Гибралтар",
+    "code": "GI",
+    "code2": "GIB",
+    "code3": 292,
+    "code4": "ISO 3166-2:GI"
+  },
+  {
+    "country": "Гондурас",
+    "code": "HN",
+    "code2": "HND",
+    "code3": 340,
+    "code4": "ISO 3166-2:HN"
+  },
+  {
+    "country": "Гонконг",
+    "code": "HK",
+    "code2": "HKG",
+    "code3": 344,
+    "code4": "ISO 3166-2:HK"
+  },
+  {
+    "country": "Гренада",
+    "code": "GD",
+    "code2": "GRD",
+    "code3": 308,
+    "code4": "ISO 3166-2:GD"
+  },
+  {
+    "country": "Гренландия",
+    "code": "GL",
+    "code2": "GRL",
+    "code3": 304,
+    "code4": "ISO 3166-2:GL"
+  },
+  {
+    "country": "Греция",
+    "code": "GR",
+    "code2": "GRC",
+    "code3": 300,
+    "code4": "ISO 3166-2:GR"
+  },
+  {
+    "country": "Грузия",
+    "code": "GE",
+    "code2": "GEO",
+    "code3": 268,
+    "code4": "ISO 3166-2:GE"
+  },
+  {
+    "country": "Гуам",
+    "code": "GU",
+    "code2": "GUM",
+    "code3": 316,
+    "code4": "ISO 3166-2:GU"
+  },
+  {
+    "country": "Дания",
+    "code": "DK",
+    "code2": "DNK",
+    "code3": 208,
+    "code4": "ISO 3166-2:DK"
+  },
+  {
+    "country": "Джерси",
+    "code": "JE",
+    "code2": "JEY",
+    "code3": 832,
+    "code4": "ISO 3166-2:JE"
+  },
+  {
+    "country": "Джибути",
+    "code": "DJ",
+    "code2": "DJI",
+    "code3": 262,
+    "code4": "ISO 3166-2:DJ"
+  },
+  {
+    "country": "Доминика",
+    "code": "DM",
+    "code2": "DMA",
+    "code3": 212,
+    "code4": "ISO 3166-2:DM"
+  },
+  {
+    "country": "Доминиканская Республика",
+    "code": "DO",
+    "code2": "DOM",
+    "code3": 214,
+    "code4": "ISO 3166-2:DO"
+  },
+  {
+    "country": "ДР Конго",
+    "code": "CD",
+    "code2": "COD",
+    "code3": 180,
+    "code4": "ISO 3166-2:CD"
+  },
+  {
+    "country": "Флаг ЕС Европейский союз",
+    "code": "EU",
+    "code2": "",
+    "code3": "",
+    "code4": "ISO 3166-2:EU"
+  },
+  {
+    "country": "Египет",
+    "code": "EG",
+    "code2": "EGY",
+    "code3": 818,
+    "code4": "ISO 3166-2:EG"
+  },
+  {
+    "country": "Замбия",
+    "code": "ZM",
+    "code2": "ZMB",
+    "code3": 894,
+    "code4": "ISO 3166-2:ZM"
+  },
+  {
+    "country": "САДР",
+    "code": "EH",
+    "code2": "ESH",
+    "code3": 732,
+    "code4": "ISO 3166-2:EH"
+  },
+  {
+    "country": "Зимбабве",
+    "code": "ZW",
+    "code2": "ZWE",
+    "code3": 716,
+    "code4": "ISO 3166-2:ZW"
+  },
+  {
+    "country": "Израиль",
+    "code": "IL",
+    "code2": "ISR",
+    "code3": 376,
+    "code4": "ISO 3166-2:IL"
+  },
+  {
+    "country": "Индия Индия",
+    "code": "IN",
+    "code2": "IND",
+    "code3": 356,
+    "code4": "ISO 3166-2:IN"
+  },
+  {
+    "country": "Индонезия",
+    "code": "ID",
+    "code2": "IDN",
+    "code3": 360,
+    "code4": "ISO 3166-2:ID"
+  },
+  {
+    "country": "Иордания",
+    "code": "JO",
+    "code2": "JOR",
+    "code3": 400,
+    "code4": "ISO 3166-2:JO"
+  },
+  {
+    "country": "Ирак",
+    "code": "IQ",
+    "code2": "IRQ",
+    "code3": 368,
+    "code4": "ISO 3166-2:IQ"
+  },
+  {
+    "country": "Иран",
+    "code": "IR",
+    "code2": "IRN",
+    "code3": 364,
+    "code4": "ISO 3166-2:IR"
+  },
+  {
+    "country": "Ирландия",
+    "code": "IE",
+    "code2": "IRL",
+    "code3": 372,
+    "code4": "ISO 3166-2:IE"
+  },
+  {
+    "country": "Исландия",
+    "code": "IS",
+    "code2": "ISL",
+    "code3": 352,
+    "code4": "ISO 3166-2:IS"
+  },
+  {
+    "country": "Испания",
+    "code": "ES",
+    "code2": "ESP",
+    "code3": 724,
+    "code4": "ISO 3166-2:ES"
+  },
+  {
+    "country": "Италия",
+    "code": "IT",
+    "code2": "ITA",
+    "code3": 380,
+    "code4": "ISO 3166-2:IT"
+  },
+  {
+    "country": "Йемен",
+    "code": "YE",
+    "code2": "YEM",
+    "code3": 887,
+    "code4": "ISO 3166-2:YE"
+  },
+  {
+    "country": "Кабо-Верде",
+    "code": "CV",
+    "code2": "CPV",
+    "code3": 132,
+    "code4": "ISO 3166-2:CV"
+  },
+  {
+    "country": "Казахстан",
+    "code": "KZ",
+    "code2": "KAZ",
+    "code3": 398,
+    "code4": "ISO 3166-2:KZ"
+  },
+  {
+    "country": "Острова Кайман",
+    "code": "KY",
+    "code2": "CYM",
+    "code3": 136,
+    "code4": "ISO 3166-2:KY"
+  },
+  {
+    "country": "Камбоджа",
+    "code": "KH",
+    "code2": "KHM",
+    "code3": 116,
+    "code4": "ISO 3166-2:KH"
+  },
+  {
+    "country": "Камерун",
+    "code": "CM",
+    "code2": "CMR",
+    "code3": 120,
+    "code4": "ISO 3166-2:CM"
+  },
+  {
+    "country": "Канада",
+    "code": "CA",
+    "code2": "CAN",
+    "code3": 124,
+    "code4": "ISO 3166-2:CA"
+  },
+  {
+    "country": "Катар",
+    "code": "QA",
+    "code2": "QAT",
+    "code3": 634,
+    "code4": "ISO 3166-2:QA"
+  },
+  {
+    "country": "Кения",
+    "code": "KE",
+    "code2": "KEN",
+    "code3": 404,
+    "code4": "ISO 3166-2:KE"
+  },
+  {
+    "country": "Кипр",
+    "code": "CY",
+    "code2": "CYP",
+    "code3": 196,
+    "code4": "ISO 3166-2:CY"
+  },
+  {
+    "country": "Киргизия",
+    "code": "KG",
+    "code2": "KGZ",
+    "code3": 417,
+    "code4": "ISO 3166-2:KG"
+  },
+  {
+    "country": "Кирибати",
+    "code": "KI",
+    "code2": "KIR",
+    "code3": 296,
+    "code4": "ISO 3166-2:KI"
+  },
+  {
+    "country": "Китайская Республика",
+    "code": "TW",
+    "code2": "TWN",
+    "code3": 158,
+    "code4": "ISO 3166-2:TW"
+  },
+  {
+    "country": "КНДР (Корейская Народно-Демократическая Республика)",
+    "code": "KP",
+    "code2": "PRK",
+    "code3": 408,
+    "code4": "ISO 3166-2:KP"
+  },
+  {
+    "country": "Китай (Китайская Народная Республика)",
+    "code": "CN",
+    "code2": "CHN",
+    "code3": 156,
+    "code4": "ISO 3166-2:CN"
+  },
+  {
+    "country": "Кокосовые острова",
+    "code": "CC",
+    "code2": "CCK",
+    "code3": 166,
+    "code4": "ISO 3166-2:CC"
+  },
+  {
+    "country": "Колумбия",
+    "code": "CO",
+    "code2": "COL",
+    "code3": 170,
+    "code4": "ISO 3166-2:CO"
+  },
+  {
+    "country": "Коморы",
+    "code": "KM",
+    "code2": "COM",
+    "code3": 174,
+    "code4": "ISO 3166-2:KM"
+  },
+  {
+    "country": "Коста-Рика",
+    "code": "CR",
+    "code2": "CRI",
+    "code3": 188,
+    "code4": "ISO 3166-2:CR"
+  },
+  {
+    "country": "Кот-д’Ивуар",
+    "code": "CI",
+    "code2": "CIV",
+    "code3": 384,
+    "code4": "ISO 3166-2:CI"
+  },
+  {
+    "country": "Куба",
+    "code": "CU",
+    "code2": "CUB",
+    "code3": 192,
+    "code4": "ISO 3166-2:CU"
+  },
+  {
+    "country": "Кувейт",
+    "code": "KW",
+    "code2": "KWT",
+    "code3": 414,
+    "code4": "ISO 3166-2:KW"
+  },
+  {
+    "country": "Кюрасао",
+    "code": "CW",
+    "code2": "CUW",
+    "code3": 531,
+    "code4": "ISO 3166-2:CW"
+  },
+  {
+    "country": "Лаос",
+    "code": "LA",
+    "code2": "LAO",
+    "code3": 418,
+    "code4": "ISO 3166-2:LA"
+  },
+  {
+    "country": "Латвия",
+    "code": "LV",
+    "code2": "LVA",
+    "code3": 428,
+    "code4": "ISO 3166-2:LV"
+  },
+  {
+    "country": "Лесото",
+    "code": "LS",
+    "code2": "LSO",
+    "code3": 426,
+    "code4": "ISO 3166-2:LS"
+  },
+  {
+    "country": "Либерия",
+    "code": "LR",
+    "code2": "LBR",
+    "code3": 430,
+    "code4": "ISO 3166-2:LR"
+  },
+  {
+    "country": "Ливан",
+    "code": "LB",
+    "code2": "LBN",
+    "code3": 422,
+    "code4": "ISO 3166-2:LB"
+  },
+  {
+    "country": "Ливия",
+    "code": "LY",
+    "code2": "LBY",
+    "code3": 434,
+    "code4": "ISO 3166-2:LY"
+  },
+  {
+    "country": "Литва",
+    "code": "LT",
+    "code2": "LTU",
+    "code3": 440,
+    "code4": "ISO 3166-2:LT"
+  },
+  {
+    "country": "Лихтенштейн",
+    "code": "LI",
+    "code2": "LIE",
+    "code3": 438,
+    "code4": "ISO 3166-2:LI"
+  },
+  {
+    "country": "Люксембург",
+    "code": "LU",
+    "code2": "LUX",
+    "code3": 442,
+    "code4": "ISO 3166-2:LU"
+  },
+  {
+    "country": "Маврикий",
+    "code": "MU",
+    "code2": "MUS",
+    "code3": 480,
+    "code4": "ISO 3166-2:MU"
+  },
+  {
+    "country": "Мавритания",
+    "code": "MR",
+    "code2": "MRT",
+    "code3": 478,
+    "code4": "ISO 3166-2:MR"
+  },
+  {
+    "country": "Мадагаскар",
+    "code": "MG",
+    "code2": "MDG",
+    "code3": 450,
+    "code4": "ISO 3166-2:MG"
+  },
+  {
+    "country": "Майотта",
+    "code": "YT",
+    "code2": "MYT",
+    "code3": 175,
+    "code4": "ISO 3166-2:YT"
+  },
+  {
+    "country": "Макао",
+    "code": "MO",
+    "code2": "MAC",
+    "code3": 446,
+    "code4": "ISO 3166-2:MO"
+  },
+  {
+    "country": "Северная Македония",
+    "code": "MK",
+    "code2": "MKD",
+    "code3": 807,
+    "code4": "ISO 3166-2:MK"
+  },
+  {
+    "country": "Малави",
+    "code": "MW",
+    "code2": "MWI",
+    "code3": 454,
+    "code4": "ISO 3166-2:MW"
+  },
+  {
+    "country": "Малайзия",
+    "code": "MY",
+    "code2": "MYS",
+    "code3": 458,
+    "code4": "ISO 3166-2:MY"
+  },
+  {
+    "country": "Мали",
+    "code": "ML",
+    "code2": "MLI",
+    "code3": 466,
+    "code4": "ISO 3166-2:ML"
+  },
+  {
+    "country": "Мальдивы",
+    "code": "MV",
+    "code2": "MDV",
+    "code3": 462,
+    "code4": "ISO 3166-2:MV"
+  },
+  {
+    "country": "Мальта",
+    "code": "MT",
+    "code2": "MLT",
+    "code3": 470,
+    "code4": "ISO 3166-2:MT"
+  },
+  {
+    "country": "Марокко",
+    "code": "MA",
+    "code2": "MAR",
+    "code3": 504,
+    "code4": "ISO 3166-2:MA"
+  },
+  {
+    "country": "Мартиника",
+    "code": "MQ",
+    "code2": "MTQ",
+    "code3": 474,
+    "code4": "ISO 3166-2:MQ"
+  },
+  {
+    "country": "Маршалловы Острова",
+    "code": "MH",
+    "code2": "MHL",
+    "code3": 584,
+    "code4": "ISO 3166-2:MH"
+  },
+  {
+    "country": "Мексика",
+    "code": "MX",
+    "code2": "MEX",
+    "code3": 484,
+    "code4": "ISO 3166-2:MX"
+  },
+  {
+    "country": "Микронезия",
+    "code": "FM",
+    "code2": "FSM",
+    "code3": 583,
+    "code4": "ISO 3166-2:FM"
+  },
+  {
+    "country": "Мозамбик",
+    "code": "MZ",
+    "code2": "MOZ",
+    "code3": 508,
+    "code4": "ISO 3166-2:MZ"
+  },
+  {
+    "country": "Молдавия",
+    "code": "MD",
+    "code2": "MDA",
+    "code3": 498,
+    "code4": "ISO 3166-2:MD"
+  },
+  {
+    "country": "Монако",
+    "code": "MC",
+    "code2": "MCO",
+    "code3": 492,
+    "code4": "ISO 3166-2:MC"
+  },
+  {
+    "country": "Монголия",
+    "code": "MN",
+    "code2": "MNG",
+    "code3": 496,
+    "code4": "ISO 3166-2:MN"
+  },
+  {
+    "country": "Монтсеррат",
+    "code": "MS",
+    "code2": "MSR",
+    "code3": 500,
+    "code4": "ISO 3166-2:MS"
+  },
+  {
+    "country": "Мьянма",
+    "code": "MM",
+    "code2": "MMR",
+    "code3": 104,
+    "code4": "ISO 3166-2:MM"
+  },
+  {
+    "country": "Намибия",
+    "code": "NA",
+    "code2": "NAM",
+    "code3": 516,
+    "code4": "ISO 3166-2:NA"
+  },
+  {
+    "country": "Науру",
+    "code": "NR",
+    "code2": "NRU",
+    "code3": 520,
+    "code4": "ISO 3166-2:NR"
+  },
+  {
+    "country": "Непал",
+    "code": "NP",
+    "code2": "NPL",
+    "code3": 524,
+    "code4": "ISO 3166-2:NP"
+  },
+  {
+    "country": "Нигер",
+    "code": "NE",
+    "code2": "NER",
+    "code3": 562,
+    "code4": "ISO 3166-2:NE"
+  },
+  {
+    "country": "Нигерия",
+    "code": "NG",
+    "code2": "NGA",
+    "code3": 566,
+    "code4": "ISO 3166-2:NG"
+  },
+  {
+    "country": "Нидерланды",
+    "code": "NL",
+    "code2": "NLD",
+    "code3": 528,
+    "code4": "ISO 3166-2:NL"
+  },
+  {
+    "country": "Никарагуа",
+    "code": "NI",
+    "code2": "NIC",
+    "code3": 558,
+    "code4": "ISO 3166-2:NI"
+  },
+  {
+    "country": "Ниуэ",
+    "code": "NU",
+    "code2": "NIU",
+    "code3": 570,
+    "code4": "ISO 3166-2:NU"
+  },
+  {
+    "country": "Новая Зеландия",
+    "code": "NZ",
+    "code2": "NZL",
+    "code3": 554,
+    "code4": "ISO 3166-2:NZ"
+  },
+  {
+    "country": "Новая Каледония",
+    "code": "NC",
+    "code2": "NCL",
+    "code3": 540,
+    "code4": "ISO 3166-2:NC"
+  },
+  {
+    "country": "Норвегия",
+    "code": "NO",
+    "code2": "NOR",
+    "code3": 578,
+    "code4": "ISO 3166-2:NO"
+  },
+  {
+    "country": "ОАЭ",
+    "code": "AE",
+    "code2": "ARE",
+    "code3": 784,
+    "code4": "ISO 3166-2:AE"
+  },
+  {
+    "country": "Оман",
+    "code": "OM",
+    "code2": "OMN",
+    "code3": 512,
+    "code4": "ISO 3166-2:OM"
+  },
+  {
+    "country": "Остров Буве",
+    "code": "BV",
+    "code2": "BVT",
+    "code3": "074",
+    "code4": "ISO 3166-2:BV"
+  },
+  {
+    "country": "Остров Мэн",
+    "code": "IM",
+    "code2": "IMN",
+    "code3": 833,
+    "code4": "ISO 3166-2:IM"
+  },
+  {
+    "country": "Острова Кука",
+    "code": "CK",
+    "code2": "COK",
+    "code3": 184,
+    "code4": "ISO 3166-2:CK"
+  },
+  {
+    "country": "Остров Норфолк",
+    "code": "NF",
+    "code2": "NFK",
+    "code3": 574,
+    "code4": "ISO 3166-2:NF"
+  },
+  {
+    "country": "Остров Рождества",
+    "code": "CX",
+    "code2": "CXR",
+    "code3": 162,
+    "code4": "ISO 3166-2:CX"
+  },
+  {
+    "country": "Острова Питкэрн",
+    "code": "PN",
+    "code2": "PCN",
+    "code3": 612,
+    "code4": "ISO 3166-2:PN"
+  },
+  {
+    "country": "Острова Святой Елены, Вознесения и Тристан-да-Кунья",
+    "code": "SH",
+    "code2": "SHN",
+    "code3": 654,
+    "code4": "ISO 3166-2:SH"
+  },
+  {
+    "country": "Пакистан",
+    "code": "PK",
+    "code2": "PAK",
+    "code3": 586,
+    "code4": "ISO 3166-2:PK"
+  },
+  {
+    "country": "Палау",
+    "code": "PW",
+    "code2": "PLW",
+    "code3": 585,
+    "code4": "ISO 3166-2:PW"
+  },
+  {
+    "country": "Государство Палестина",
+    "code": "PS",
+    "code2": "PSE",
+    "code3": 275,
+    "code4": "ISO 3166-2:PS"
+  },
+  {
+    "country": "Панама",
+    "code": "PA",
+    "code2": "PAN",
+    "code3": 591,
+    "code4": "ISO 3166-2:PA"
+  },
+  {
+    "country": "Папуа — Новая Гвинея",
+    "code": "PG",
+    "code2": "PNG",
+    "code3": 598,
+    "code4": "ISO 3166-2:PG"
+  },
+  {
+    "country": "Парагвай",
+    "code": "PY",
+    "code2": "PRY",
+    "code3": 600,
+    "code4": "ISO 3166-2:PY"
+  },
+  {
+    "country": "Перу",
+    "code": "PE",
+    "code2": "PER",
+    "code3": 604,
+    "code4": "ISO 3166-2:PE"
+  },
+  {
+    "country": "Польша",
+    "code": "PL",
+    "code2": "POL",
+    "code3": 616,
+    "code4": "ISO 3166-2:PL"
+  },
+  {
+    "country": "Португалия",
+    "code": "PT",
+    "code2": "PRT",
+    "code3": 620,
+    "code4": "ISO 3166-2:PT"
+  },
+  {
+    "country": "Пуэрто-Рико",
+    "code": "PR",
+    "code2": "PRI",
+    "code3": 630,
+    "code4": "ISO 3166-2:PR"
+  },
+  {
+    "country": "Республика Конго",
+    "code": "CG",
+    "code2": "COG",
+    "code3": 178,
+    "code4": "ISO 3166-2:CG"
+  },
+  {
+    "country": "Республика Корея",
+    "code": "KR",
+    "code2": "KOR",
+    "code3": 410,
+    "code4": "ISO 3166-2:KR"
+  },
+  {
+    "country": "Реюньон",
+    "code": "RE",
+    "code2": "REU",
+    "code3": 638,
+    "code4": "ISO 3166-2:RE"
+  },
+  {
+    "country": "Россия",
+    "code": "RU",
+    "code2": "RUS",
+    "code3": 643,
+    "code4": "ISO 3166-2:RU"
+  },
+  {
+    "country": "Руанда",
+    "code": "RW",
+    "code2": "RWA",
+    "code3": 646,
+    "code4": "ISO 3166-2:RW"
+  },
+  {
+    "country": "Румыния",
+    "code": "RO",
+    "code2": "ROU",
+    "code3": 642,
+    "code4": "ISO 3166-2:RO"
+  },
+  {
+    "country": "Сальвадор",
+    "code": "SV",
+    "code2": "SLV",
+    "code3": 222,
+    "code4": "ISO 3166-2:SV"
+  },
+  {
+    "country": "Самоа",
+    "code": "WS",
+    "code2": "WSM",
+    "code3": 882,
+    "code4": "ISO 3166-2:WS"
+  },
+  {
+    "country": "Сан-Марино",
+    "code": "SM",
+    "code2": "SMR",
+    "code3": 674,
+    "code4": "ISO 3166-2:SM"
+  },
+  {
+    "country": "Сан-Томе и Принсипи",
+    "code": "ST",
+    "code2": "STP",
+    "code3": 678,
+    "code4": "ISO 3166-2:ST"
+  },
+  {
+    "country": "Саудовская Аравия",
+    "code": "SA",
+    "code2": "SAU",
+    "code3": 682,
+    "code4": "ISO 3166-2:SA"
+  },
+  {
+    "country": "Эсватини",
+    "code": "SZ",
+    "code2": "SWZ",
+    "code3": 748,
+    "code4": "ISO 3166-2:SZ"
+  },
+  {
+    "country": "Северные Марианские Острова",
+    "code": "MP",
+    "code2": "MNP",
+    "code3": 580,
+    "code4": "ISO 3166-2:MP"
+  },
+  {
+    "country": "Сейшельские Острова",
+    "code": "SC",
+    "code2": "SYC",
+    "code3": 690,
+    "code4": "ISO 3166-2:SC"
+  },
+  {
+    "country": "Сен-Бартелеми (Карибы)",
+    "code": "BL",
+    "code2": "BLM",
+    "code3": 652,
+    "code4": "ISO 3166-2:BL"
+  },
+  {
+    "country": "Сен-Мартен",
+    "code": "MF",
+    "code2": "MAF",
+    "code3": 663,
+    "code4": "ISO 3166-2:MF"
+  },
+  {
+    "country": "Сен-Пьер и Микелон",
+    "code": "PM",
+    "code2": "SPM",
+    "code3": 666,
+    "code4": "ISO 3166-2:PM"
+  },
+  {
+    "country": "Сенегал",
+    "code": "SN",
+    "code2": "SEN",
+    "code3": 686,
+    "code4": "ISO 3166-2:SN"
+  },
+  {
+    "country": "Сент-Винсент и Гренадины",
+    "code": "VC",
+    "code2": "VCT",
+    "code3": 670,
+    "code4": "ISO 3166-2:VC"
+  },
+  {
+    "country": "Сент-Китс и Невис",
+    "code": "KN",
+    "code2": "KNA",
+    "code3": 659,
+    "code4": "ISO 3166-2:KN"
+  },
+  {
+    "country": "Сент-Люсия",
+    "code": "LC",
+    "code2": "LCA",
+    "code3": 662,
+    "code4": "ISO 3166-2:LC"
+  },
+  {
+    "country": "Сербия",
+    "code": "RS",
+    "code2": "SRB",
+    "code3": 688,
+    "code4": "ISO 3166-2:RS"
+  },
+  {
+    "country": "Сингапур",
+    "code": "SG",
+    "code2": "SGP",
+    "code3": 702,
+    "code4": "ISO 3166-2:SG"
+  },
+  {
+    "country": "Синт-Мартен",
+    "code": "SX",
+    "code2": "SXM",
+    "code3": 534,
+    "code4": "ISO 3166-2:SX"
+  },
+  {
+    "country": "Сирия",
+    "code": "SY",
+    "code2": "SYR",
+    "code3": 760,
+    "code4": "ISO 3166-2:SY"
+  },
+  {
+    "country": "Словакия",
+    "code": "SK",
+    "code2": "SVK",
+    "code3": 703,
+    "code4": "ISO 3166-2:SK"
+  },
+  {
+    "country": "Словения",
+    "code": "SI",
+    "code2": "SVN",
+    "code3": 705,
+    "code4": "ISO 3166-2:SI"
+  },
+  {
+    "country": "Соломоновы Острова",
+    "code": "SB",
+    "code2": "SLB",
+    "code3": "090",
+    "code4": "ISO 3166-2:SB"
+  },
+  {
+    "country": "Сомали",
+    "code": "SO",
+    "code2": "SOM",
+    "code3": 706,
+    "code4": "ISO 3166-2:SO"
+  },
+  {
+    "country": "Судан",
+    "code": "SD",
+    "code2": "SDN",
+    "code3": 729,
+    "code4": "ISO 3166-2:SD"
+  },
+  {
+    "country": "Суринам",
+    "code": "SR",
+    "code2": "SUR",
+    "code3": 740,
+    "code4": "ISO 3166-2:SR"
+  },
+  {
+    "country": "США",
+    "code": "US",
+    "code2": "USA",
+    "code3": 840,
+    "code4": "ISO 3166-2:US"
+  },
+  {
+    "country": "Сьерра-Леоне",
+    "code": "SL",
+    "code2": "SLE",
+    "code3": 694,
+    "code4": "ISO 3166-2:SL"
+  },
+  {
+    "country": "Таджикистан",
+    "code": "TJ",
+    "code2": "TJK",
+    "code3": 762,
+    "code4": "ISO 3166-2:TJ"
+  },
+  {
+    "country": "Таиланд",
+    "code": "TH",
+    "code2": "THA",
+    "code3": 764,
+    "code4": "ISO 3166-2:TH"
+  },
+  {
+    "country": "Танзания",
+    "code": "TZ",
+    "code2": "TZA",
+    "code3": 834,
+    "code4": "ISO 3166-2:TZ"
+  },
+  {
+    "country": "Теркс и Кайкос",
+    "code": "TC",
+    "code2": "TCA",
+    "code3": 796,
+    "code4": "ISO 3166-2:TC"
+  },
+  {
+    "country": "Того",
+    "code": "TG",
+    "code2": "TGO",
+    "code3": 768,
+    "code4": "ISO 3166-2:TG"
+  },
+  {
+    "country": "Токелау",
+    "code": "TK",
+    "code2": "TKL",
+    "code3": 772,
+    "code4": "ISO 3166-2:TK"
+  },
+  {
+    "country": "Тонга",
+    "code": "TO",
+    "code2": "TON",
+    "code3": 776,
+    "code4": "ISO 3166-2:TO"
+  },
+  {
+    "country": "Тринидад и Тобаго",
+    "code": "TT",
+    "code2": "TTO",
+    "code3": 780,
+    "code4": "ISO 3166-2:TT"
+  },
+  {
+    "country": "Тувалу",
+    "code": "TV",
+    "code2": "TUV",
+    "code3": 798,
+    "code4": "ISO 3166-2:TV"
+  },
+  {
+    "country": "Тунис",
+    "code": "TN",
+    "code2": "TUN",
+    "code3": 788,
+    "code4": "ISO 3166-2:TN"
+  },
+  {
+    "country": "Туркмения",
+    "code": "TM",
+    "code2": "TKM",
+    "code3": 795,
+    "code4": "ISO 3166-2:TM"
+  },
+  {
+    "country": "Турция",
+    "code": "TR",
+    "code2": "TUR",
+    "code3": 792,
+    "code4": "ISO 3166-2:TR"
+  },
+  {
+    "country": "Уганда",
+    "code": "UG",
+    "code2": "UGA",
+    "code3": 800,
+    "code4": "ISO 3166-2:UG"
+  },
+  {
+    "country": "Узбекистан",
+    "code": "UZ",
+    "code2": "UZB",
+    "code3": 860,
+    "code4": "ISO 3166-2:UZ"
+  },
+  {
+    "country": "Украина",
+    "code": "UA",
+    "code2": "UKR",
+    "code3": 804,
+    "code4": "ISO 3166-2:UA"
+  },
+  {
+    "country": "Уоллис и Футуна",
+    "code": "WF",
+    "code2": "WLF",
+    "code3": 876,
+    "code4": "ISO 3166-2:WF"
+  },
+  {
+    "country": "Уругвай",
+    "code": "UY",
+    "code2": "URY",
+    "code3": 858,
+    "code4": "ISO 3166-2:UY"
+  },
+  {
+    "country": "Фарерские острова",
+    "code": "FO",
+    "code2": "FRO",
+    "code3": 234,
+    "code4": "ISO 3166-2:FO"
+  },
+  {
+    "country": "Фиджи",
+    "code": "FJ",
+    "code2": "FJI",
+    "code3": 242,
+    "code4": "ISO 3166-2:FJ"
+  },
+  {
+    "country": "Филиппины",
+    "code": "PH",
+    "code2": "PHL",
+    "code3": 608,
+    "code4": "ISO 3166-2:PH"
+  },
+  {
+    "country": "Финляндия",
+    "code": "FI",
+    "code2": "FIN",
+    "code3": 246,
+    "code4": "ISO 3166-2:FI"
+  },
+  {
+    "country": "Фолклендские острова",
+    "code": "FK",
+    "code2": "FLK",
+    "code3": 238,
+    "code4": "ISO 3166-2:FK"
+  },
+  {
+    "country": "Франция",
+    "code": "FR",
+    "code2": "FRA",
+    "code3": 250,
+    "code4": "ISO 3166-2:FR"
+  },
+  {
+    "country": "Французская Полинезия",
+    "code": "PF",
+    "code2": "PYF",
+    "code3": 258,
+    "code4": "ISO 3166-2:PF"
+  },
+  {
+    "country": "Французские Южные и Антарктические территории",
+    "code": "TF",
+    "code2": "ATF",
+    "code3": 260,
+    "code4": "ISO 3166-2:TF"
+  },
+  {
+    "country": "Херд и Макдональд",
+    "code": "HM",
+    "code2": "HMD",
+    "code3": 334,
+    "code4": "ISO 3166-2:HM"
+  },
+  {
+    "country": "Хорватия",
+    "code": "HR",
+    "code2": "HRV",
+    "code3": 191,
+    "code4": "ISO 3166-2:HR"
+  },
+  {
+    "country": "ЦАР",
+    "code": "CF",
+    "code2": "CAF",
+    "code3": 140,
+    "code4": "ISO 3166-2:CF"
+  },
+  {
+    "country": "Чад",
+    "code": "TD",
+    "code2": "TCD",
+    "code3": 148,
+    "code4": "ISO 3166-2:TD"
+  },
+  {
+    "country": "Черногория",
+    "code": "ME",
+    "code2": "MNE",
+    "code3": 499,
+    "code4": "ISO 3166-2:ME"
+  },
+  {
+    "country": "Чехия",
+    "code": "CZ",
+    "code2": "CZE",
+    "code3": 203,
+    "code4": "ISO 3166-2:CZ"
+  },
+  {
+    "country": "Чили",
+    "code": "CL",
+    "code2": "CHL",
+    "code3": 152,
+    "code4": "ISO 3166-2:CL"
+  },
+  {
+    "country": "Швейцария",
+    "code": "CH",
+    "code2": "CHE",
+    "code3": 756,
+    "code4": "ISO 3166-2:CH"
+  },
+  {
+    "country": "Швеция",
+    "code": "SE",
+    "code2": "SWE",
+    "code3": 752,
+    "code4": "ISO 3166-2:SE"
+  },
+  {
+    "country": "Флаг Шпицбергена и Ян-Майена Шпицберген и Ян-Майен",
+    "code": "SJ",
+    "code2": "SJM",
+    "code3": 744,
+    "code4": "ISO 3166-2:SJ"
+  },
+  {
+    "country": "Шри-Ланка",
+    "code": "LK",
+    "code2": "LKA",
+    "code3": 144,
+    "code4": "ISO 3166-2:LK"
+  },
+  {
+    "country": "Эквадор",
+    "code": "EC",
+    "code2": "ECU",
+    "code3": 218,
+    "code4": "ISO 3166-2:EC"
+  },
+  {
+    "country": "Экваториальная Гвинея",
+    "code": "GQ",
+    "code2": "GNQ",
+    "code3": 226,
+    "code4": "ISO 3166-2:GQ"
+  },
+  {
+    "country": "Эритрея",
+    "code": "ER",
+    "code2": "ERI",
+    "code3": 232,
+    "code4": "ISO 3166-2:ER"
+  },
+  {
+    "country": "Эстония",
+    "code": "EE",
+    "code2": "EST",
+    "code3": 233,
+    "code4": "ISO 3166-2:EE"
+  },
+  {
+    "country": "Эфиопия",
+    "code": "ET",
+    "code2": "ETH",
+    "code3": 231,
+    "code4": "ISO 3166-2:ET"
+  },
+  {
+    "country": "ЮАР",
+    "code": "ZA",
+    "code2": "ZAF",
+    "code3": 710,
+    "code4": "ISO 3166-2:ZA"
+  },
+  {
+    "country": "Южная Георгия и Южные Сандвичевы Острова",
+    "code": "GS",
+    "code2": "SGS",
+    "code3": 239,
+    "code4": "ISO 3166-2:GS"
+  },
+  {
+    "country": "Южный Судан",
+    "code": "SS",
+    "code2": "SSD",
+    "code3": 728,
+    "code4": "ISO 3166-2:SS"
+  },
+  {
+    "country": "Ямайка",
+    "code": "JM",
+    "code2": "JAM",
+    "code3": 388,
+    "code4": "ISO 3166-2:JM"
+  },
+  {
+    "country": "Япония",
+    "code": "JP",
+    "code2": "",
+    "code3": "",
+    "code4": ""
+  }
+]
