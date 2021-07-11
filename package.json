@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "aws-sdk": "^2.930.0",
     "axios": "^0.21.1",
     "babel-core": "^6.26.3",
     "bootstrap-vue": "^2.21.2",
@@ -15,8 +16,10 @@
     "file-saver": "^2.0.5",
     "jszip": "^3.6.0",
     "jszip-sync": "^3.2.1-sync",
+    "mock-aws-s3": "^4.0.2",
+    "nock": "^13.1.0",
     "pdfmake": "^0.1.70",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-axios": "^3.2.4",
     "vue2-datepicker": "^3.9.0"
   },

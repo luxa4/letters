@@ -5,8 +5,8 @@
       {{ status ? status : ''}}
       <div v-if="isCreating" class="progress">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
-             :style="`width: ${progressBar}%`">
-          {{ progressBar }}
+             :style="`width: ${isNaN(progressBar) ? 0 : progressBar}%`">
+          {{ isNaN(progressBar) ? 0 : progressBar }} %
         </div>
       </div>
       <div v-if="result" class="mt-2"><h3>Найдено {{ result }} писем!</h3></div>
@@ -15,9 +15,8 @@
             placeholder="Укажите период заказов"
             value-type="X"
             range-separator=" по "
-            :time-picker-options="{start: '00:00', step:'00:01' , end: '23:59', format: 'HH:mm'}"
             v-model="date"
-            type="datetime"
+            type="date"
             format="DD-MM-YYYY"
             range></date-picker>
       </div>
@@ -28,6 +27,7 @@
 </template>
 
 <script>
+
 import Troyka from "@/components/Troyka";
 import axios from "axios";
 import { saveAs } from 'file-saver';
@@ -35,17 +35,32 @@ import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import 'vue2-datepicker/locale/ru';
 import regionJson from '../region.json';
-import countryJson from '../country.json';
+// import countryJson from '../country.json';
 
-import {one} from "@/components/SvgImg/img1A4";
-// import {two} from "@/components/SvgImg/img2A4";
-// import {three} from "@/components/SvgImg/img3A4";
-// import {five} from "@/components/SvgImg/img5A4";
-// import {six} from "@/components/SvgImg/img6A4";
-// import {seven} from "@/components/SvgImg/img7A4";
-// import {eight} from "@/components/SvgImg/img8A4";
-// import {nine} from "@/components/SvgImg/img9A4";
+import {oneA4} from "@/components/SvgImg/img1A4";
 import {oneA5} from "@/components/SvgImg/img1A5";
+import {oneC5} from "@/components/SvgImg/img1C5";
+import {twoA4} from "@/components/SvgImg/img2A4";
+import {twoA5} from "@/components/SvgImg/img2A5";
+import {twoC5} from "@/components/SvgImg/img2C5";
+import {threeA4} from "@/components/SvgImg/img3A4";
+import {threeA5} from "@/components/SvgImg/img3A5";
+import {threeC5} from "@/components/SvgImg/img3C5";
+import {fiveA4} from "@/components/SvgImg/img5A4";
+import {fiveA5} from "@/components/SvgImg/img5A5";
+import {fiveC5} from "@/components/SvgImg/img5C5";
+import {sixA4} from "@/components/SvgImg/img6A4";
+import {sixA5} from "@/components/SvgImg/img6A5";
+import {sixC5} from "@/components/SvgImg/img6C5";
+import {sevenA4} from "@/components/SvgImg/img7A4";
+import {sevenA5} from "@/components/SvgImg/img7A5";
+import {sevenC5} from "@/components/SvgImg/img7C5";
+import {eightA4} from "@/components/SvgImg/img8A4";
+import {eightA5} from "@/components/SvgImg/img8A5";
+import {eightC5} from "@/components/SvgImg/img8C5";
+import {nineA4} from "@/components/SvgImg/img9A4";
+import {nineA5} from "@/components/SvgImg/img9A5";
+import {nineC5} from "@/components/SvgImg/img9C5";
 
 export default {
   name: 'CreateLetter',
@@ -81,7 +96,7 @@ export default {
   },
   mounted() {
     this.regionList = regionJson;
-    this.countryList = countryJson;
+    // this.countryList = countryJson;
   },
   components: {
     Troyka,
@@ -89,10 +104,10 @@ export default {
   },
   methods: {
 
-    getEnvelopType(type) {
+    getEnvelopType(type, extraType) {
       if (type.includes('конверте С4')) return 'A4';
-      if (type.includes('лассическое')) return 'A5';
-      if (type) return 'C5';
+      if (type.toLowerCase().includes('классическое') && extraType.toLowerCase().includes('крафтовый')) return 'C5';
+      return 'A5';
     },
 
     getRegion(regionCode, city) {
@@ -107,18 +122,38 @@ export default {
       return country.country;
     },
 
-    // getPicture(picture) {
-    //   if (picture.includes('1')) return one;
-    //   if (picture.includes('2')) return two;
-    //   if (picture.includes('3')) return three;
-    //   if (picture.includes('4')) return three;
-    //   if (picture.includes('5')) return five;
-    //   if (picture.includes('6')) return six;
-    //   if (picture.includes('7')) return seven;
-    //   if (picture.includes('8')) return eight;
-    //   if (picture.includes('9')) return nine;
-    //   return two;
-    // },
+    getPicture(picture, envelopType, extraType) {
+      if (extraType.includes('1') && envelopType === 'A4') return oneA4;
+      if (extraType.includes('2') && envelopType === 'A4') return twoA4;
+      if (extraType.includes('3') && envelopType === 'A4') return threeA4;
+      if (extraType.includes('4') && envelopType === 'A4') return threeA4;
+      if (extraType.includes('5') && envelopType === 'A4') return fiveA4;
+      if (extraType.includes('6') && envelopType === 'A4') return sixA4;
+      if (extraType.includes('7') && envelopType === 'A4') return sevenA4;
+      if (extraType.includes('8') && envelopType === 'A4') return eightA4;
+      if (extraType.includes('9') && envelopType === 'A4') return nineA4;
+
+      if (picture.includes('1') && envelopType === 'A5') return oneA5;
+      if (picture.includes('2') && envelopType === 'A5') return twoA5;
+      if (picture.includes('3') && envelopType === 'A5') return threeA5;
+      if (picture.includes('4') && envelopType === 'A5') return threeA5;
+      if (picture.includes('5') && envelopType === 'A5') return fiveA5;
+      if (picture.includes('6') && envelopType === 'A5') return sixA5;
+      if (picture.includes('7') && envelopType === 'A5') return sevenA5;
+      if (picture.includes('8') && envelopType === 'A5') return eightA5;
+      if (picture.includes('9') && envelopType === 'A5') return nineA5;
+
+      if (picture.includes('1') && envelopType === 'C5') return oneC5;
+      if (picture.includes('2') && envelopType === 'C5') return twoC5;
+      if (picture.includes('3') && envelopType === 'C5') return threeC5;
+      if (picture.includes('4') && envelopType === 'C5') return threeC5;
+      if (picture.includes('5') && envelopType === 'C5') return fiveC5;
+      if (picture.includes('6') && envelopType === 'C5') return sixC5;
+      if (picture.includes('7') && envelopType === 'C5') return sevenC5;
+      if (picture.includes('8') && envelopType === 'C5') return eightC5;
+      if (picture.includes('9') && envelopType === 'C5') return nineC5;
+      return twoC5;
+    },
 
     createFiles() {
       let pdfDocGenerator = [];
@@ -127,7 +162,7 @@ export default {
       this.state.forEach((order, id) => {
         // console.log('Зашли в цикл созд конвертов')
         // console.log(`Reuslt function - ${this.getEnvelopType(order.envelop)}`);
-        switch (this.getEnvelopType(order.envelop)) {
+        switch (this.getEnvelopType(order.envelopType, order.extraType)) {
           case 'A4':
             pdfDocGenerator[id] = this.createPdfA4(order);
             break;
@@ -144,7 +179,8 @@ export default {
         this.status = 'Создание конвертов...'
         prom[i] = new Promise((resolve) => {
           pdfDocGenerator[i].getBlob((blob) => {
-            this.myZip.file(`${this.getEnvelopType(this.state[i].envelop)}_${this.state[i].order}.pdf`, blob);
+            const letterType = this.getEnvelopType(this.state[i].envelopType, this.state[i].extraType);
+            this.myZip.file(`${letterType}_${this.state[i].order}.pdf`, blob);
             this.count++;
             resolve('Сохраняем');
           })
@@ -156,8 +192,8 @@ export default {
 
     makePdf() {
       const prom = this.createFiles();
-      this.status = 'Создание архива...'
       Promise.all([...prom]).then(()=>{
+        this.status = 'Создание архива...'
         this.myZip.generateAsync({type:"blob"})
             .then((blob) => {
               this.status = '';
@@ -167,19 +203,22 @@ export default {
     },
 
     async startPdfZip() {
-      this.count = 0;
       this.isCreating = true;
+      this.result = '0'
+      this.count = 0;
       let zip = require("jszip-sync/dist/jszip.min.js");
       this.myZip = new zip();
       this.status = 'Поиск писем...'
       const { data } = await this.getOrderUsePeriod(this.date[0], this.date[1]);
-      console.log('Данные с ECWID',data);
+      this.status = `Найдено ${data.items.length} писем...`;
+      // console.log('Данные с ECWID',data);
       this.state = data.items
           .filter(i => i.items[0]?.name?.includes('письмо') && i.shippingPerson.countryCode === 'RU' && !i.items[0]?.name?.includes('ЦК'))
           .map(i => {
             let obj = {
               order: i.id,
-              envelop: i.items[0].name,
+              envelopType: i.items[0].name,
+              extraType: i.items[0].selectedOptions[7].value,
               picture: i.items[0].selectedOptions[8].value,
               person: i.items[0].selectedOptions[0].value,
               postalCode: i.shippingPerson.postalCode,
@@ -190,10 +229,22 @@ export default {
             };
             return obj;
           });
-      this.status = `Найдено ${this.state.length} писем...`;
-      console.table(this.state);
+
+      this.status = `Обработано ${this.state.length} писем...`;
+      // console.table(this.state);
       this.result = this.state.length
-      this.result ? await this.makePdf() : this.result='Нет писем';
+
+      // try {
+      //   const { data } = await createStream({
+      //     symbology: SymbologyType.AZTEC,
+      //   }, this.state.order, OutputTypes.SVG)
+      //
+      //   console.log('Result: ', data)
+      // } catch (err) {
+      //   console.error('Error: ', err)
+      // }
+
+      this.result ? await this.makePdf() : this.result = '0';
     },
 
     createPdfA4(order) {
@@ -217,10 +268,10 @@ export default {
             bolditalics: 'Pechkin_35011.ttf'
           },
           Arial: {
-            normal: 'arial.ttf',
-            bold: 'arial.ttf',
-            italics: 'arial.ttf',
-            bolditalics: 'arial.ttf'
+            normal: 'Arial.ttf',
+            bold: 'Arial.ttf',
+            italics: 'Arial.ttf',
+            bolditalics: 'Arial.ttf'
           }
         }
 
@@ -299,10 +350,17 @@ export default {
               margin: [50, 1, 0, 0]
             },
 
+            {
+              text: order.order,
+              fontSize: 7,
+              color: '#323d85',
+              margin: [760, -100, 0, 0]
+            },
+
              // Picture
             {
-              svg: one,
-              margin: [35, -10, 0, 0]
+              svg: this.getPicture(order.picture, 'A4', order.extraType),
+              margin: [0, 90, 0, 0]
             },
 
             // PostalCode
@@ -345,35 +403,35 @@ export default {
                 {
                   type: 'line',
                   x1: 489, y1: -32,
-                  x2: 730, y2: -32,
+                  x2: 779, y2: -32,
                   lineWidth: 1,
                   color: '#2b2a29',
                 },
                 {
                   type: 'line',
                   x1: 489, y1: 0,
-                  x2: 730, y2: 0,
+                  x2: 779, y2: 0,
                   lineWidth: 1,
                   color: '#2b2a29',
                 },
                 {
                   type: 'line',
                   x1: 489, y1: 32,
-                  x2: 730, y2: 32,
+                  x2: 779, y2: 32,
                   lineWidth: 1,
                   color: '#2b2a29',
                 },
                 {
                   type: 'line',
                   x1: 489, y1: 64,
-                  x2: 730, y2: 64,
+                  x2: 779, y2: 64,
                   lineWidth: 1,
                   color: '#2b2a29',
                 },
                 {
                   type: 'line',
                   x1: 489, y1: 96,
-                  x2: 730, y2: 96,
+                  x2: 779, y2: 96,
                   lineWidth: 1,
                   color: '#2b2a29',
                 }
@@ -404,7 +462,7 @@ export default {
               margin: [496, 1, 0, 0]
             },
             {
-              text: this.getCountry(order.country),
+              text: 'Россия',
               fontSize: 26,
               color: '#323d85',
               margin: [496, 1, 0, 0]
@@ -418,14 +476,8 @@ export default {
             font: 'Andantino'
           }
         }
-
         return  pdfMake.createPdf(docDefinition);
         // pdfMake.createPdf(docDefinition).open();
-
-        // this.myZip.file(`${order.order}.pdf`, pdfDocGenerator.getBlob((blob) => blob));
-
-
-
     },
     createPdfA5(order) {
       const pdfMake = require('pdfmake/build/pdfmake.js')
@@ -448,22 +500,28 @@ export default {
           bolditalics: 'Pechkin_35011.ttf'
         },
         Arial: {
-          normal: 'arial.ttf',
-          bold: 'arial.ttf',
-          italics: 'arial.ttf',
-          bolditalics: 'arial.ttf'
+          normal: 'Arial.ttf',
+          bold: 'Arial.ttf',
+          italics: 'Arial.ttf',
+          bolditalics: 'Arial.ttf'
         }
       }
 
       const docDefinition = {
         content: [
+
+          // Picture
+          {
+            svg: this.getPicture(order.picture, 'A5', order.extraType),
+            margin: [0, 12, 0, 0]
+          },
           {
             text: 'От кого',
             italics: true,
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [28, 20, 0, 0]
+            margin: [28, -368, 0, 0]
           },
           {
             text: 'Откуда',
@@ -533,11 +591,11 @@ export default {
             color: '#323d85',
             margin: [29, -3, 0, 0]
           },
-
-          // Picture
           {
-            svg: oneA5,
-            margin: [29, 10, 0, 0]
+            text: order.order,
+            fontSize: 7,
+            color: '#323d85',
+            margin: [530, -100, 0, 0]
           },
 
           // PostalCode
@@ -549,14 +607,14 @@ export default {
                 '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
                 ' </g>\n' +
                 '</svg>',
-            margin: [28, -15, 0, 0]
+            margin: [28, 263, 0, 0]
           },
           {
             text: order.postalCode,
             font: 'Pechkin',
             fontSize: 34,
             color: '#2b2a29',
-            margin: [49, -12, 0, 0]
+            margin: [49, -11.5, 0, 0]
           },
 
           {
@@ -565,7 +623,7 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [261, -150, 0, 0]
+            margin: [265, -150, 0, 0]
           },
           {
             text: 'Куда',
@@ -573,41 +631,41 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [261, 15, 0, 0]
+            margin: [265, 15, 0, 0]
           },
           {
             canvas: [
               {
                 type: 'line',
-                x1: 303, y1: -32,
+                x1: 307, y1: -32,
                 x2: 544, y2: -32,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 303, y1: 0,
+                x1: 307, y1: 0,
                 x2: 544, y2: 0,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 303, y1: 32,
+                x1: 307, y1: 32,
                 x2: 544, y2: 32,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 303, y1: 64,
+                x1: 307, y1: 64,
                 x2: 544, y2: 64,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 303, y1: 96,
+                x1: 307, y1: 96,
                 x2: 544, y2: 96,
                 lineWidth: 1,
                 color: '#2b2a29',
@@ -618,31 +676,31 @@ export default {
             text: order.person,
             fontSize: 26,
             color: '#323d85',
-            margin: [304, -154, 0, 0]
+            margin: [307, -154, 0, 0]
           },
           {
             text: order.street,
             fontSize: 26,
             color: '#323d85',
-            margin: [304, 2, 0, 0]
+            margin: [307, 2, 0, 0]
           },
           {
             text: order.city,
             fontSize: 26,
             color: '#323d85',
-            margin: [304, 2, 0, 0]
+            margin: [307, 2, 0, 0]
           },
           {
             text: this.getRegion(order.region, order.city),
             fontSize: 26,
             color: '#323d85',
-            margin: [304, 1, 0, 0]
+            margin: [307, 1, 0, 0]
           },
           {
-            text: this.getCountry(order.country),
+            text: 'Россия',
             fontSize: 26,
             color: '#323d85',
-            margin: [304, 1, 0, 0]
+            margin: [307, 1, 0, 0]
           }
         ],
 
@@ -656,11 +714,6 @@ export default {
 
       return  pdfMake.createPdf(docDefinition);
       // pdfMake.createPdf(docDefinition).open();
-
-      // this.myZip.file(`${order.order}.pdf`, pdfDocGenerator.getBlob((blob) => blob));
-
-
-
     },
     createPdfC5(order) {
       const pdfMake = require('pdfmake/build/pdfmake.js')
@@ -683,22 +736,28 @@ export default {
           bolditalics: 'Pechkin_35011.ttf'
         },
         Arial: {
-          normal: 'arial.ttf',
-          bold: 'arial.ttf',
-          italics: 'arial.ttf',
-          bolditalics: 'arial.ttf'
+          normal: 'Arial.ttf',
+          bold: 'Arial.ttf',
+          italics: 'Arial.ttf',
+          bolditalics: 'Arial.ttf'
         }
       }
 
       const docDefinition = {
         content: [
+          // Picture
+          {
+            svg: this.getPicture(order.picture, 'C5', order.extraType),
+            margin: [0, 31, 0, 0]
+          },
+
           {
             text: 'От кого',
             italics: true,
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [28, 20, 0, 0]
+            margin: [28, -385, 0, 0]
           },
           {
             text: 'Откуда',
@@ -768,11 +827,11 @@ export default {
             color: '#323d85',
             margin: [29, -3, 0, 0]
           },
-
-          // Picture
           {
-            svg: oneA5,
-            margin: [29, 10, 0, 0]
+            text: order.order,
+            fontSize: 7,
+            color: '#323d85',
+            margin: [580, -100, 0, 0]
           },
 
           // PostalCode
@@ -784,23 +843,22 @@ export default {
                 '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
                 ' </g>\n' +
                 '</svg>',
-            margin: [28, -15, 0, 0]
+            margin: [28, 284, 0, 0]
           },
           {
             text: order.postalCode,
             font: 'Pechkin',
             fontSize: 34,
             color: '#2b2a29',
-            margin: [49, -12, 0, 0]
+            margin: [49, -11.5, 0, 0]
           },
-
           {
             text: 'Кому',
             italics: true,
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [325, -150, 0, 0]
+            margin: [300, -150, 0, 0]
           },
           {
             text: 'Куда',
@@ -808,41 +866,41 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [325, 15, 0, 0]
+            margin: [300, 15, 0, 0]
           },
           {
             canvas: [
               {
                 type: 'line',
-                x1: 365, y1: -32,
+                x1: 340, y1: -32,
                 x2: 606, y2: -32,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 365, y1: 0,
+                x1: 340, y1: 0,
                 x2: 606, y2: 0,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 365, y1: 32,
+                x1: 340, y1: 32,
                 x2: 606, y2: 32,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 365, y1: 64,
+                x1: 340, y1: 64,
                 x2: 606, y2: 64,
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 365, y1: 96,
+                x1: 340, y1: 96,
                 x2: 606, y2: 96,
                 lineWidth: 1,
                 color: '#2b2a29',
@@ -853,31 +911,31 @@ export default {
             text: order.person,
             fontSize: 26,
             color: '#323d85',
-            margin: [365, -154, 0, 0]
+            margin: [340, -154, 0, 0]
           },
           {
             text: order.street,
             fontSize: 26,
             color: '#323d85',
-            margin: [365, 2, 0, 0]
+            margin: [340, 2, 0, 0]
           },
           {
             text: order.city,
             fontSize: 26,
             color: '#323d85',
-            margin: [365, 2, 0, 0]
+            margin: [340, 2, 0, 0]
           },
           {
             text: this.getRegion(order.region, order.city),
             fontSize: 26,
             color: '#323d85',
-            margin: [365, 1, 0, 0]
+            margin: [340, 1, 0, 0]
           },
           {
-            text: this.getCountry(order.country),
+            text: 'Россия',
             fontSize: 26,
             color: '#323d85',
-            margin: [365, 1, 0, 0]
+            margin: [340, 1, 0, 0]
           }
         ],
 
@@ -888,19 +946,12 @@ export default {
           font: 'Andantino'
         }
       }
-
       return  pdfMake.createPdf(docDefinition);
       // pdfMake.createPdf(docDefinition).open();
-
-      // this.myZip.file(`${order.order}.pdf`, pdfDocGenerator.getBlob((blob) => blob));
-
-
-
     },
 
-
     getOrderUsePeriod(createdFrom, createdTo) {
-      const url = `https://app.ecwid.com/api/v3/1569218/orders?token=secret_Wk9esm1V9SNWQLdXnyhjaVwxQgX68b4L&createdFrom=${createdFrom}&createdTo=${createdTo}`
+      const url = `https://app.ecwid.com/api/v3/1569218/orders?token=secret_Wk9esm1V9SNWQLdXnyhjaVwxQgX68b4L&createdFrom=${createdFrom}&createdTo=${+createdTo+86399}`
       return axios.get(url);
     }
   }
