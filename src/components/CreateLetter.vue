@@ -213,7 +213,9 @@ export default {
       this.status = `Найдено ${data.items.length} писем...`;
       // console.log('Данные с ECWID',data);
       this.state = data.items
-          .filter(i => i.items[0]?.name?.includes('письмо') && i.shippingPerson.countryCode === 'RU' && !i.items[0]?.name?.includes('ЦК'))
+          .filter(i => i.items[0]?.name?.includes('письмо')
+              && i.shippingPerson.countryCode === 'RU'
+              && !i.items[0]?.name?.includes('ЦК'))
           .map(i => {
             let obj = {
               order: i.id,
