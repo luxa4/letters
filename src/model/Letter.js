@@ -7,8 +7,8 @@ export class Letter {
         this.city = data.shippingPerson.city;
         this.street = data.shippingPerson.street;
         this.order_id = data.id;
-        this.envelope_type = data.items[0].name;
-        this.envelope_type_extra = data.items[0].selectedOptions[7].value;
+        this.type = data.items[0].name;
+        this.type_extra = data.items[0].selectedOptions[7].value;
         this.picture = data.items[0].selectedOptions[8].value;
     }
 }

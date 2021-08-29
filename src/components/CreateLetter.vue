@@ -398,7 +398,7 @@ export default {
             margin: [496, 2, 0, 0]
           },
           {
-            text: this.getRegion(letter.region, letter.city),
+            text: this.getRegion(letter),
             fontSize: 26,
             color: '#323d85',
             margin: [496, 1, 0, 0]
@@ -633,7 +633,7 @@ export default {
             margin: [307, 2, 0, 0]
           },
           {
-            text: this.getRegion(letter.region, letter.city),
+            text: this.getRegion(letter),
             fontSize: 26,
             color: '#323d85',
             margin: [307, 1, 0, 0]
@@ -690,7 +690,7 @@ export default {
           // Picture
           {
             svg: this.getPicture(letter.picture, 'C5', letter.envelope_type_extra),
-            margin: [0, 31, 0, 0]
+            margin: this.getMarginPicture(letter.type)
           },
 
           {
@@ -898,8 +898,8 @@ export default {
       return 'A5';
     },
 
-    getRegion(regionCode, city) {
-      const region = this.regionList.find(region => region.code == regionCode);
+    getRegion( {region_code, city} ) {
+      const region = this.regionList.find(region => region.code == region_code);
       // Если город столица региона - область не указываем
       if (city.includes(region.capital) &&  city.trim().length < region.capital.length + 3) return '';
       return region.region;
@@ -910,36 +910,36 @@ export default {
       return country.country;
     },
 
-    getPicture(picture, envelopType, extraType) {
-      if (extraType.includes('1') && envelopType === 'A4') return oneA4;
-      if (extraType.includes('2') && envelopType === 'A4') return twoA4;
-      if (extraType.includes('3') && envelopType === 'A4') return threeA4;
-      if (extraType.includes('4') && envelopType === 'A4') return threeA4;
-      if (extraType.includes('5') && envelopType === 'A4') return fiveA4;
-      if (extraType.includes('6') && envelopType === 'A4') return sixA4;
-      if (extraType.includes('7') && envelopType === 'A4') return sevenA4;
-      if (extraType.includes('8') && envelopType === 'A4') return eightA4;
-      if (extraType.includes('9') && envelopType === 'A4') return nineA4;
+    getPicture( { picture, envelope_type, envelope_type_extra} ) {
+      if (envelope_type_extra.includes('1') && envelope_type === 'A4') return oneA4;
+      if (envelope_type_extra.includes('2') && envelope_type === 'A4') return twoA4;
+      if (envelope_type_extra.includes('3') && envelope_type === 'A4') return threeA4;
+      if (envelope_type_extra.includes('4') && envelope_type === 'A4') return threeA4;
+      if (envelope_type_extra.includes('5') && envelope_type === 'A4') return fiveA4;
+      if (envelope_type_extra.includes('6') && envelope_type === 'A4') return sixA4;
+      if (envelope_type_extra.includes('7') && envelope_type === 'A4') return sevenA4;
+      if (envelope_type_extra.includes('8') && envelope_type === 'A4') return eightA4;
+      if (envelope_type_extra.includes('9') && envelope_type === 'A4') return nineA4;
 
-      if (picture.includes('1') && envelopType === 'A5') return oneA5;
-      if (picture.includes('2') && envelopType === 'A5') return twoA5;
-      if (picture.includes('3') && envelopType === 'A5') return threeA5;
-      if (picture.includes('4') && envelopType === 'A5') return threeA5;
-      if (picture.includes('5') && envelopType === 'A5') return fiveA5;
-      if (picture.includes('6') && envelopType === 'A5') return sixA5;
-      if (picture.includes('7') && envelopType === 'A5') return sevenA5;
-      if (picture.includes('8') && envelopType === 'A5') return eightA5;
-      if (picture.includes('9') && envelopType === 'A5') return nineA5;
+      if (picture.includes('1') && envelope_type === 'A5') return oneA5;
+      if (picture.includes('2') && envelope_type === 'A5') return twoA5;
+      if (picture.includes('3') && envelope_type === 'A5') return threeA5;
+      if (picture.includes('4') && envelope_type === 'A5') return threeA5;
+      if (picture.includes('5') && envelope_type === 'A5') return fiveA5;
+      if (picture.includes('6') && envelope_type === 'A5') return sixA5;
+      if (picture.includes('7') && envelope_type === 'A5') return sevenA5;
+      if (picture.includes('8') && envelope_type === 'A5') return eightA5;
+      if (picture.includes('9') && envelope_type === 'A5') return nineA5;
 
-      if (picture.includes('1') && envelopType === 'C5') return oneC5;
-      if (picture.includes('2') && envelopType === 'C5') return twoC5;
-      if (picture.includes('3') && envelopType === 'C5') return threeC5;
-      if (picture.includes('4') && envelopType === 'C5') return threeC5;
-      if (picture.includes('5') && envelopType === 'C5') return fiveC5;
-      if (picture.includes('6') && envelopType === 'C5') return sixC5;
-      if (picture.includes('7') && envelopType === 'C5') return sevenC5;
-      if (picture.includes('8') && envelopType === 'C5') return eightC5;
-      if (picture.includes('9') && envelopType === 'C5') return nineC5;
+      if (picture.includes('1') && envelope_type === 'C5') return oneC5;
+      if (picture.includes('2') && envelope_type === 'C5') return twoC5;
+      if (picture.includes('3') && envelope_type === 'C5') return threeC5;
+      if (picture.includes('4') && envelope_type === 'C5') return threeC5;
+      if (picture.includes('5') && envelope_type === 'C5') return fiveC5;
+      if (picture.includes('6') && envelope_type === 'C5') return sixC5;
+      if (picture.includes('7') && envelope_type === 'C5') return sevenC5;
+      if (picture.includes('8') && envelope_type === 'C5') return eightC5;
+      if (picture.includes('9') && envelope_type === 'C5') return nineC5;
       return twoC5;
     },
 
@@ -980,7 +980,7 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [50, 40, 0, 0]
+            margin: this.getMarginLabelFromWho(letter.type)
           },
           {
             text: 'Откуда',
@@ -988,7 +988,7 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [50, 15, 0, 0]
+            margin: this.getMarginLabelFrom(letter.type)
           },
           {
             canvas: [
@@ -1056,8 +1056,8 @@ export default {
 
           // Picture
           {
-            svg: this.getPicture(letter.picture, 'A4', letter.envelope_type_extra),
-            margin: [0, 90, 0, 0]
+            svg: this.getPicture(letter),
+            margin: this.getMarginPicture(letter.type)
           },
 
           // PostalCode
@@ -1166,7 +1166,7 @@ export default {
           }
         ],
 
-        pageSize: 'A4',
+        pageSize: letter.envelope_type,
         pageOrientation: 'landscape',
         pageMargins: [0, 0, 0, 0],
         defaultStyle: {
@@ -1176,7 +1176,21 @@ export default {
       return  pdfMake.createPdf(docDefinition);
       // pdfMake.createPdf(docDefinition).open();
     },
-
+    getMarginLabelFromWho(letter_type) {
+      if (letter_type === 'A4') return [50, 40, 0, 0];
+      if (letter_type === 'A5') return [28, -368, 0, 0];
+      return [28, -385, 0, 0]
+    },
+    getMarginLabelFrom(letter_type) {
+      if (letter_type === 'A4') return [50, 40, 0, 0];
+      if (letter_type === 'A5') return [28, -368, 0, 0];
+      return [28, -385, 0, 0]
+    },
+    getMarginPicture(letter_type) {
+      if (letter_type === 'A4') return [0, 90, 0, 0];
+      if (letter_type === 'A5') return [0, 12, 0, 0];
+      return [0, 31, 0, 0]
+    }
   }
 }
 </script>
