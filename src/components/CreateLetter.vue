@@ -910,36 +910,41 @@ export default {
       return country.country;
     },
 
-    getPicture( { picture, envelope_type, envelope_type_extra} ) {
-      if (envelope_type_extra.includes('1') && envelope_type === 'A4') return oneA4;
-      if (envelope_type_extra.includes('2') && envelope_type === 'A4') return twoA4;
-      if (envelope_type_extra.includes('3') && envelope_type === 'A4') return threeA4;
-      if (envelope_type_extra.includes('4') && envelope_type === 'A4') return threeA4;
-      if (envelope_type_extra.includes('5') && envelope_type === 'A4') return fiveA4;
-      if (envelope_type_extra.includes('6') && envelope_type === 'A4') return sixA4;
-      if (envelope_type_extra.includes('7') && envelope_type === 'A4') return sevenA4;
-      if (envelope_type_extra.includes('8') && envelope_type === 'A4') return eightA4;
-      if (envelope_type_extra.includes('9') && envelope_type === 'A4') return nineA4;
+    getPicture( { picture, type, type_extra} ) {
+      if (type === 'A4') {
+        if (type_extra.includes('1')) return oneA4;
+        if (type_extra.includes('2')) return twoA4;
+        if (type_extra.includes('3')) return threeA4;
+        if (type_extra.includes('4')) return threeA4;
+        if (type_extra.includes('5')) return fiveA4;
+        if (type_extra.includes('6')) return sixA4;
+        if (type_extra.includes('7')) return sevenA4;
+        if (type_extra.includes('8')) return eightA4;
+        if (type_extra.includes('9')) return nineA4;
+      }
 
-      if (picture.includes('1') && envelope_type === 'A5') return oneA5;
-      if (picture.includes('2') && envelope_type === 'A5') return twoA5;
-      if (picture.includes('3') && envelope_type === 'A5') return threeA5;
-      if (picture.includes('4') && envelope_type === 'A5') return threeA5;
-      if (picture.includes('5') && envelope_type === 'A5') return fiveA5;
-      if (picture.includes('6') && envelope_type === 'A5') return sixA5;
-      if (picture.includes('7') && envelope_type === 'A5') return sevenA5;
-      if (picture.includes('8') && envelope_type === 'A5') return eightA5;
-      if (picture.includes('9') && envelope_type === 'A5') return nineA5;
+      if (type === 'A5') {
+        if (picture.includes('1')) return oneA5;
+        if (picture.includes('2')) return twoA5;
+        if (picture.includes('3')) return threeA5;
+        if (picture.includes('4')) return threeA5;
+        if (picture.includes('5')) return fiveA5;
+        if (picture.includes('6')) return sixA5;
+        if (picture.includes('7')) return sevenA5;
+        if (picture.includes('8')) return eightA5;
+        if (picture.includes('9')) return nineA5;
+      }
 
-      if (picture.includes('1') && envelope_type === 'C5') return oneC5;
-      if (picture.includes('2') && envelope_type === 'C5') return twoC5;
-      if (picture.includes('3') && envelope_type === 'C5') return threeC5;
-      if (picture.includes('4') && envelope_type === 'C5') return threeC5;
-      if (picture.includes('5') && envelope_type === 'C5') return fiveC5;
-      if (picture.includes('6') && envelope_type === 'C5') return sixC5;
-      if (picture.includes('7') && envelope_type === 'C5') return sevenC5;
-      if (picture.includes('8') && envelope_type === 'C5') return eightC5;
-      if (picture.includes('9') && envelope_type === 'C5') return nineC5;
+      if (picture.includes('1')) return oneC5;
+      if (picture.includes('2')) return twoC5;
+      if (picture.includes('3')) return threeC5;
+      if (picture.includes('4')) return threeC5;
+      if (picture.includes('5')) return fiveC5;
+      if (picture.includes('6')) return sixC5;
+      if (picture.includes('7')) return sevenC5;
+      if (picture.includes('8')) return eightC5;
+      if (picture.includes('9')) return nineC5;
+
       return twoC5;
     },
 
