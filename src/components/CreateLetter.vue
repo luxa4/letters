@@ -9,7 +9,7 @@
           {{ isNaN(progressBar) ? 0 : progressBar }} %
         </div>
       </div>
-      <div v-if="result" class="mt-2"><h3>Найдено {{ result }} писем!</h3></div>
+      <div v-if="letters_count" class="mt-2"><h3>Найдено {{ letters_count }} писем!</h3></div>
       <div style="margin-bottom: 15px; margin-top: 15px">
         <date-picker
             placeholder="Укажите период заказов"
@@ -27,15 +27,13 @@
 </template>
 
 <script>
-
+import { getOrders } from "../services";
 import Troyka from "@/components/Troyka";
-import axios from "axios";
 import { saveAs } from 'file-saver';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 import 'vue2-datepicker/locale/ru';
 import regionJson from '../region.json';
-// import countryJson from '../country.json';
 
 import {oneA4} from "@/components/SvgImg/img1A4";
 import {oneA5} from "@/components/SvgImg/img1A5";
@@ -61,15 +59,16 @@ import {eightC5} from "@/components/SvgImg/img8C5";
 import {nineA4} from "@/components/SvgImg/img9A4";
 import {nineA5} from "@/components/SvgImg/img9A5";
 import {nineC5} from "@/components/SvgImg/img9C5";
+import {Letter} from "../model/Person";
 
 export default {
   name: 'CreateLetter',
   data() {
     return {
       status: '',
-      state: null,
+      letters: null,
       date: null,
-      result: 0,
+      letters_count: 0,
       regionList: null,
       countryList: null,
       progress: 0,
@@ -91,7 +90,7 @@ export default {
   },
   computed: {
     progressBar() {
-      return Math.round(this.count * 100 / this.result);
+      return Math.round(this.count * 100 / this.letters_count);
     }
   },
   mounted() {
@@ -103,139 +102,33 @@ export default {
     DatePicker
   },
   methods: {
-
-    getEnvelopType(type, extraType) {
-      if (type.includes('конверте С4')) return 'A4';
-      if (type.toLowerCase().includes('классическое') && extraType.toLowerCase().includes('крафтовый')) return 'C5';
-      return 'A5';
-    },
-
-    getRegion(regionCode, city) {
-      const region = this.regionList.find(region => region.code == regionCode);
-      // Если город столица региона - область не указываем
-      if (city.includes(region.capital) &&  city.trim().length < region.capital.length + 3) return '';
-      return region.region;
-    },
-
-    getCountry(countryCode) {
-      const country = this.countryList.find(country => country.code == countryCode);
-      return country.country;
-    },
-
-    getPicture(picture, envelopType, extraType) {
-      if (extraType.includes('1') && envelopType === 'A4') return oneA4;
-      if (extraType.includes('2') && envelopType === 'A4') return twoA4;
-      if (extraType.includes('3') && envelopType === 'A4') return threeA4;
-      if (extraType.includes('4') && envelopType === 'A4') return threeA4;
-      if (extraType.includes('5') && envelopType === 'A4') return fiveA4;
-      if (extraType.includes('6') && envelopType === 'A4') return sixA4;
-      if (extraType.includes('7') && envelopType === 'A4') return sevenA4;
-      if (extraType.includes('8') && envelopType === 'A4') return eightA4;
-      if (extraType.includes('9') && envelopType === 'A4') return nineA4;
-
-      if (picture.includes('1') && envelopType === 'A5') return oneA5;
-      if (picture.includes('2') && envelopType === 'A5') return twoA5;
-      if (picture.includes('3') && envelopType === 'A5') return threeA5;
-      if (picture.includes('4') && envelopType === 'A5') return threeA5;
-      if (picture.includes('5') && envelopType === 'A5') return fiveA5;
-      if (picture.includes('6') && envelopType === 'A5') return sixA5;
-      if (picture.includes('7') && envelopType === 'A5') return sevenA5;
-      if (picture.includes('8') && envelopType === 'A5') return eightA5;
-      if (picture.includes('9') && envelopType === 'A5') return nineA5;
-
-      if (picture.includes('1') && envelopType === 'C5') return oneC5;
-      if (picture.includes('2') && envelopType === 'C5') return twoC5;
-      if (picture.includes('3') && envelopType === 'C5') return threeC5;
-      if (picture.includes('4') && envelopType === 'C5') return threeC5;
-      if (picture.includes('5') && envelopType === 'C5') return fiveC5;
-      if (picture.includes('6') && envelopType === 'C5') return sixC5;
-      if (picture.includes('7') && envelopType === 'C5') return sevenC5;
-      if (picture.includes('8') && envelopType === 'C5') return eightC5;
-      if (picture.includes('9') && envelopType === 'C5') return nineC5;
-      return twoC5;
-    },
-
-    createFiles() {
-      let pdfDocGenerator = [];
-      let prom = [];
-
-      this.state.forEach((order, id) => {
-        // console.log('Зашли в цикл созд конвертов')
-        // console.log(`Reuslt function - ${this.getEnvelopType(order.envelop)}`);
-        switch (this.getEnvelopType(order.envelopType, order.extraType)) {
-          case 'A4':
-            pdfDocGenerator[id] = this.createPdfA4(order);
-            break;
-          case 'A5':
-            pdfDocGenerator[id] = this.createPdfA5(order);
-            break;
-          case 'C5':
-            pdfDocGenerator[id] =  this.createPdfC5(order);
-            break;
-        }
-      })
-
-      for (let i = 0; i < pdfDocGenerator.length; i++) {
-        this.status = 'Создание конвертов...'
-        prom[i] = new Promise((resolve) => {
-          pdfDocGenerator[i].getBlob((blob) => {
-            const letterType = this.getEnvelopType(this.state[i].envelopType, this.state[i].extraType);
-            this.myZip.file(`${letterType}_${this.state[i].order}.pdf`, blob);
-            this.count++;
-            resolve('Сохраняем');
-          })
-        })
-      }
-
-      return prom;
-    },
-
-    makePdf() {
-      const prom = this.createFiles();
-      Promise.all([...prom]).then(()=>{
-        this.status = 'Создание архива...'
-        this.myZip.generateAsync({type:"blob"})
-            .then((blob) => {
-              this.status = '';
-              saveAs(blob, `orders${1}.zip`)})
-      })
-
-    },
-
     async startPdfZip() {
       this.isCreating = true;
-      this.result = '0'
+      this.letters_count = '0'
       this.count = 0;
+
       let zip = require("jszip-sync/dist/jszip.min.js");
       this.myZip = new zip();
+
       this.status = 'Поиск писем...'
-      const { data } = await this.getOrderUsePeriod(this.date[0], this.date[1]);
+
+      const { data } = await getOrders(this.date[0], this.date[1]);
+
       this.status = `Найдено ${data.items.length} писем...`;
-      // console.log('Данные с ECWID',data);
-      this.state = data.items
+
+      this.letters = data.items
           .filter(i => i.items[0]?.name?.includes('письмо')
               && i.shippingPerson.countryCode === 'RU'
               && !i.items[0]?.name?.includes('ЦК'))
-          .map(i => {
-            let obj = {
-              order: i.id,
-              envelopType: i.items[0].name,
-              extraType: i.items[0].selectedOptions[7].value,
-              picture: i.items[0].selectedOptions[8].value,
-              person: i.items[0].selectedOptions[0].value,
-              postalCode: i.shippingPerson.postalCode,
-              country: i.shippingPerson.countryCode,
-              region: i.shippingPerson.stateOrProvinceCode,
-              city: i.shippingPerson.city,
-              street: i.shippingPerson.street
-            };
-            return obj;
-          });
+          .map(i => new Letter(i));
 
-      this.status = `Обработано ${this.state.length} писем...`;
+      this.status = `Обработано ${this.letters.length} писем...`;
       // console.table(this.state);
-      this.result = this.state.length
+      this.letters_count = this.letters.length
 
+      if (this.letters_count) {
+        await this.createPDF();
+      }
       // try {
       //   const { data } = await createStream({
       //     symbology: SymbologyType.AZTEC,
@@ -245,243 +138,290 @@ export default {
       // } catch (err) {
       //   console.error('Error: ', err)
       // }
-
-      this.result ? await this.makePdf() : this.result = '0';
     },
 
-    createPdfA4(order) {
-        const pdfMake = require('pdfmake/build/pdfmake.js')
-        if (pdfMake.vfs == undefined) {
-          let pdfFonts = require('pdfmake/build/vfs_fonts.js')
-          pdfMake.vfs = pdfFonts.pdfMake.vfs;
-        }
-
-        pdfMake.fonts = {
-          Andantino: {
-            normal: 'Andantino script.ttf',
-            bold: 'Andantino script.ttf',
-            italics: 'Andantino script.ttf',
-            bolditalics: 'Andantino script.ttf'
-          },
-          Pechkin: {
-            normal: 'Pechkin_35011.ttf',
-            bold: 'Pechkin_35011.ttf',
-            italics: 'Pechkin_35011.ttf',
-            bolditalics: 'Pechkin_35011.ttf'
-          },
-          Arial: {
-            normal: 'Arial.ttf',
-            bold: 'Arial.ttf',
-            italics: 'Arial.ttf',
-            bolditalics: 'Arial.ttf'
-          }
-        }
-
-        const docDefinition = {
-          content: [
-            {
-              text: 'От кого',
-              italics: true,
-              fontSize: 14,
-              font: 'Arial',
-              color: '#2b2a29',
-              margin: [50, 40, 0, 0]
-            },
-            {
-              text: 'Откуда',
-              italics: true,
-              fontSize: 14,
-              font: 'Arial',
-              color: '#2b2a29',
-              margin: [50, 15, 0, 0]
-            },
-            {
-              canvas: [
-                {
-                  type: 'line',
-                  x1: 115, y1: -32,
-                  x2: 300, y2: -32,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-                {
-                  type: 'line',
-                  x1: 115, y1: 0,
-                  x2: 300, y2: 0,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-                {
-                  type: 'line',
-                  x1: 50, y1: 32,
-                  x2: 300, y2: 32,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-                {
-                  type: 'line',
-                  x1: 50, y1: 64,
-                  x2: 300, y2: 64,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-              ]
-            },
-            {
-              text: 'Дедушки Мороза',
-              fontSize: 26,
-              color: '#323d85',
-              margin: [120, -122, 0, 0]
-            },
-            {
-              text: 'Дворец Деда Мороза',
-              fontSize: 26,
-              color: '#323d85',
-              margin: [120, 2, 0, 0]
-            },
-            {
-              text: 'г.Великий Устюг',
-              fontSize: 26,
-              color: '#323d85',
-              margin: [79, 2, 0, 0]
-            },
-            {
-              text: 'Вологодская область, Россия',
-              fontSize: 26,
-              color: '#323d85',
-              margin: [50, 1, 0, 0]
-            },
-
-            {
-              text: order.order,
-              fontSize: 7,
-              color: '#323d85',
-              margin: [760, -100, 0, 0]
-            },
-
-             // Picture
-            {
-              svg: this.getPicture(order.picture, 'A4', order.extraType),
-              margin: [0, 90, 0, 0]
-            },
-
-            // PostalCode
-            {
-              svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n' +
-                  ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">\n' +
-                  '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>\n' +
-                  '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                  '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                  ' </g>\n' +
-                  '</svg>',
-              margin: [50, -90, 0, 0]
-            },
-            {
-              text: order.postalCode,
-              font: 'Pechkin',
-              fontSize: 34,
-              color: '#2b2a29',
-              margin: [73, -11.5, 0, 0]
-            },
-
-            {
-              text: 'Кому',
-              italics: true,
-              fontSize: 14,
-              font: 'Arial',
-              color: '#2b2a29',
-              margin: [450, -150, 0, 0]
-            },
-            {
-              text: 'Куда',
-              italics: true,
-              fontSize: 14,
-              font: 'Arial',
-              color: '#2b2a29',
-              margin: [450, 15, 0, 0]
-            },
-            {
-              canvas: [
-                {
-                  type: 'line',
-                  x1: 489, y1: -32,
-                  x2: 779, y2: -32,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-                {
-                  type: 'line',
-                  x1: 489, y1: 0,
-                  x2: 779, y2: 0,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-                {
-                  type: 'line',
-                  x1: 489, y1: 32,
-                  x2: 779, y2: 32,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-                {
-                  type: 'line',
-                  x1: 489, y1: 64,
-                  x2: 779, y2: 64,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                },
-                {
-                  type: 'line',
-                  x1: 489, y1: 96,
-                  x2: 779, y2: 96,
-                  lineWidth: 1,
-                  color: '#2b2a29',
-                }
-              ]
-            },
-            {
-              text: order.person,
-              fontSize: 26,
-              color: '#323d85',
-              margin: [496, -154, 0, 0]
-            },
-            {
-              text: order.street,
-              fontSize: 26,
-              color: '#323d85',
-              margin: [496, 2, 0, 0]
-            },
-            {
-              text: order.city,
-              fontSize: 26,
-              color: '#323d85',
-              margin: [496, 2, 0, 0]
-            },
-            {
-              text: this.getRegion(order.region, order.city),
-              fontSize: 26,
-              color: '#323d85',
-              margin: [496, 1, 0, 0]
-            },
-            {
-              text: 'Россия',
-              fontSize: 26,
-              color: '#323d85',
-              margin: [496, 1, 0, 0]
-            }
-          ],
-
-          pageSize: 'A4',
-          pageOrientation: 'landscape',
-          pageMargins: [0, 0, 0, 0],
-          defaultStyle: {
-            font: 'Andantino'
-          }
-        }
-        return  pdfMake.createPdf(docDefinition);
-        // pdfMake.createPdf(docDefinition).open();
+    createPDF() {
+      const letters_in_pdf = this.createFiles();
+      this.createZIP(letters_in_pdf);
     },
-    createPdfA5(order) {
+
+    createZIP(files) {
+      Promise.all([...files]).then(() => {
+        this.status = 'Создание архива...'
+        this.myZip.generateAsync( {type: 'blob' } )
+            .then((blob) => {
+              this.status = '';
+              saveAs(blob, `orders${1}.zip`)})
+      })
+    },
+
+    createFiles() {
+      let pdfDocGenerator = [];
+      let prom = [];
+
+      this.letters.forEach( (letter, id) => {
+        switch (this.getEnvelopType(letter.envelope_type, letter.envelope_type_extra)) {
+          case 'A4':
+            pdfDocGenerator[id] = this.createPdfA4(letter);
+            break;
+          case 'A5':
+            pdfDocGenerator[id] = this.createPdfA5(letter);
+            break;
+          case 'C5':
+            pdfDocGenerator[id] = this.createPdfC5(letter);
+            break;
+        }
+      })
+
+      for (let i = 0; i < pdfDocGenerator.length; i++) {
+        this.status = 'Создание конвертов...'
+        prom[i] = new Promise((resolve) => {
+          pdfDocGenerator[i].getBlob((blob) => {
+            const letterType = this.getEnvelopType(this.letters[i].envelope_type, this.letters[i].envelope_type_extra);
+            this.myZip.file(`${letterType}_${this.letters[i].order}.pdf`, blob);
+            this.count++;
+            resolve('Сохраняем');
+          })
+        })
+      }
+
+      return prom;
+    },
+
+    createPdfA4(letter) {
+      const pdfMake = require('pdfmake/build/pdfmake.js')
+
+      if (pdfMake.vfs == undefined) {
+        let pdfFonts = require('pdfmake/build/vfs_fonts.js')
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      }
+
+      pdfMake.fonts = {
+        Andantino: {
+          normal: 'Andantino script.ttf',
+          bold: 'Andantino script.ttf',
+          italics: 'Andantino script.ttf',
+          bolditalics: 'Andantino script.ttf'
+        },
+        Pechkin: {
+          normal: 'Pechkin_35011.ttf',
+          bold: 'Pechkin_35011.ttf',
+          italics: 'Pechkin_35011.ttf',
+          bolditalics: 'Pechkin_35011.ttf'
+        },
+        Arial: {
+          normal: 'Arial.ttf',
+          bold: 'Arial.ttf',
+          italics: 'Arial.ttf',
+          bolditalics: 'Arial.ttf'
+        }
+      }
+
+      const docDefinition = {
+        content: [
+          {
+            text: 'От кого',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [50, 40, 0, 0]
+          },
+          {
+            text: 'Откуда',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [50, 15, 0, 0]
+          },
+          {
+            canvas: [
+              {
+                type: 'line',
+                x1: 115, y1: -32,
+                x2: 300, y2: -32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 115, y1: 0,
+                x2: 300, y2: 0,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 50, y1: 32,
+                x2: 300, y2: 32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 50, y1: 64,
+                x2: 300, y2: 64,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+            ]
+          },
+          {
+            text: 'Дедушки Мороза',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [120, -122, 0, 0]
+          },
+          {
+            text: 'Дворец Деда Мороза',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [120, 2, 0, 0]
+          },
+          {
+            text: 'г.Великий Устюг',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [79, 2, 0, 0]
+          },
+          {
+            text: 'Вологодская область, Россия',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [50, 1, 0, 0]
+          },
+
+          {
+            text: letter.order_id,
+            fontSize: 7,
+            color: '#323d85',
+            margin: [760, -100, 0, 0]
+          },
+
+          // Picture
+          {
+            svg: this.getPicture(letter.picture, 'A4', letter.envelope_type_extra),
+            margin: [0, 90, 0, 0]
+          },
+
+          // PostalCode
+          {
+            svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n' +
+                ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">\n' +
+                '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>\n' +
+                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
+                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
+                ' </g>\n' +
+                '</svg>',
+            margin: [50, -90, 0, 0]
+          },
+          {
+            text: letter.postalCode,
+            font: 'Pechkin',
+            fontSize: 34,
+            color: '#2b2a29',
+            margin: [73, -11.5, 0, 0]
+          },
+
+          {
+            text: 'Кому',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [450, -150, 0, 0]
+          },
+          {
+            text: 'Куда',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [450, 15, 0, 0]
+          },
+          {
+            canvas: [
+              {
+                type: 'line',
+                x1: 489, y1: -32,
+                x2: 779, y2: -32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 0,
+                x2: 779, y2: 0,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 32,
+                x2: 779, y2: 32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 64,
+                x2: 779, y2: 64,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 96,
+                x2: 779, y2: 96,
+                lineWidth: 1,
+                color: '#2b2a29',
+              }
+            ]
+          },
+          {
+            text: letter.name,
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, -154, 0, 0]
+          },
+          {
+            text: letter.street,
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 2, 0, 0]
+          },
+          {
+            text: letter.city,
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 2, 0, 0]
+          },
+          {
+            text: this.getRegion(letter.region, letter.city),
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 1, 0, 0]
+          },
+          {
+            text: 'Россия',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 1, 0, 0]
+          }
+        ],
+
+        pageSize: 'A4',
+        pageOrientation: 'landscape',
+        pageMargins: [0, 0, 0, 0],
+        defaultStyle: {
+          font: 'Andantino'
+        }
+      }
+      return  pdfMake.createPdf(docDefinition);
+      // pdfMake.createPdf(docDefinition).open();
+    },
+    createPdfA5(letter) {
       const pdfMake = require('pdfmake/build/pdfmake.js')
       if (pdfMake.vfs == undefined) {
         let pdfFonts = require('pdfmake/build/vfs_fonts.js')
@@ -514,7 +454,7 @@ export default {
 
           // Picture
           {
-            svg: this.getPicture(order.picture, 'A5', order.extraType),
+            svg: this.getPicture(letter.picture, 'A5', letter.envelope_type_extra),
             margin: [0, 12, 0, 0]
           },
           {
@@ -594,7 +534,7 @@ export default {
             margin: [29, -3, 0, 0]
           },
           {
-            text: order.order,
+            text: letter.order,
             fontSize: 7,
             color: '#323d85',
             margin: [530, -100, 0, 0]
@@ -612,7 +552,7 @@ export default {
             margin: [28, 263, 0, 0]
           },
           {
-            text: order.postalCode,
+            text: letter.postalCode,
             font: 'Pechkin',
             fontSize: 34,
             color: '#2b2a29',
@@ -675,25 +615,25 @@ export default {
             ]
           },
           {
-            text: order.person,
+            text: letter.name,
             fontSize: 26,
             color: '#323d85',
             margin: [307, -154, 0, 0]
           },
           {
-            text: order.street,
+            text: letter.street,
             fontSize: 26,
             color: '#323d85',
             margin: [307, 2, 0, 0]
           },
           {
-            text: order.city,
+            text: letter.city,
             fontSize: 26,
             color: '#323d85',
             margin: [307, 2, 0, 0]
           },
           {
-            text: this.getRegion(order.region, order.city),
+            text: this.getRegion(letter.region, letter.city),
             fontSize: 26,
             color: '#323d85',
             margin: [307, 1, 0, 0]
@@ -717,7 +657,7 @@ export default {
       return  pdfMake.createPdf(docDefinition);
       // pdfMake.createPdf(docDefinition).open();
     },
-    createPdfC5(order) {
+    createPdfC5(letter) {
       const pdfMake = require('pdfmake/build/pdfmake.js')
       if (pdfMake.vfs == undefined) {
         let pdfFonts = require('pdfmake/build/vfs_fonts.js')
@@ -749,7 +689,7 @@ export default {
         content: [
           // Picture
           {
-            svg: this.getPicture(order.picture, 'C5', order.extraType),
+            svg: this.getPicture(letter.picture, 'C5', letter.envelope_type_extra),
             margin: [0, 31, 0, 0]
           },
 
@@ -830,7 +770,7 @@ export default {
             margin: [29, -3, 0, 0]
           },
           {
-            text: order.order,
+            text: letter.order,
             fontSize: 7,
             color: '#323d85',
             margin: [580, -100, 0, 0]
@@ -848,7 +788,7 @@ export default {
             margin: [28, 284, 0, 0]
           },
           {
-            text: order.postalCode,
+            text: letter.postal_code,
             font: 'Pechkin',
             fontSize: 34,
             color: '#2b2a29',
@@ -910,25 +850,25 @@ export default {
             ]
           },
           {
-            text: order.person,
+            text: letter.name,
             fontSize: 26,
             color: '#323d85',
             margin: [340, -154, 0, 0]
           },
           {
-            text: order.street,
+            text: letter.street,
             fontSize: 26,
             color: '#323d85',
             margin: [340, 2, 0, 0]
           },
           {
-            text: order.city,
+            text: letter.city,
             fontSize: 26,
             color: '#323d85',
             margin: [340, 2, 0, 0]
           },
           {
-            text: this.getRegion(order.region, order.city),
+            text: this.getRegion(letter.region, letter.city),
             fontSize: 26,
             color: '#323d85',
             margin: [340, 1, 0, 0]
@@ -952,10 +892,291 @@ export default {
       // pdfMake.createPdf(docDefinition).open();
     },
 
-    getOrderUsePeriod(createdFrom, createdTo) {
-      const url = `https://app.ecwid.com/api/v3/1569218/orders?token=secret_Wk9esm1V9SNWQLdXnyhjaVwxQgX68b4L&createdFrom=${createdFrom}&createdTo=${+createdTo+86399}`
-      return axios.get(url);
-    }
+    getEnvelopType(type, extraType) {
+      if (type.includes('конверте С4')) return 'A4';
+      if (type.toLowerCase().includes('классическое') && extraType.toLowerCase().includes('крафтовый')) return 'C5';
+      return 'A5';
+    },
+
+    getRegion(regionCode, city) {
+      const region = this.regionList.find(region => region.code == regionCode);
+      // Если город столица региона - область не указываем
+      if (city.includes(region.capital) &&  city.trim().length < region.capital.length + 3) return '';
+      return region.region;
+    },
+
+    getCountry(countryCode) {
+      const country = this.countryList.find(country => country.code == countryCode);
+      return country.country;
+    },
+
+    getPicture(picture, envelopType, extraType) {
+      if (extraType.includes('1') && envelopType === 'A4') return oneA4;
+      if (extraType.includes('2') && envelopType === 'A4') return twoA4;
+      if (extraType.includes('3') && envelopType === 'A4') return threeA4;
+      if (extraType.includes('4') && envelopType === 'A4') return threeA4;
+      if (extraType.includes('5') && envelopType === 'A4') return fiveA4;
+      if (extraType.includes('6') && envelopType === 'A4') return sixA4;
+      if (extraType.includes('7') && envelopType === 'A4') return sevenA4;
+      if (extraType.includes('8') && envelopType === 'A4') return eightA4;
+      if (extraType.includes('9') && envelopType === 'A4') return nineA4;
+
+      if (picture.includes('1') && envelopType === 'A5') return oneA5;
+      if (picture.includes('2') && envelopType === 'A5') return twoA5;
+      if (picture.includes('3') && envelopType === 'A5') return threeA5;
+      if (picture.includes('4') && envelopType === 'A5') return threeA5;
+      if (picture.includes('5') && envelopType === 'A5') return fiveA5;
+      if (picture.includes('6') && envelopType === 'A5') return sixA5;
+      if (picture.includes('7') && envelopType === 'A5') return sevenA5;
+      if (picture.includes('8') && envelopType === 'A5') return eightA5;
+      if (picture.includes('9') && envelopType === 'A5') return nineA5;
+
+      if (picture.includes('1') && envelopType === 'C5') return oneC5;
+      if (picture.includes('2') && envelopType === 'C5') return twoC5;
+      if (picture.includes('3') && envelopType === 'C5') return threeC5;
+      if (picture.includes('4') && envelopType === 'C5') return threeC5;
+      if (picture.includes('5') && envelopType === 'C5') return fiveC5;
+      if (picture.includes('6') && envelopType === 'C5') return sixC5;
+      if (picture.includes('7') && envelopType === 'C5') return sevenC5;
+      if (picture.includes('8') && envelopType === 'C5') return eightC5;
+      if (picture.includes('9') && envelopType === 'C5') return nineC5;
+      return twoC5;
+    },
+
+    getPDF(letter) {
+      const pdfMake = require('pdfmake/build/pdfmake.js')
+
+      if (pdfMake.vfs == undefined) {
+        let pdfFonts = require('pdfmake/build/vfs_fonts.js')
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      }
+
+      pdfMake.fonts = {
+        Andantino: {
+          normal: 'Andantino script.ttf',
+          bold: 'Andantino script.ttf',
+          italics: 'Andantino script.ttf',
+          bolditalics: 'Andantino script.ttf'
+        },
+        Pechkin: {
+          normal: 'Pechkin_35011.ttf',
+          bold: 'Pechkin_35011.ttf',
+          italics: 'Pechkin_35011.ttf',
+          bolditalics: 'Pechkin_35011.ttf'
+        },
+        Arial: {
+          normal: 'Arial.ttf',
+          bold: 'Arial.ttf',
+          italics: 'Arial.ttf',
+          bolditalics: 'Arial.ttf'
+        }
+      }
+
+      const docDefinition = {
+        content: [
+          {
+            text: 'От кого',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [50, 40, 0, 0]
+          },
+          {
+            text: 'Откуда',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [50, 15, 0, 0]
+          },
+          {
+            canvas: [
+              {
+                type: 'line',
+                x1: 115, y1: -32,
+                x2: 300, y2: -32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 115, y1: 0,
+                x2: 300, y2: 0,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 50, y1: 32,
+                x2: 300, y2: 32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 50, y1: 64,
+                x2: 300, y2: 64,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+            ]
+          },
+          {
+            text: 'Дедушки Мороза',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [120, -122, 0, 0]
+          },
+          {
+            text: 'Дворец Деда Мороза',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [120, 2, 0, 0]
+          },
+          {
+            text: 'г.Великий Устюг',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [79, 2, 0, 0]
+          },
+          {
+            text: 'Вологодская область, Россия',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [50, 1, 0, 0]
+          },
+
+          {
+            text: letter.order_id,
+            fontSize: 7,
+            color: '#323d85',
+            margin: [760, -100, 0, 0]
+          },
+
+          // Picture
+          {
+            svg: this.getPicture(letter.picture, 'A4', letter.envelope_type_extra),
+            margin: [0, 90, 0, 0]
+          },
+
+          // PostalCode
+          {
+            svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n' +
+                ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">\n' +
+                '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>\n' +
+                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
+                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
+                ' </g>\n' +
+                '</svg>',
+            margin: [50, -90, 0, 0]
+          },
+          {
+            text: letter.postalCode,
+            font: 'Pechkin',
+            fontSize: 34,
+            color: '#2b2a29',
+            margin: [73, -11.5, 0, 0]
+          },
+
+          {
+            text: 'Кому',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [450, -150, 0, 0]
+          },
+          {
+            text: 'Куда',
+            italics: true,
+            fontSize: 14,
+            font: 'Arial',
+            color: '#2b2a29',
+            margin: [450, 15, 0, 0]
+          },
+          {
+            canvas: [
+              {
+                type: 'line',
+                x1: 489, y1: -32,
+                x2: 779, y2: -32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 0,
+                x2: 779, y2: 0,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 32,
+                x2: 779, y2: 32,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 64,
+                x2: 779, y2: 64,
+                lineWidth: 1,
+                color: '#2b2a29',
+              },
+              {
+                type: 'line',
+                x1: 489, y1: 96,
+                x2: 779, y2: 96,
+                lineWidth: 1,
+                color: '#2b2a29',
+              }
+            ]
+          },
+          {
+            text: letter.name,
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, -154, 0, 0]
+          },
+          {
+            text: letter.street,
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 2, 0, 0]
+          },
+          {
+            text: letter.city,
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 2, 0, 0]
+          },
+          {
+            text: this.getRegion(letter.region, letter.city),
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 1, 0, 0]
+          },
+          {
+            text: 'Россия',
+            fontSize: 26,
+            color: '#323d85',
+            margin: [496, 1, 0, 0]
+          }
+        ],
+
+        pageSize: 'A4',
+        pageOrientation: 'landscape',
+        pageMargins: [0, 0, 0, 0],
+        defaultStyle: {
+          font: 'Andantino'
+        }
+      }
+      return  pdfMake.createPdf(docDefinition);
+      // pdfMake.createPdf(docDefinition).open();
+    },
+
   }
 }
 </script>
