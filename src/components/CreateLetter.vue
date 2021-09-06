@@ -18,7 +18,7 @@
             v-model="date"
             type="date"
             format="DD-MM-YYYY"
-            range></date-picker>
+            range />
       </div>
       <b-button  @click="startPdfZip" variant="success">Создать ПДФ</b-button>
       <!--      <div>{{ date }}</div>-->
@@ -59,7 +59,7 @@ import {eightC5} from "@/components/SvgImg/img8C5";
 import {nineA4} from "@/components/SvgImg/img9A4";
 import {nineA5} from "@/components/SvgImg/img9A5";
 import {nineC5} from "@/components/SvgImg/img9C5";
-import {Letter} from "../model/Person";
+import {Letter} from "../model/Letter";
 
 export default {
   name: 'CreateLetter',
@@ -74,7 +74,94 @@ export default {
       progress: 0,
       count: 0,
       isCreating: false,
-      myZip: null
+      myZip: null,
+      parametersA4: {
+        marginTextFromWho: [50, 40, 0, 0],
+        marginTextFrom: [50, 15, 0, 0],
+        lineTop1: [115, -32, 300, -32],
+        lineTop2: [115, 0, 300, 0],
+        lineTop3: [50, 32, 300, 32],
+        lineTop4: [50, 64, 300, 64],
+        marginTextDedMoroz: [120, -122, 0, 0],
+        marginTextDvorec: [120, 2, 0, 0],
+        marginTextCity: [79, 2, 0, 0],
+        marginTextRegion: [50, 1, 0, 0],
+        marginOrderId: [760, -100, 0, 0],
+        marginPicture: [0, 90, 0, 0],
+        marginPostalPic: [50, -90, 0, 0],
+        marginPostal: [73, -11.5, 0, 0],
+        marginTextWho: [450, -150, 0, 0],
+        marginTextWhere: [450, 15, 0, 0],
+        lineDown1: [481, -32, 779, -32],
+        lineDown2: [489, 0, 779, 0],
+        lineDown3: [489, 32, 779, 32],
+        lineDown4: [489, 64, 779, 64],
+        lineDown5: [489, 96, 779, 96],
+        marginPerson: [496, -154, 0, 0],
+        marginCity: [496, 2, 0, 0],
+        marginStreet: [496, 2, 0, 0],
+        marginRegion: [496, 1, 0, 0],
+        marginRussia: [496, 1, 0, 0],
+        pageSize: 'A4'
+      },
+      parametersA5: {
+        marginTextFromWho: [28, -368, 0, 0],
+        marginTextFrom: [28, 12, 0, 0],
+        lineTop1: [92, -28, 300, -28],
+        lineTop2: [92, 0, 300, 0],
+        lineTop3: [28, 28, 300, 28],
+        lineTop4: [28, 56, 300, 56],
+        marginTextDedMoroz: [100, -110, 0, 0],
+        marginTextDvorec: [100, -2, 0, 0],
+        marginTextCity: [59, -2, 0, 0],
+        marginTextRegion: [29, -3, 0, 0],
+        marginOrderId: [530, -100, 0, 0],
+        marginPicture: [0, 12, 0, 0],
+        marginPostalPic: [28, 263, 0, 0],
+        marginPostal: [49, -11.5, 0, 0],
+        marginTextWho: [265, -150, 0, 0],
+        marginTextWhere: [265, 15, 0, 0],
+        lineDown1: [307, -32, 544, -32],
+        lineDown2: [307, 0, 544, 0],
+        lineDown3: [307, 32, 544, 32],
+        lineDown4: [307, 64, 544, 64],
+        lineDown5: [307, 96, 544, 96],
+        marginPerson: [307, -154, 0, 0],
+        marginCity: [307, 2, 0, 0],
+        marginStreet: [307, 2, 0, 0],
+        marginRegion: [307, 1, 0, 0],
+        marginRussia: [307, 1, 0, 0],
+        pageSize: 'A5'
+      },
+      parametersC5: {
+        marginTextFromWho: [28, -385, 0, 0],
+        marginTextFrom: [28, 12, 0, 0],
+        lineTop1: [92, -28, 300, -28],
+        lineTop2: [92, 0, 300, 0],
+        lineTop3: [28, 28, 300, 28],
+        lineTop4: [28, 56, 300, 56],
+        marginTextDedMoroz: [100, -110, 0, 0],
+        marginTextDvorec: [100, -2, 0, 0],
+        marginTextCity: [59, -2, 0, 0],
+        marginTextRegion: [29, -3, 0, 0],
+        marginOrderId: [580, -100, 0, 0],
+        marginPicture: [0, 31, 0, 0],
+        marginPostalPic: [28, 284, 0, 0],
+        marginPostal: [49, -11.5, 0, 0],
+        marginTextWho: [300, -150, 0, 0],
+        marginTextWhere: [300, 15, 0, 0],
+        lineDown1: [340, -32, 606, -32],
+        lineDown2: [340, 0, 606, 0],
+        lineDown3: [340, 32, 606, 32],
+        lineDown4: [340, 64, 606, 64],
+        lineDown5: [340, 96, 606, 96],
+        marginPerson: [340, -154, 0, 0],
+        marginCity: [340, 2, 0, 0],
+        marginStreet: [340, 2, 0, 0],
+        marginRegion: [340, 1, 0, 0],
+        marginRussia: [340, 1, 0, 0],
+        pageSize: 'C5'
+      }
     }
   },
   watch: {
@@ -160,25 +247,17 @@ export default {
       let prom = [];
 
       this.letters.forEach( (letter, id) => {
-        switch (this.getEnvelopType(letter.envelope_type, letter.envelope_type_extra)) {
-          case 'A4':
-            pdfDocGenerator[id] = this.createPdfA4(letter);
-            break;
-          case 'A5':
-            pdfDocGenerator[id] = this.createPdfA5(letter);
-            break;
-          case 'C5':
-            pdfDocGenerator[id] = this.createPdfC5(letter);
-            break;
-        }
+        const letterType = this.getEnvelopType(letter.type, letter.type_extra);
+        pdfDocGenerator[id] = this.createTo(letterType, letter);
       })
 
       for (let i = 0; i < pdfDocGenerator.length; i++) {
         this.status = 'Создание конвертов...'
+
         prom[i] = new Promise((resolve) => {
           pdfDocGenerator[i].getBlob((blob) => {
-            const letterType = this.getEnvelopType(this.letters[i].envelope_type, this.letters[i].envelope_type_extra);
-            this.myZip.file(`${letterType}_${this.letters[i].order}.pdf`, blob);
+            const letterType = this.getEnvelopType(this.letters[i].type, this.letters[i].type_extra);
+            this.myZip.file(`${letterType}_${this.letters[i].order_id}.pdf`, blob);
             this.count++;
             resolve('Сохраняем');
           })
@@ -188,7 +267,14 @@ export default {
       return prom;
     },
 
-    createPdfA4(letter) {
+    getLetterParameters(envelope_type) {
+      if (envelope_type === 'A4') return this.parametersA4;
+      if (envelope_type === 'A5') return this.parametersA5;
+      return this.parametersC5;
+    },
+
+    createTo(envelope_type, letter) {
+      const parameters = this.getLetterParameters(envelope_type);
       const pdfMake = require('pdfmake/build/pdfmake.js')
 
       if (pdfMake.vfs == undefined) {
@@ -225,7 +311,7 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [50, 40, 0, 0]
+            margin: parameters.marginTextFromWho
           },
           {
             text: 'Откуда',
@@ -233,35 +319,35 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [50, 15, 0, 0]
+            margin: parameters.marginTextFrom
           },
           {
             canvas: [
               {
                 type: 'line',
-                x1: 115, y1: -32,
-                x2: 300, y2: -32,
+                x1: parameters.lineTop1[0], y1: parameters.lineTop1[1],
+                x2: parameters.lineTop1[2], y2: parameters.lineTop1[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 115, y1: 0,
-                x2: 300, y2: 0,
+                x1: parameters.lineTop2[0], y1: parameters.lineTop2[1],
+                x2: parameters.lineTop2[2], y2: parameters.lineTop2[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 50, y1: 32,
-                x2: 300, y2: 32,
+                x1: parameters.lineTop3[0], y1: parameters.lineTop3[1],
+                x2: parameters.lineTop3[2], y2: parameters.lineTop3[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 50, y1: 64,
-                x2: 300, y2: 64,
+                x1: parameters.lineTop4[0], y1: parameters.lineTop4[1],
+                x2: parameters.lineTop4[2], y2: parameters.lineTop4[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
@@ -271,38 +357,38 @@ export default {
             text: 'Дедушки Мороза',
             fontSize: 26,
             color: '#323d85',
-            margin: [120, -122, 0, 0]
+            margin: parameters.marginTextDedMoroz
           },
           {
             text: 'Дворец Деда Мороза',
             fontSize: 26,
             color: '#323d85',
-            margin: [120, 2, 0, 0]
+            margin: parameters.marginTextDvorec
           },
           {
             text: 'г.Великий Устюг',
             fontSize: 26,
             color: '#323d85',
-            margin: [79, 2, 0, 0]
+            margin: parameters.marginTextCity
           },
           {
             text: 'Вологодская область, Россия',
             fontSize: 26,
             color: '#323d85',
-            margin: [50, 1, 0, 0]
+            margin: parameters.marginTextRegion
           },
 
           {
             text: letter.order_id,
             fontSize: 7,
             color: '#323d85',
-            margin: [760, -100, 0, 0]
+            margin: parameters.marginOrderId
           },
 
           // Picture
           {
-            svg: this.getPicture(letter.picture, 'A4', letter.envelope_type_extra),
-            margin: [0, 90, 0, 0]
+            svg: this.getPicture(letter),
+            margin: parameters.marginPicture
           },
 
           // PostalCode
@@ -314,493 +400,23 @@ export default {
                 '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
                 ' </g>\n' +
                 '</svg>',
-            margin: [50, -90, 0, 0]
-          },
-          {
-            text: letter.postalCode,
-            font: 'Pechkin',
-            fontSize: 34,
-            color: '#2b2a29',
-            margin: [73, -11.5, 0, 0]
-          },
-
-          {
-            text: 'Кому',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [450, -150, 0, 0]
-          },
-          {
-            text: 'Куда',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [450, 15, 0, 0]
-          },
-          {
-            canvas: [
-              {
-                type: 'line',
-                x1: 489, y1: -32,
-                x2: 779, y2: -32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 0,
-                x2: 779, y2: 0,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 32,
-                x2: 779, y2: 32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 64,
-                x2: 779, y2: 64,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 96,
-                x2: 779, y2: 96,
-                lineWidth: 1,
-                color: '#2b2a29',
-              }
-            ]
-          },
-          {
-            text: letter.name,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, -154, 0, 0]
-          },
-          {
-            text: letter.street,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 2, 0, 0]
-          },
-          {
-            text: letter.city,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 2, 0, 0]
-          },
-          {
-            text: this.getRegion(letter),
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 1, 0, 0]
-          },
-          {
-            text: 'Россия',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 1, 0, 0]
-          }
-        ],
-
-        pageSize: 'A4',
-        pageOrientation: 'landscape',
-        pageMargins: [0, 0, 0, 0],
-        defaultStyle: {
-          font: 'Andantino'
-        }
-      }
-      return  pdfMake.createPdf(docDefinition);
-      // pdfMake.createPdf(docDefinition).open();
-    },
-    createPdfA5(letter) {
-      const pdfMake = require('pdfmake/build/pdfmake.js')
-      if (pdfMake.vfs == undefined) {
-        let pdfFonts = require('pdfmake/build/vfs_fonts.js')
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      }
-
-      pdfMake.fonts = {
-        Andantino: {
-          normal: 'Andantino script.ttf',
-          bold: 'Andantino script.ttf',
-          italics: 'Andantino script.ttf',
-          bolditalics: 'Andantino script.ttf'
-        },
-        Pechkin: {
-          normal: 'Pechkin_35011.ttf',
-          bold: 'Pechkin_35011.ttf',
-          italics: 'Pechkin_35011.ttf',
-          bolditalics: 'Pechkin_35011.ttf'
-        },
-        Arial: {
-          normal: 'Arial.ttf',
-          bold: 'Arial.ttf',
-          italics: 'Arial.ttf',
-          bolditalics: 'Arial.ttf'
-        }
-      }
-
-      const docDefinition = {
-        content: [
-
-          // Picture
-          {
-            svg: this.getPicture(letter.picture, 'A5', letter.envelope_type_extra),
-            margin: [0, 12, 0, 0]
-          },
-          {
-            text: 'От кого',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [28, -368, 0, 0]
-          },
-          {
-            text: 'Откуда',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [28, 12, 0, 0]
-          },
-          {
-            canvas: [
-              {
-                // Лини кому - оступ от линии Откуда
-                type: 'line',
-                x1: 92, y1: -28,
-                x2: 300, y2: -28,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                // Линия Откуда - отступа не надо идет сразу от слова
-                type: 'line',
-                x1: 92, y1: 0,
-                x2: 300, y2: 0,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                // Линия Великий Устюг
-                type: 'line',
-                x1: 28, y1: 28,
-                x2: 300, y2: 28,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                // Линия Вологодская облать Россия
-                type: 'line',
-                x1: 28, y1: 56,
-                x2: 300, y2: 56,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-            ]
-          },
-          {
-            text: 'Дедушки Мороза',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [100, -110, 0, 0]
-          },
-          {
-            text: 'Дворец Деда Мороза',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [100, -2, 0, 0]
-          },
-          {
-            text: 'г.Великий Устюг',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [59, -2, 0, 0]
-          },
-          {
-            text: 'Вологодская область, Россия',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [29, -3, 0, 0]
-          },
-          {
-            text: letter.order,
-            fontSize: 7,
-            color: '#323d85',
-            margin: [530, -100, 0, 0]
-          },
-
-          // PostalCode
-          {
-            svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n' +
-                ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">\n' +
-                '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                ' </g>\n' +
-                '</svg>',
-            margin: [28, 263, 0, 0]
-          },
-          {
-            text: letter.postalCode,
-            font: 'Pechkin',
-            fontSize: 34,
-            color: '#2b2a29',
-            margin: [49, -11.5, 0, 0]
-          },
-
-          {
-            text: 'Кому',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [265, -150, 0, 0]
-          },
-          {
-            text: 'Куда',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [265, 15, 0, 0]
-          },
-          {
-            canvas: [
-              {
-                type: 'line',
-                x1: 307, y1: -32,
-                x2: 544, y2: -32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 307, y1: 0,
-                x2: 544, y2: 0,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 307, y1: 32,
-                x2: 544, y2: 32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 307, y1: 64,
-                x2: 544, y2: 64,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 307, y1: 96,
-                x2: 544, y2: 96,
-                lineWidth: 1,
-                color: '#2b2a29',
-              }
-            ]
-          },
-          {
-            text: letter.name,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [307, -154, 0, 0]
-          },
-          {
-            text: letter.street,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [307, 2, 0, 0]
-          },
-          {
-            text: letter.city,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [307, 2, 0, 0]
-          },
-          {
-            text: this.getRegion(letter),
-            fontSize: 26,
-            color: '#323d85',
-            margin: [307, 1, 0, 0]
-          },
-          {
-            text: 'Россия',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [307, 1, 0, 0]
-          }
-        ],
-
-        pageSize: 'A5',
-        pageOrientation: 'landscape',
-        pageMargins: [0, 0, 0, 0],
-        defaultStyle: {
-          font: 'Andantino'
-        }
-      }
-
-      return  pdfMake.createPdf(docDefinition);
-      // pdfMake.createPdf(docDefinition).open();
-    },
-    createPdfC5(letter) {
-      const pdfMake = require('pdfmake/build/pdfmake.js')
-      if (pdfMake.vfs == undefined) {
-        let pdfFonts = require('pdfmake/build/vfs_fonts.js')
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      }
-
-      pdfMake.fonts = {
-        Andantino: {
-          normal: 'Andantino script.ttf',
-          bold: 'Andantino script.ttf',
-          italics: 'Andantino script.ttf',
-          bolditalics: 'Andantino script.ttf'
-        },
-        Pechkin: {
-          normal: 'Pechkin_35011.ttf',
-          bold: 'Pechkin_35011.ttf',
-          italics: 'Pechkin_35011.ttf',
-          bolditalics: 'Pechkin_35011.ttf'
-        },
-        Arial: {
-          normal: 'Arial.ttf',
-          bold: 'Arial.ttf',
-          italics: 'Arial.ttf',
-          bolditalics: 'Arial.ttf'
-        }
-      }
-
-      const docDefinition = {
-        content: [
-          // Picture
-          {
-            svg: this.getPicture(letter.picture, 'C5', letter.envelope_type_extra),
-            margin: this.getMarginPicture(letter.type)
-          },
-
-          {
-            text: 'От кого',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [28, -385, 0, 0]
-          },
-          {
-            text: 'Откуда',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [28, 12, 0, 0]
-          },
-          {
-            canvas: [
-              {
-                // Лини кому - оступ от линии Откуда
-                type: 'line',
-                x1: 92, y1: -28,
-                x2: 300, y2: -28,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                // Линия Откуда - отступа не надо идет сразу от слова
-                type: 'line',
-                x1: 92, y1: 0,
-                x2: 300, y2: 0,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                // Линия Великий Устюг
-                type: 'line',
-                x1: 28, y1: 28,
-                x2: 300, y2: 28,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                // Линия Вологодская облать Россия
-                type: 'line',
-                x1: 28, y1: 56,
-                x2: 300, y2: 56,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-            ]
-          },
-          {
-            text: 'Дедушки Мороза',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [100, -110, 0, 0]
-          },
-          {
-            text: 'Дворец Деда Мороза',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [100, -2, 0, 0]
-          },
-          {
-            text: 'г.Великий Устюг',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [59, -2, 0, 0]
-          },
-          {
-            text: 'Вологодская область, Россия',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [29, -3, 0, 0]
-          },
-          {
-            text: letter.order,
-            fontSize: 7,
-            color: '#323d85',
-            margin: [580, -100, 0, 0]
-          },
-
-          // PostalCode
-          {
-            svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n' +
-                ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">\n' +
-                '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                ' </g>\n' +
-                '</svg>',
-            margin: [28, 284, 0, 0]
+            margin: parameters.marginPostalPic
           },
           {
             text: letter.postal_code,
             font: 'Pechkin',
             fontSize: 34,
             color: '#2b2a29',
-            margin: [49, -11.5, 0, 0]
+            margin: parameters.marginPostal
           },
+
           {
             text: 'Кому',
             italics: true,
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [300, -150, 0, 0]
+            margin: parameters.marginTextWho
           },
           {
             text: 'Куда',
@@ -808,42 +424,42 @@ export default {
             fontSize: 14,
             font: 'Arial',
             color: '#2b2a29',
-            margin: [300, 15, 0, 0]
+            margin: parameters.marginTextWhere
           },
           {
             canvas: [
               {
                 type: 'line',
-                x1: 340, y1: -32,
-                x2: 606, y2: -32,
+                x1: parameters.lineDown1[0], y1: parameters.lineDown1[1],
+                x2: parameters.lineDown1[2], y2: parameters.lineDown1[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 340, y1: 0,
-                x2: 606, y2: 0,
+                x1: parameters.lineDown2[0], y1: parameters.lineDown2[1],
+                x2: parameters.lineDown2[2], y2: parameters.lineDown2[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 340, y1: 32,
-                x2: 606, y2: 32,
+                x1: parameters.lineDown3[0], y1: parameters.lineDown3[1],
+                x2: parameters.lineDown3[2], y2: parameters.lineDown3[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 340, y1: 64,
-                x2: 606, y2: 64,
+                x1: parameters.lineDown4[0], y1: parameters.lineDown4[1],
+                x2: parameters.lineDown4[2], y2: parameters.lineDown4[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               },
               {
                 type: 'line',
-                x1: 340, y1: 96,
-                x2: 606, y2: 96,
+                x1: parameters.lineDown5[0], y1: parameters.lineDown5[1],
+                x2: parameters.lineDown5[2], y2: parameters.lineDown5[3],
                 lineWidth: 1,
                 color: '#2b2a29',
               }
@@ -853,35 +469,35 @@ export default {
             text: letter.name,
             fontSize: 26,
             color: '#323d85',
-            margin: [340, -154, 0, 0]
+            margin: parameters.marginPerson
           },
           {
             text: letter.street,
             fontSize: 26,
             color: '#323d85',
-            margin: [340, 2, 0, 0]
+            margin: parameters.marginStreet
           },
           {
             text: letter.city,
             fontSize: 26,
             color: '#323d85',
-            margin: [340, 2, 0, 0]
+            margin: parameters.marginCity
           },
           {
-            text: this.getRegion(letter.region, letter.city),
+            text: this.getRegion(letter),
             fontSize: 26,
             color: '#323d85',
-            margin: [340, 1, 0, 0]
+            margin: parameters.marginRegion
           },
           {
             text: 'Россия',
             fontSize: 26,
             color: '#323d85',
-            margin: [340, 1, 0, 0]
+            margin: parameters.marginRussia
           }
         ],
 
-        pageSize: 'C5',
+        pageSize: parameters.pageSize,
         pageOrientation: 'landscape',
         pageMargins: [0, 0, 0, 0],
         defaultStyle: {
@@ -899,14 +515,14 @@ export default {
     },
 
     getRegion( {region_code, city} ) {
-      const region = this.regionList.find(region => region.code == region_code);
+      const region = this.regionList.find(region => region.code === region_code);
       // Если город столица региона - область не указываем
       if (city.includes(region.capital) &&  city.trim().length < region.capital.length + 3) return '';
       return region.region;
     },
 
     getCountry(countryCode) {
-      const country = this.countryList.find(country => country.code == countryCode);
+      const country = this.countryList.find(country => country.code === countryCode);
       return country.country;
     },
 
@@ -946,255 +562,6 @@ export default {
       if (picture.includes('9')) return nineC5;
 
       return twoC5;
-    },
-
-    getPDF(letter) {
-      const pdfMake = require('pdfmake/build/pdfmake.js')
-
-      if (pdfMake.vfs == undefined) {
-        let pdfFonts = require('pdfmake/build/vfs_fonts.js')
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-      }
-
-      pdfMake.fonts = {
-        Andantino: {
-          normal: 'Andantino script.ttf',
-          bold: 'Andantino script.ttf',
-          italics: 'Andantino script.ttf',
-          bolditalics: 'Andantino script.ttf'
-        },
-        Pechkin: {
-          normal: 'Pechkin_35011.ttf',
-          bold: 'Pechkin_35011.ttf',
-          italics: 'Pechkin_35011.ttf',
-          bolditalics: 'Pechkin_35011.ttf'
-        },
-        Arial: {
-          normal: 'Arial.ttf',
-          bold: 'Arial.ttf',
-          italics: 'Arial.ttf',
-          bolditalics: 'Arial.ttf'
-        }
-      }
-
-      const docDefinition = {
-        content: [
-          {
-            text: 'От кого',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: this.getMarginLabelFromWho(letter.type)
-          },
-          {
-            text: 'Откуда',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: this.getMarginLabelFrom(letter.type)
-          },
-          {
-            canvas: [
-              {
-                type: 'line',
-                x1: 115, y1: -32,
-                x2: 300, y2: -32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 115, y1: 0,
-                x2: 300, y2: 0,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 50, y1: 32,
-                x2: 300, y2: 32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 50, y1: 64,
-                x2: 300, y2: 64,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-            ]
-          },
-          {
-            text: 'Дедушки Мороза',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [120, -122, 0, 0]
-          },
-          {
-            text: 'Дворец Деда Мороза',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [120, 2, 0, 0]
-          },
-          {
-            text: 'г.Великий Устюг',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [79, 2, 0, 0]
-          },
-          {
-            text: 'Вологодская область, Россия',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [50, 1, 0, 0]
-          },
-
-          {
-            text: letter.order_id,
-            fontSize: 7,
-            color: '#323d85',
-            margin: [760, -100, 0, 0]
-          },
-
-          // Picture
-          {
-            svg: this.getPicture(letter),
-            margin: this.getMarginPicture(letter.type)
-          },
-
-          // PostalCode
-          {
-            svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n' +
-                ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">\n' +
-                '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                ' </g>\n' +
-                '</svg>',
-            margin: [50, -90, 0, 0]
-          },
-          {
-            text: letter.postalCode,
-            font: 'Pechkin',
-            fontSize: 34,
-            color: '#2b2a29',
-            margin: [73, -11.5, 0, 0]
-          },
-
-          {
-            text: 'Кому',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [450, -150, 0, 0]
-          },
-          {
-            text: 'Куда',
-            italics: true,
-            fontSize: 14,
-            font: 'Arial',
-            color: '#2b2a29',
-            margin: [450, 15, 0, 0]
-          },
-          {
-            canvas: [
-              {
-                type: 'line',
-                x1: 489, y1: -32,
-                x2: 779, y2: -32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 0,
-                x2: 779, y2: 0,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 32,
-                x2: 779, y2: 32,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 64,
-                x2: 779, y2: 64,
-                lineWidth: 1,
-                color: '#2b2a29',
-              },
-              {
-                type: 'line',
-                x1: 489, y1: 96,
-                x2: 779, y2: 96,
-                lineWidth: 1,
-                color: '#2b2a29',
-              }
-            ]
-          },
-          {
-            text: letter.name,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, -154, 0, 0]
-          },
-          {
-            text: letter.street,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 2, 0, 0]
-          },
-          {
-            text: letter.city,
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 2, 0, 0]
-          },
-          {
-            text: this.getRegion(letter.region, letter.city),
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 1, 0, 0]
-          },
-          {
-            text: 'Россия',
-            fontSize: 26,
-            color: '#323d85',
-            margin: [496, 1, 0, 0]
-          }
-        ],
-
-        pageSize: letter.envelope_type,
-        pageOrientation: 'landscape',
-        pageMargins: [0, 0, 0, 0],
-        defaultStyle: {
-          font: 'Andantino'
-        }
-      }
-      return  pdfMake.createPdf(docDefinition);
-      // pdfMake.createPdf(docDefinition).open();
-    },
-    getMarginLabelFromWho(letter_type) {
-      if (letter_type === 'A4') return [50, 40, 0, 0];
-      if (letter_type === 'A5') return [28, -368, 0, 0];
-      return [28, -385, 0, 0]
-    },
-    getMarginLabelFrom(letter_type) {
-      if (letter_type === 'A4') return [50, 40, 0, 0];
-      if (letter_type === 'A5') return [28, -368, 0, 0];
-      return [28, -385, 0, 0]
-    },
-    getMarginPicture(letter_type) {
-      if (letter_type === 'A4') return [0, 90, 0, 0];
-      if (letter_type === 'A5') return [0, 12, 0, 0];
-      return [0, 31, 0, 0]
     }
   }
 }
