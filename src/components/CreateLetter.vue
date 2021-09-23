@@ -243,19 +243,21 @@ export default {
     },
 
     createFiles() {
-      let pdfDocGenerator = [];
-      let prom = [];
+      let pdfArray = [];
+      let pdfBlobs = [];
 
+      // Создаем ПДФ конверты и помещаем в массив
       this.letters.forEach( (letter, id) => {
         const letterType = this.getEnvelopType(letter.type, letter.type_extra);
-        pdfDocGenerator[id] = this.createTo(letterType, letter);
+        pdfArray[id] = this.createTo(letterType, letter);
       })
 
-      for (let i = 0; i < pdfDocGenerator.length; i++) {
+      // ПДФ файлы перобразуем в blob и оборачиваем в Promise
+      for (let i = 0; i < pdfArray.length; i++) {
         this.status = 'Создание конвертов...'
 
-        prom[i] = new Promise((resolve) => {
-          pdfDocGenerator[i].getBlob((blob) => {
+        pdfBlobs[i] = new Promise((resolve) => {
+          pdfArray[i].getBlob((blob) => {
             const letterType = this.getEnvelopType(this.letters[i].type, this.letters[i].type_extra);
             this.myZip.file(`${letterType}_${this.letters[i].order_id}.pdf`, blob);
             this.count++;
@@ -264,7 +266,7 @@ export default {
         })
       }
 
-      return prom;
+      return pdfBlobs;
     },
 
     getLetterParameters(envelope_type) {
