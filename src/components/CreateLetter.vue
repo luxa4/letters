@@ -227,46 +227,48 @@ export default {
       // }
     },
 
-    createPDF() {
-      const letters_in_pdf = this.createFiles();
-      this.createZIP(letters_in_pdf);
+    async createPDF() {
+      await this.createFiles();
+      this.createZIP();
     },
 
-    createZIP(files) {
-      Promise.all([...files]).then(() => {
-        this.status = 'Создание архива...'
-        this.myZip.generateAsync( {type: 'blob' } )
-            .then((blob) => {
-              this.status = '';
-              saveAs(blob, `orders${1}.zip`)})
-      })
+    createZIP() {
+      this.myZip.generateAsync( {type: 'blob' } )
+          .then((blob) => {
+            this.status = '';
+            saveAs(blob, `orders${1}.zip`)
+          })
     },
 
-    createFiles() {
+    async createFiles() {
       let pdfArray = [];
       let pdfBlobs = [];
 
       // Создаем ПДФ конверты и помещаем в массив
       this.letters.forEach( (letter, id) => {
+        this.status = `Создаем pdf - ${id + 1} из ${this.letters.length}`
         const letterType = this.getEnvelopType(letter.type, letter.type_extra);
         pdfArray[id] = this.createTo(letterType, letter);
       })
 
-      // ПДФ файлы перобразуем в blob и оборачиваем в Promise
+      // ПДФ файлы перобразуем в blob и добавляем в архив
       for (let i = 0; i < pdfArray.length; i++) {
-        this.status = 'Создание конвертов...'
+        this.status = `Упаковка pdf в архив - ${i + 1} из ${pdfArray.length}`
 
-        pdfBlobs[i] = new Promise((resolve) => {
-          pdfArray[i].getBlob((blob) => {
-            const letterType = this.getEnvelopType(this.letters[i].type, this.letters[i].type_extra);
-            this.myZip.file(`${letterType}_${this.letters[i].order_id}.pdf`, blob);
-            this.count++;
-            resolve('Сохраняем');
-          })
+        pdfBlobs[i] = await new Promise(resolve => {
+          setTimeout(() => {
+            pdfArray[i].getBlob((blob) => {
+              resolve(blob);
+            });
+          },0)
         })
+        this.count++;
+
+        const letterType = this.getEnvelopType(this.letters[i].type, this.letters[i].type_extra);
+        // Добавляем в архив
+        this.myZip.file(`${letterType}_${this.letters[i].order_id}.pdf`, pdfBlobs[i]);
       }
 
-      return pdfBlobs;
     },
 
     getLetterParameters(envelope_type) {
