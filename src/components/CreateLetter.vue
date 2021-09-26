@@ -31,7 +31,7 @@
       <b-button
           @click="startPdfZip"
           variant="success">
-          Пуск
+          Начать волшебство
       </b-button>
     </div>
   </div>
@@ -87,7 +87,7 @@ export default {
       isCreating: false,
       myZip: null,
       parametersA4: {
-        marginTextFromWho: [50, 40, 0, 0],
+        marginTextFromWho: [50, -497, 0, 0],
         marginTextFrom: [50, 15, 0, 0],
         lineTop1: [115, -32, 300, -32],
         lineTop2: [115, 0, 300, 0],
@@ -98,8 +98,8 @@ export default {
         marginTextCity: [79, 2, 0, 0],
         marginTextRegion: [50, 1, 0, 0],
         marginOrderId: [760, -100, 0, 0],
-        marginPicture: [0, 90, 0, 0],
-        marginPostalPic: [50, -90, 0, 0],
+        marginPicture: [0, 150, 0, 0],
+        marginPostalPic: [50, 390, 0, 0],
         marginPostal: [73, -11.5, 0, 0],
         marginTextWho: [450, -150, 0, 0],
         marginTextWhere: [450, 15, 0, 0],
@@ -116,7 +116,7 @@ export default {
         pageSize: 'A4'
       },
       parametersA5: {
-        marginTextFromWho: [28, -368, 0, 0],
+        marginTextFromWho: [28, -367, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
         lineTop1: [92, -28, 300, -28],
         lineTop2: [92, 0, 300, 0],
@@ -127,25 +127,25 @@ export default {
         marginTextCity: [59, -2, 0, 0],
         marginTextRegion: [29, -3, 0, 0],
         marginOrderId: [530, -100, 0, 0],
-        marginPicture: [0, 12, 0, 0],
-        marginPostalPic: [28, 263, 0, 0],
-        marginPostal: [49, -11.5, 0, 0],
+        marginPicture: [-1, 16, 0, 0],
+        marginPostalPic: [28, 262, 0, 0],
+        marginPostal: [49, -11.2, 0, 0],
         marginTextWho: [265, -150, 0, 0],
         marginTextWhere: [265, 15, 0, 0],
-        lineDown1: [307, -32, 544, -32],
-        lineDown2: [307, 0, 544, 0],
-        lineDown3: [307, 32, 544, 32],
-        lineDown4: [307, 64, 544, 64],
-        lineDown5: [307, 96, 544, 96],
-        marginPerson: [307, -154, 0, 0],
-        marginCity: [307, 2, 0, 0],
-        marginStreet: [307, 2, 0, 0],
-        marginRegion: [307, 1, 0, 0],
-        marginRussia: [307, 1, 0, 0],
+        lineDown1: [305, -32, 571, -32],
+        lineDown2: [305, 0, 571, 0],
+        lineDown3: [305, 32, 571, 32],
+        lineDown4: [305, 64, 571, 64],
+        lineDown5: [305, 96, 571, 96],
+        marginPerson: [305, -154, 0, 0],
+        marginCity: [305, 2, 0, 0],
+        marginStreet: [305, 2, 0, 0],
+        marginRegion: [305, 1, 0, 0],
+        marginRussia: [305, 1, 0, 0],
         pageSize: 'A5'
       },
       parametersC5: {
-        marginTextFromWho: [28, -385, 0, 0],
+        marginTextFromWho: [28, -380, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
         lineTop1: [92, -28, 300, -28],
         lineTop2: [92, 0, 300, 0],
@@ -156,9 +156,9 @@ export default {
         marginTextCity: [59, -2, 0, 0],
         marginTextRegion: [29, -3, 0, 0],
         marginOrderId: [580, -100, 0, 0],
-        marginPicture: [0, 31, 0, 0],
-        marginPostalPic: [28, 284, 0, 0],
-        marginPostal: [49, -11.5, 0, 0],
+        marginPicture: [-1, 29, 0, 0],
+        marginPostalPic: [28, 280, 0, 0],
+        marginPostal: [49, -11.2, 0, 0],
         marginTextWho: [300, -150, 0, 0],
         marginTextWhere: [300, 15, 0, 0],
         lineDown1: [340, -32, 606, -32],
@@ -258,11 +258,13 @@ export default {
       let pdfArray = [];
       let pdfBlobs = [];
 
+
       // Создаем ПДФ конверты и помещаем в массив
       this.letters.forEach( (letter, id) => {
         this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`
         const letterType = this.getEnvelopType(letter.type, letter.type_extra);
         pdfArray[id] = this.createTo(letterType, letter);
+
       })
 
       // ПДФ файлы перобразуем в blob и добавляем в архив
@@ -323,6 +325,11 @@ export default {
 
       const docDefinition = {
         content: [
+          // Picture
+          {
+            svg: this.getPicture(letter),
+            margin: parameters.marginPicture
+          },
           {
             text: 'От кого',
             italics: true,
@@ -401,12 +408,6 @@ export default {
             fontSize: 7,
             color: '#323d85',
             margin: parameters.marginOrderId
-          },
-
-          // Picture
-          {
-            svg: this.getPicture(letter),
-            margin: parameters.marginPicture
           },
 
           // PostalCode
