@@ -49,8 +49,6 @@ import regionJson from '../region.json';
 import {oneA4} from "@/components/SvgImg/img1A4";
 import {oneA5} from "@/components/SvgImg/img1A5";
 import {oneC5} from "@/components/SvgImg/img1C5";
-import {twoA4} from "@/components/SvgImg/img2A4";
-import {twoA5} from "@/components/SvgImg/img2A5";
 import {twoC5} from "@/components/SvgImg/img2C5";
 import {threeA4} from "@/components/SvgImg/img3A4";
 import {threeA5} from "@/components/SvgImg/img3A5";
@@ -70,6 +68,12 @@ import {eightC5} from "@/components/SvgImg/img8C5";
 import {nineA4} from "@/components/SvgImg/img9A4";
 import {nineA5} from "@/components/SvgImg/img9A5";
 import {nineC5} from "@/components/SvgImg/img9C5";
+import {tenA4} from "@/components/SvgImg/img10A4";
+import {tenA5} from "@/components/SvgImg/img10A5";
+import {tenC5} from "@/components/SvgImg/img10C5";
+import {elevenA4} from "@/components/SvgImg/img11A4";
+import {elevenA5} from "@/components/SvgImg/img11A5";
+import {elevenC5} from "@/components/SvgImg/img11C5";
 import {Letter} from "../model/Letter";
 
 export default {
@@ -548,10 +552,10 @@ export default {
     getPicture( { picture, type, type_extra} ) {
       if (type === 'A4') {
         if (type_extra.includes('1')) return oneA4;
-        if (type_extra.includes('2')) return twoA4;
+        if (type_extra.includes('2')) return fiveA4;
         if (type_extra.includes('3')) return threeA4;
-        if (type_extra.includes('4')) return threeA4;
-        if (type_extra.includes('5')) return fiveA4;
+        if (type_extra.includes('4')) return elevenA4;
+        if (type_extra.includes('5')) return tenA4;
         if (type_extra.includes('6')) return sixA4;
         if (type_extra.includes('7')) return sevenA4;
         if (type_extra.includes('8')) return eightA4;
@@ -560,10 +564,10 @@ export default {
 
       if (type === 'A5') {
         if (picture.includes('1')) return oneA5;
-        if (picture.includes('2')) return twoA5;
+        if (picture.includes('2')) return fiveA5;
         if (picture.includes('3')) return threeA5;
-        if (picture.includes('4')) return threeA5;
-        if (picture.includes('5')) return fiveA5;
+        if (picture.includes('4')) return elevenA5;
+        if (picture.includes('5')) return tenA5;
         if (picture.includes('6')) return sixA5;
         if (picture.includes('7')) return sevenA5;
         if (picture.includes('8')) return eightA5;
@@ -571,10 +575,10 @@ export default {
       }
 
       if (picture.includes('1')) return oneC5;
-      if (picture.includes('2')) return twoC5;
+      if (picture.includes('2')) return fiveC5;
       if (picture.includes('3')) return threeC5;
-      if (picture.includes('4')) return threeC5;
-      if (picture.includes('5')) return fiveC5;
+      if (picture.includes('4')) return elevenC5;
+      if (picture.includes('5')) return tenC5;
       if (picture.includes('6')) return sixC5;
       if (picture.includes('7')) return sevenC5;
       if (picture.includes('8')) return eightC5;
