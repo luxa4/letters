@@ -75,6 +75,7 @@ import {elevenA4} from "@/components/SvgImg/img11A4";
 import {elevenA5} from "@/components/SvgImg/img11A5";
 import {elevenC5} from "@/components/SvgImg/img11C5";
 import {Letter} from "../model/Letter";
+import bwipjs from 'bwip-js';
 
 export default {
   name: 'CreateLetter',
@@ -90,7 +91,9 @@ export default {
       count: 0,
       isCreating: false,
       myZip: null,
+      myAztec: null,
       parametersA4: {
+        marginPicture: [0, 150, 0, 0],
         marginTextFromWho: [50, -497, 0, 0],
         marginTextFrom: [50, 15, 0, 0],
         lineTop1: [115, -32, 300, -32],
@@ -102,7 +105,6 @@ export default {
         marginTextCity: [79, 2, 0, 0],
         marginTextRegion: [50, 1, 0, 0],
         marginOrderId: [760, -100, 0, 0],
-        marginPicture: [0, 150, 0, 0],
         marginPostalPic: [50, 390, 0, 0],
         marginPostal: [73, -11.5, 0, 0],
         marginTextWho: [450, -150, 0, 0],
@@ -120,7 +122,8 @@ export default {
         pageSize: 'A4'
       },
       parametersA5: {
-        marginTextFromWho: [28, -367, 0, 0],
+        marginPicture: [-1, 13, 0, 0],
+        marginTextFromWho: [28, -380, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
         lineTop1: [92, -28, 300, -28],
         lineTop2: [92, 0, 300, 0],
@@ -131,8 +134,7 @@ export default {
         marginTextCity: [59, -2, 0, 0],
         marginTextRegion: [29, -3, 0, 0],
         marginOrderId: [530, -100, 0, 0],
-        marginPicture: [-1, 16, 0, 0],
-        marginPostalPic: [28, 262, 0, 0],
+        marginPostalPic: [28, 264, 0, 0],
         marginPostal: [49, -11.2, 0, 0],
         marginTextWho: [265, -150, 0, 0],
         marginTextWhere: [265, 15, 0, 0],
@@ -149,6 +151,7 @@ export default {
         pageSize: 'A5'
       },
       parametersC5: {
+        marginPicture: [-1, 29, 0, 0],
         marginTextFromWho: [28, -380, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
         lineTop1: [92, -28, 300, -28],
@@ -160,7 +163,6 @@ export default {
         marginTextCity: [59, -2, 0, 0],
         marginTextRegion: [29, -3, 0, 0],
         marginOrderId: [580, -100, 0, 0],
-        marginPicture: [-1, 29, 0, 0],
         marginPostalPic: [28, 280, 0, 0],
         marginPostal: [49, -11.2, 0, 0],
         marginTextWho: [300, -150, 0, 0],
@@ -231,13 +233,33 @@ export default {
       this.status = `Обработано ${this.letters.length} `;
       this.letters_count = this.letters.length;
 
+
+      bwipjs.toBuffer({
+        bcid:        'azteccode',       // Barcode type
+        text:        '13213213',    // Text to encode
+        scale:       3,               // 3x scaling factor
+        height:      10,              // Bar height, in millimeters
+        includetext: true,            // Show human-readable text
+        textxalign:  'center',        // Always good to set this
+      }, function (err, png) {
+        if (err) {
+          // `err` may be a string or Error object
+        } else {
+
+          console.log(png)
+        }
+      });
+
       if (this.letters_count) {
         await this.createPDF();
       }
+
+
+
       // try {
       //   const { data } = await createStream({
       //     symbology: SymbologyType.AZTEC,
-      //   }, this.state.order, OutputTypes.SVG)
+      //   }, this.state.order, OutputType.SVG)
       //
       //   console.log('Result: ', data)
       // } catch (err) {
@@ -262,12 +284,11 @@ export default {
       let pdfArray = [];
       let pdfBlobs = [];
 
-
       // Создаем ПДФ конверты и помещаем в массив
       this.letters.forEach( (letter, id) => {
         this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`
         const letterType = this.getEnvelopType(letter.type, letter.type_extra);
-        pdfArray[id] = this.createTo(letterType, letter);
+          pdfArray[id] = this.createTo(letterType, letter);
 
       })
 
@@ -298,6 +319,7 @@ export default {
     },
 
     createTo(envelope_type, letter) {
+      console.log(envelope_type)
       const parameters = this.getLetterParameters(envelope_type);
       const pdfMake = require('pdfmake/build/pdfmake.js')
 
