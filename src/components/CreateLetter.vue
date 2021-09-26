@@ -2,14 +2,21 @@
   <div class="hello">
     <div class="container">
       <Troyka/>
+      <div v-if="letters_count">
       {{ status ? status : ''}}
-      <div v-if="isCreating" class="progress">
+      <div class="progress">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
              :style="`width: ${isNaN(progressBar) ? 0 : progressBar}%`">
           {{ isNaN(progressBar) ? 0 : progressBar }} %
         </div>
       </div>
-      <div v-if="letters_count" class="mt-2"><h3>Найдено {{ letters_count }} писем!</h3></div>
+      </div>
+      <div v-if="letters_count" class="mt-2">
+        <h3>{{ findLetters }}</h3>
+      </div>
+      <div v-if="letters_count === 0">
+        <h3>Писем не найдено</h3>
+      </div>
       <div style="margin-bottom: 15px; margin-top: 15px">
         <date-picker
             placeholder="Укажите период заказов"
@@ -18,10 +25,9 @@
             v-model="date"
             type="date"
             format="DD-MM-YYYY"
-            range />
+            range/>
       </div>
-      <b-button  @click="startPdfZip" variant="success">Создать ПДФ</b-button>
-      <!--      <div>{{ date }}</div>-->
+      <b-button  @click="startPdfZip" variant="success">Пуск</b-button>
     </div>
   </div>
 </template>
@@ -68,7 +74,7 @@ export default {
       status: '',
       letters: null,
       date: null,
-      letters_count: 0,
+      letters_count: null,
       regionList: null,
       countryList: null,
       progress: 0,
@@ -178,6 +184,10 @@ export default {
   computed: {
     progressBar() {
       return Math.round(this.count * 100 / this.letters_count);
+    },
+    findLetters() {
+      return `Найдено ${this.letters_count}
+       ${this.plural(this.letters_count, 'письмо', 'письма', 'писем')}!`
     }
   },
   mounted() {
@@ -191,7 +201,6 @@ export default {
   methods: {
     async startPdfZip() {
       this.isCreating = true;
-      this.letters_count = '0'
       this.count = 0;
 
       let zip = require("jszip-sync/dist/jszip.min.js");
@@ -199,9 +208,10 @@ export default {
 
       this.status = 'Поиск писем...'
 
-      const { data } = await getOrders(this.date[0], this.date[1]);
+      const [ startDay, endDay ] = this.date;
 
-      this.status = `Найдено ${data.items.length} писем...`;
+      const { data } = await getOrders(startDay, endDay);
+
 
       this.letters = data.items
           .filter(i => i.items[0]?.name?.includes('письмо')
@@ -209,9 +219,8 @@ export default {
               && !i.items[0]?.name?.includes('ЦК'))
           .map(i => new Letter(i));
 
-      this.status = `Обработано ${this.letters.length} писем...`;
-      // console.table(this.state);
-      this.letters_count = this.letters.length
+      this.status = `Обработано ${this.letters.length} `;
+      this.letters_count = this.letters.length;
 
       if (this.letters_count) {
         await this.createPDF();
@@ -246,14 +255,14 @@ export default {
 
       // Создаем ПДФ конверты и помещаем в массив
       this.letters.forEach( (letter, id) => {
-        this.status = `Создаем pdf - ${id + 1} из ${this.letters.length}`
+        this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`
         const letterType = this.getEnvelopType(letter.type, letter.type_extra);
         pdfArray[id] = this.createTo(letterType, letter);
       })
 
       // ПДФ файлы перобразуем в blob и добавляем в архив
       for (let i = 0; i < pdfArray.length; i++) {
-        this.status = `Упаковка pdf в архив - ${i + 1} из ${pdfArray.length}`
+        this.status = `Упаковка PDF в архив - ${i + 1} из ${pdfArray.length}`
 
         pdfBlobs[i] = await new Promise(resolve => {
           setTimeout(() => {
@@ -508,8 +517,8 @@ export default {
           font: 'Andantino'
         }
       }
-      return  pdfMake.createPdf(docDefinition);
-      // pdfMake.createPdf(docDefinition).open();
+      // return  pdfMake.createPdf(docDefinition);
+      pdfMake.createPdf(docDefinition).open();
     },
 
     getEnvelopType(type, extraType) {
@@ -566,10 +575,32 @@ export default {
       if (picture.includes('9')) return nineC5;
 
       return twoC5;
+    },
+    plural (number, one, two, five) {
+      console.log('Enter in plural', number)
+      let n = Math.floor(Math.abs(number));
+      n %= 100;
+
+      if (n >= 5 && n <= 20) {
+        return five;
+      }
+
+      n %= 10;
+
+      if (n === 1) {
+        return one;
+      }
+
+      if (n >= 2 && n <= 4) {
+        return two;
+      }
+
+      return five;
     }
   }
 }
 </script>
 
 <style scoped>
+
 </style>
