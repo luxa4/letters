@@ -5,8 +5,9 @@
       <div v-if="letters_count">
       {{ status ? status : ''}}
       <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
-             :style="`width: ${isNaN(progressBar) ? 0 : progressBar}%`">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+             :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
+             :style="`width: ${ isNaN(progressBar) ? 0 : progressBar }%`">
           {{ isNaN(progressBar) ? 0 : progressBar }} %
         </div>
       </div>
@@ -27,7 +28,11 @@
             format="DD-MM-YYYY"
             range/>
       </div>
-      <b-button  @click="startPdfZip" variant="success">Пуск</b-button>
+      <b-button
+          @click="startPdfZip"
+          variant="success">
+          Пуск
+      </b-button>
     </div>
   </div>
 </template>
@@ -98,7 +103,7 @@ export default {
         marginPostal: [73, -11.5, 0, 0],
         marginTextWho: [450, -150, 0, 0],
         marginTextWhere: [450, 15, 0, 0],
-        lineDown1: [481, -32, 779, -32],
+        lineDown1: [489, -32, 779, -32],
         lineDown2: [489, 0, 779, 0],
         lineDown3: [489, 32, 779, 32],
         lineDown4: [489, 64, 779, 64],
@@ -238,7 +243,7 @@ export default {
 
     async createPDF() {
       await this.createFiles();
-      this.createZIP();
+      // this.createZIP();
     },
 
     createZIP() {
@@ -309,10 +314,10 @@ export default {
           bolditalics: 'Pechkin_35011.ttf'
         },
         Arial: {
-          normal: 'Arial.ttf',
-          bold: 'Arial.ttf',
-          italics: 'Arial.ttf',
-          bolditalics: 'Arial.ttf'
+          normal: 'arial_italic.ttf',
+          bold: 'arial_italic.ttf',
+          italics: 'arial_italic.ttf',
+          bolditalics: 'arial_italic.ttf'
         }
       }
 
@@ -600,7 +605,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
