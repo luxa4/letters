@@ -26,4 +26,7 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.btn {
+  width: 320px;
+}
 </style>

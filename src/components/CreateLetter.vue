@@ -30,11 +30,12 @@
       </div>
       <b-button
           @click="startPdfZip"
+          :disabled="disabled"
           variant="success">
           Начать волшебство
       </b-button>
     </div>
-    <canvas id="mycanvas"></canvas>
+    <canvas style="display: none" id="mycanvas"></canvas>
   </div>
 </template>
 
@@ -83,6 +84,7 @@ export default {
     return {
       status: '',
       letters: null,
+      disabled: false,
       date: null,
       letters_count: null,
       regionList: null,
@@ -94,6 +96,7 @@ export default {
       myAztec: null,
       parametersA4: {
         marginPicture: [0, 150, 0, 0],
+        marginAztec: [245,-37,0,0],
         marginTextFromWho: [50, -497, 0, 0],
         marginTextFrom: [50, 15, 0, 0],
         lineTop1: [115, -32, 300, -32],
@@ -123,6 +126,7 @@ export default {
       },
       parametersA5: {
         marginPicture: [-1, 13, 0, 0],
+        marginAztec: [220,-37,0,0],
         marginTextFromWho: [28, -365, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
         lineTop1: [92, -28, 300, -28],
@@ -152,6 +156,7 @@ export default {
       },
       parametersC5: {
         marginPicture: [-1, 29, 0, 0],
+        marginAztec: [220,-37,0,0],
         marginTextFromWho: [28, -380, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
         lineTop1: [92, -28, 300, -28],
@@ -181,17 +186,6 @@ export default {
       }
     }
   },
-  watch: {
-    // date(v) {
-    //   console.log(v)
-    // },
-    // myZip(value) {
-    //   console.log(value);
-    // },
-    // count(v) {
-    //   console.log("Каунт ",v);
-    // }
-  },
   computed: {
     progressBar() {
       return Math.round(this.count * 100 / this.letters_count);
@@ -211,6 +205,7 @@ export default {
   },
   methods: {
     async startPdfZip() {
+      this.disabled = true;
       this.isCreating = true;
       this.count = 0;
 
@@ -236,11 +231,12 @@ export default {
       if (this.letters_count) {
         await this.createPDF();
       }
+      this.disabled = false;
     },
 
     async createPDF() {
       await this.createFiles();
-      // this.createZIP();
+      this.createZIP();
     },
 
     createZIP() {
@@ -255,7 +251,8 @@ export default {
           bcid:        'azteccode',
           text:        order,
           scale:       1,
-          height:      5,
+          width:       14,
+          height:      14,
           includetext: false,
           textxalign:  'center',
         });
@@ -411,8 +408,8 @@ export default {
           },
 
           {
-            text: letter.order_id,
-            fontSize: 7,
+            text: letter.order_id.slice(-4),
+            fontSize: 10,
             color: '#323d85',
             margin: parameters.marginOrderId
           },
@@ -436,11 +433,8 @@ export default {
             margin: parameters.marginPostal
           },
           {
-            // you'll most often use dataURI images on the browser side
-            // if no width/height/fit is provided, the original size will be used
             image: aztecCode,
-            margin: [205,-30,10,10],
-            fit: [30, 30]
+            margin: parameters.marginAztec,
           },
           {
             text: 'Кому',
@@ -536,8 +530,8 @@ export default {
           font: 'Andantino'
         }
       }
-      // return  pdfMake.createPdf(docDefinition);
-      pdfMake.createPdf(docDefinition).open();
+      return  pdfMake.createPdf(docDefinition);
+      // pdfMake.createPdf(docDefinition).open();
     },
 
     getEnvelopType(type, extraType) {
