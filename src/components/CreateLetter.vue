@@ -75,8 +75,7 @@ import {elevenA4} from "@/components/SvgImg/img11A4";
 import {elevenA5} from "@/components/SvgImg/img11A5";
 import {elevenC5} from "@/components/SvgImg/img11C5";
 import {Letter} from "../model/Letter";
-import bwipjs from 'bwip-js';
-
+// import bwipjs from 'bwip-js';
 export default {
   name: 'CreateLetter',
   data() {
@@ -123,7 +122,7 @@ export default {
       },
       parametersA5: {
         marginPicture: [-1, 13, 0, 0],
-        marginTextFromWho: [28, -380, 0, 0],
+        marginTextFromWho: [28, -365, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
         lineTop1: [92, -28, 300, -28],
         lineTop2: [92, 0, 300, 0],
@@ -233,22 +232,18 @@ export default {
       this.status = `Обработано ${this.letters.length} `;
       this.letters_count = this.letters.length;
 
-
-      bwipjs.toBuffer({
-        bcid:        'azteccode',       // Barcode type
-        text:        '13213213',    // Text to encode
-        scale:       3,               // 3x scaling factor
-        height:      10,              // Bar height, in millimeters
-        includetext: true,            // Show human-readable text
-        textxalign:  'center',        // Always good to set this
-      }, function (err, png) {
-        if (err) {
-          // `err` may be a string or Error object
-        } else {
-
-          console.log(png)
-        }
-      });
+      // let azt = require("bwip-js");
+      // this.myAztec = azt;
+      // bwipjs.toBuffer({
+      //   bcid:        'azteccode',       // Barcode type
+      //   text:        '13213213',    // Text to encode
+      //   scale:       3,               // 3x scaling factor
+      //   height:      10,              // Bar height, in millimeters
+      //   includetext: true,            // Show human-readable text
+      //   textxalign:  'center',        // Always good to set this
+      // }).then(png => {
+      //   console.log(png)
+      // });
 
       if (this.letters_count) {
         await this.createPDF();
@@ -288,8 +283,7 @@ export default {
       this.letters.forEach( (letter, id) => {
         this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`
         const letterType = this.getEnvelopType(letter.type, letter.type_extra);
-          pdfArray[id] = this.createTo(letterType, letter);
-
+        pdfArray[id] = this.createTo(letterType, letter);
       })
 
       // ПДФ файлы перобразуем в blob и добавляем в архив
@@ -319,7 +313,6 @@ export default {
     },
 
     createTo(envelope_type, letter) {
-      console.log(envelope_type)
       const parameters = this.getLetterParameters(envelope_type);
       const pdfMake = require('pdfmake/build/pdfmake.js')
 
@@ -353,7 +346,7 @@ export default {
         content: [
           // Picture
           {
-            svg: this.getPicture(letter),
+            svg: this.getPicture(letter, envelope_type),
             margin: parameters.marginPicture
           },
           {
@@ -571,40 +564,40 @@ export default {
       return country.country;
     },
 
-    getPicture( { picture, type, type_extra} ) {
-      if (type === 'A4') {
-        if (type_extra.includes('1')) return oneA4;
-        if (type_extra.includes('2')) return fiveA4;
-        if (type_extra.includes('3')) return threeA4;
-        if (type_extra.includes('4')) return elevenA4;
-        if (type_extra.includes('5')) return tenA4;
-        if (type_extra.includes('6')) return sixA4;
-        if (type_extra.includes('7')) return sevenA4;
-        if (type_extra.includes('8')) return eightA4;
-        if (type_extra.includes('9')) return nineA4;
+    getPicture( letter, envelope_type ) {
+      if (envelope_type === 'A4') {
+        if (letter.type_extra.includes('1')) return oneA4;
+        if (letter.type_extra.includes('2')) return fiveA4;
+        if (letter.type_extra.includes('3')) return threeA4;
+        if (letter.type_extra.includes('4')) return elevenA4;
+        if (letter.type_extra.includes('5')) return tenA4;
+        if (letter.type_extra.includes('6')) return sixA4;
+        if (letter.type_extra.includes('7')) return sevenA4;
+        if (letter.type_extra.includes('8')) return eightA4;
+        if (letter.type_extra.includes('9')) return nineA4;
       }
 
-      if (type === 'A5') {
-        if (picture.includes('1')) return oneA5;
-        if (picture.includes('2')) return fiveA5;
-        if (picture.includes('3')) return threeA5;
-        if (picture.includes('4')) return elevenA5;
-        if (picture.includes('5')) return tenA5;
-        if (picture.includes('6')) return sixA5;
-        if (picture.includes('7')) return sevenA5;
-        if (picture.includes('8')) return eightA5;
-        if (picture.includes('9')) return nineA5;
+      if (envelope_type === 'A5') {
+        if (letter.picture.includes('1')) return oneA5;
+        if (letter.picture.includes('2')) return fiveA5;
+        if (letter.picture.includes('3')) return threeA5;
+        if (letter.picture.includes('4')) return elevenA5;
+        if (letter.picture.includes('5')) return tenA5;
+        if (letter.picture.includes('6')) return sixA5;
+        if (letter.picture.includes('7')) return sevenA5;
+        if (letter.picture.includes('8')) return eightA5;
+        if (letter.picture.includes('9')) return nineA5;
       }
 
-      if (picture.includes('1')) return oneC5;
-      if (picture.includes('2')) return fiveC5;
-      if (picture.includes('3')) return threeC5;
-      if (picture.includes('4')) return elevenC5;
-      if (picture.includes('5')) return tenC5;
-      if (picture.includes('6')) return sixC5;
-      if (picture.includes('7')) return sevenC5;
-      if (picture.includes('8')) return eightC5;
-      if (picture.includes('9')) return nineC5;
+      if (letter.picture.includes('1')) return oneC5;
+      if (letter.picture.includes('2')) return fiveC5;
+      if (letter.picture.includes('3')) return threeC5;
+      if (letter.picture.includes('4')) return elevenC5;
+      if (letter.picture.includes('5')) return tenC5;
+      if (letter.picture.includes('6')) return sixC5;
+      if (letter.picture.includes('7')) return sevenC5;
+      if (letter.picture.includes('8')) return eightC5;
+      if (letter.picture.includes('9')) return nineC5;
 
       return twoC5;
     },
