@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <div class="container">
-      <Troyka/>
+      <Logo/>
       <div v-if="letters_count">
       {{ status ? status : ''}}
       <div class="progress">
@@ -34,12 +34,13 @@
           Начать волшебство
       </b-button>
     </div>
+    <canvas id="mycanvas"></canvas>
   </div>
 </template>
 
 <script>
 import { getOrders } from "../services";
-import Troyka from "@/components/Troyka";
+import Logo from "@/components/Logo";
 import { saveAs } from 'file-saver';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
@@ -75,7 +76,7 @@ import {elevenA4} from "@/components/SvgImg/img11A4";
 import {elevenA5} from "@/components/SvgImg/img11A5";
 import {elevenC5} from "@/components/SvgImg/img11C5";
 import {Letter} from "../model/Letter";
-// import bwipjs from 'bwip-js';
+import bwipjs from "bwip-js";
 export default {
   name: 'CreateLetter',
   data() {
@@ -205,7 +206,7 @@ export default {
     // this.countryList = countryJson;
   },
   components: {
-    Troyka,
+    Logo,
     DatePicker
   },
   methods: {
@@ -232,34 +233,9 @@ export default {
       this.status = `Обработано ${this.letters.length} `;
       this.letters_count = this.letters.length;
 
-      // let azt = require("bwip-js");
-      // this.myAztec = azt;
-      // bwipjs.toBuffer({
-      //   bcid:        'azteccode',       // Barcode type
-      //   text:        '13213213',    // Text to encode
-      //   scale:       3,               // 3x scaling factor
-      //   height:      10,              // Bar height, in millimeters
-      //   includetext: true,            // Show human-readable text
-      //   textxalign:  'center',        // Always good to set this
-      // }).then(png => {
-      //   console.log(png)
-      // });
-
       if (this.letters_count) {
         await this.createPDF();
       }
-
-
-
-      // try {
-      //   const { data } = await createStream({
-      //     symbology: SymbologyType.AZTEC,
-      //   }, this.state.order, OutputType.SVG)
-      //
-      //   console.log('Result: ', data)
-      // } catch (err) {
-      //   console.error('Error: ', err)
-      // }
     },
 
     async createPDF() {
@@ -274,6 +250,17 @@ export default {
             saveAs(blob, `orders${1}.zip`)
           })
     },
+    getAztecCode(order) {
+        let aztecCanvas = bwipjs.toCanvas('mycanvas', {
+          bcid:        'azteccode',
+          text:        order,
+          scale:       1,
+          height:      5,
+          includetext: false,
+          textxalign:  'center',
+        });
+        return aztecCanvas.toDataURL('image/png');
+    },
 
     async createFiles() {
       let pdfArray = [];
@@ -283,7 +270,8 @@ export default {
       this.letters.forEach( (letter, id) => {
         this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`
         const letterType = this.getEnvelopType(letter.type, letter.type_extra);
-        pdfArray[id] = this.createTo(letterType, letter);
+        const aztecCode = this.getAztecCode(letter.order_id);
+        pdfArray[id] = this.createTo(letterType, letter, aztecCode);
       })
 
       // ПДФ файлы перобразуем в blob и добавляем в архив
@@ -312,7 +300,7 @@ export default {
       return this.parametersC5;
     },
 
-    createTo(envelope_type, letter) {
+    createTo(envelope_type, letter, aztecCode) {
       const parameters = this.getLetterParameters(envelope_type);
       const pdfMake = require('pdfmake/build/pdfmake.js')
 
@@ -447,7 +435,13 @@ export default {
             color: '#2b2a29',
             margin: parameters.marginPostal
           },
-
+          {
+            // you'll most often use dataURI images on the browser side
+            // if no width/height/fit is provided, the original size will be used
+            image: aztecCode,
+            margin: [205,-30,10,10],
+            fit: [30, 30]
+          },
           {
             text: 'Кому',
             italics: true,
