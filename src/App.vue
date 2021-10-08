@@ -1,17 +1,13 @@
 <template>
   <div id="app">
-    <CreateLetter />
+    <router-view/>
   </div>
 </template>
 
 <script>
-import CreateLetter from './components/CreateLetter.vue'
 
 export default {
   name: 'App',
-  components: {
-    CreateLetter
-  }
 }
 </script>
 
