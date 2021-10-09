@@ -174,25 +174,24 @@ export default {
   name: "Map",
   data() {
     return {
-      maxScale: 2,
+      maxScale: 4,
       minScale: 0.25,
       scale: 1,
-      xT: 1,
-      yT: 1,
+      xT: 0,
+      yT: 0,
       isDragging: false,
       coord: {},
-      offsetX: null,
-      offsetY: null,
-      elem: null
+      offset: null,
+      elem: null,
+      svg: null
     }
   },
   mounted() {
-    const map = document.querySelector('.map')
+    this.svg = document.querySelector('.map')
     //
-    map.addEventListener('mousedown', this.startDrag);
-    map.addEventListener('mousemove', this.drag);
-    map.addEventListener('mouseup', this.endDrag);
-    map.addEventListener('mouseleave', this.endDrag);
+    this.svg.addEventListener('mousedown', this.startDrag);
+    this.svg.addEventListener('mousemove', this.drag);
+    this.svg.addEventListener('mouseup', this.endDrag);
     // let element = document.querySelector('.content');
     // let options = {
     //   limit: body,
@@ -211,36 +210,35 @@ export default {
     startDrag(event) {
       this.isDragging = true;
       this.elem = document.querySelector('.content');
-      let CTM = document.querySelector('.map').getScreenCTM();
-      this.offsetX = (event.clientX - CTM.e) / CTM.a;
-      this.offsetY = (event.clientY - CTM.f) / CTM.d;
+      this.offset = this.getMousePosition(event);
+      this.offset.x -= this.xT
+      this.offset.y -= this.yT
     },
     drag(event) {
-      event.preventDefault();
       if (this.isDragging) {
-        // console.log(event)
-        let CTM = this.elem.getScreenCTM();
-        const x = (event.clientX - CTM.e) / CTM.a;
-        const y = (event.clientY - CTM.f) / CTM.d;
-
-        // console.log(x, y)
-
-        this.xT = x - this.offsetX;
-        this.yT = y - this.offsetY;
+        event.preventDefault();
+        this.coord = this.getMousePosition(event);
+        this.xT = this.coord.x - this.offset.x;
+        this.yT = this.coord.y - this.offset.y;
       }
     },
     endDrag() {
       this.isDragging = false;
+      this.elem = null
     },
     scalePlus() {
-      if (this.scale < this.maxScale) this.scale = this.scale + 0.25;
-      console.log( this.scale)
+      if (this.scale < this.maxScale) this.scale += 0.25;
     },
     scaleMinus() {
-      if (this.scale > this.minScale)  this.scale = this.scale - 0.25;
-      console.log( this.scale)
+      if (this.scale > this.minScale) this.scale -= 0.25;
     },
-
+    getMousePosition(event) {
+      let CTM = this.svg.getScreenCTM();
+      return {
+        x: (event.clientX - CTM.e) / CTM.a,
+        y: (event.clientY - CTM.f) / CTM.d
+      };
+    }
   }
 }
 </script>
