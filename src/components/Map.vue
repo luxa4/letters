@@ -192,6 +192,7 @@ export default {
     this.svg.addEventListener('mousedown', this.startDrag);
     this.svg.addEventListener('mousemove', this.drag);
     this.svg.addEventListener('mouseup', this.endDrag);
+    this.svg.addEventListener('mouseleave', this.endDrag);
     // let element = document.querySelector('.content');
     // let options = {
     //   limit: body,
