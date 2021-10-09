@@ -258,10 +258,18 @@ export default {
       this.elem = null
     },
     scalePlus() {
-      if (this.scale < this.maxScale) this.scale += 0.25;
+      if (this.svg.classList.contains('x2')) {
+        this.svg.classList.add('x3')
+      } else {
+        this.svg.classList.add('x2')
+      }
     },
     scaleMinus() {
-      if (this.scale > this.minScale) this.scale -= 0.25;
+      if (this.svg.classList.contains('x3')) {
+        this.svg.classList.remove('x3')
+      } else {
+        this.svg.classList.remove('x2')
+      }
     },
     getMousePosition(event) {
       let CTM = this.svg.getScreenCTM();
@@ -278,13 +286,43 @@ export default {
 .region {
   cursor: pointer;
   fill: rgb(162,217,247);
+  -webkit-transform: scale(1);
+  -webkit-transform-origin: 50% 50%;
+  -webkit-transition:.3s;
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  transition:.3s;
+  transform-box: fill-box;
 }
-.region:hover {
-  fill: rgb(56,171,218);
+
+.x2 {
+  -webkit-transform: scale(2);
+  -webkit-transform-origin: 50% 50%;
+  -webkit-transition:.3s;
+  transform: scale(2);
+  transform-origin: 50% 50%;
+  transition:.3s;
+}
+
+.x3 {
+  -webkit-transform: scale(2.5);
+  -webkit-transform-origin: 50% 50%;
+  -webkit-transition:.3s;
+  transform: scale(2.5);
+  transform-origin: 50% 50%;
+  transition:.3s;
 }
 
 .map {
   position: relative;
+  -webkit-transform: scale(1);
+  -webkit-transform-origin: 50% 50%;
+  -webkit-transition:.3s;
+  transform: scale(1);
+  transform-origin: 50% 50%;
+  transition:.3s;
+  transform-box: fill-box;
+
 }
 
 .controls {
@@ -292,6 +330,10 @@ export default {
   right: 60px;
   top: 20%;
   font-size: 31px;
+}
+
+.content {
+
 }
 
 .control {
