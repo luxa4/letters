@@ -1,41 +1,43 @@
 <template>
   <div class="hello">
     <div class="container">
-      <Logo/>
-      <div v-if="letters_count">
-      {{ status ? status : ''}}
-      <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-             :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
-             :style="`width: ${ isNaN(progressBar) ? 0 : progressBar }%`">
-          {{ isNaN(progressBar) ? 0 : progressBar }} %
+      <Logo @onShowControls="toggleControls"/>
+      <div v-if="showControls">
+        <div v-if="letters_count">
+        {{ status ? status : ''}}
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+               :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
+               :style="`width: ${ isNaN(progressBar) ? 0 : progressBar }%`">
+            {{ isNaN(progressBar) ? 0 : progressBar }} %
+          </div>
         </div>
+        </div>
+        <div v-if="letters_count" class="mt-2">
+          <h3>{{ findLetters }}</h3>
+        </div>
+        <div v-if="letters_count === 0">
+          <h3>Писем не найдено</h3>
+        </div>
+        <div style="margin-bottom: 15px; margin-top: 15px">
+          <date-picker
+              placeholder="Укажите период заказов"
+              value-type="X"
+              range-separator=" по "
+              v-model="date"
+              type="date"
+              format="DD-MM-YYYY"
+              range/>
+        </div>
+        <b-button
+            @click="startPdfZip"
+            :disabled="disabled"
+            variant="success">
+            Начать волшебство
+        </b-button>
       </div>
-      </div>
-      <div v-if="letters_count" class="mt-2">
-        <h3>{{ findLetters }}</h3>
-      </div>
-      <div v-if="letters_count === 0">
-        <h3>Писем не найдено</h3>
-      </div>
-      <div style="margin-bottom: 15px; margin-top: 15px">
-        <date-picker
-            placeholder="Укажите период заказов"
-            value-type="X"
-            range-separator=" по "
-            v-model="date"
-            type="date"
-            format="DD-MM-YYYY"
-            range/>
-      </div>
-      <b-button
-          @click="startPdfZip"
-          :disabled="disabled"
-          variant="success">
-          Начать волшебство
-      </b-button>
+      <canvas style="display: none" id="mycanvas"></canvas>
     </div>
-    <canvas style="display: none" id="mycanvas"></canvas>
   </div>
 </template>
 
@@ -82,6 +84,7 @@ export default {
   name: 'CreateLetter',
   data() {
     return {
+      showControls: false,
       status: '',
       letters: null,
       disabled: false,
@@ -204,6 +207,9 @@ export default {
     DatePicker
   },
   methods: {
+    toggleControls() {
+      this.showControls = !this.showControls;
+    },
     async startPdfZip() {
       this.disabled = true;
       this.isCreating = true;
