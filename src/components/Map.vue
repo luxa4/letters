@@ -169,9 +169,9 @@
 </template>
 
 <script>
+import { getRegion } from "../helper";
 import { getOrders } from "../services";
 import { Order } from "../model/Order";
-import {getRegion} from "../helper";
 
 export default {
   name: "Map",
@@ -193,25 +193,106 @@ export default {
     }
   },
   async mounted() {
-    // const data = await getOrders(1380637620, 1633789620, 0);
-    // console.log(data)
-    const existOrder = 0;
+    const existOrder = 85;
 
-    const data = await getOrders(1380637620, 1633789620);
+    const data = await getOrders(1380637620, 	1949501537);
     const orderTotal = data.data.total;
     const extra = (orderTotal - existOrder * 100) % 100 === 0 ? 0 : 1
     const countQuery = ~~((orderTotal - existOrder * 100) / 100) + extra;
 
     for (let i = 0; i < countQuery; i++) {
-      const data = await getOrders(1380637620, 1633789620, (existOrder + i) *100);
+      const data = await getOrders(1380637620, 	1949501537, (existOrder + i) *100);
       this.orders = [...this.orders, ...data.data.items]
     }
 
-    // console.log(this.orders)
     this.letters = this.orders.filter(i => i.shippingPerson)
         .filter(i => i.shippingPerson.countryCode === 'RU')
         .map(i => new Order(i))
         .map(i => i.region_code);
+
+    this.count[1] = 48;
+    this.count[2] = 155;
+    this.count[3] = 42;
+    this.count[4] = 26;
+    this.count[5] = 18;
+    this.count[7] = 12;
+    this.count[8] = 10;
+    this.count[9] = 13;
+    this.count[10] = 65;
+    this.count[11] = 36;
+    this.count[12] = 19;
+    this.count[13] = 18;
+    this.count[14] = 35;
+    this.count[15] = 7;
+    this.count[16] = 124;
+    this.count[17] = 5;
+    this.count[18] = 53;
+    this.count[19] = 10;
+    this.count[20] = 2;
+    this.count[21] = 31;
+    this.count[22] = 54;
+    this.count[23] = 380;
+    this.count[24] = 65;
+    this.count[25] = 44;
+    this.count[26] = 116;
+    this.count[27] = 80;
+    this.count[28] = 28;
+    this.count[29] = 59;
+    this.count[30] = 34;
+    this.count[31] = 95;
+    this.count[32] = 40;
+    this.count[33] = 80;
+    this.count[34] = 116;
+    this.count[35] = 256;
+    this.count[36] = 138;
+    this.count[37] = 48;
+    this.count[38] = 62;
+    this.count[39] = 68;
+    this.count[40] = 89;
+    this.count[41] = 31;
+    this.count[42] = 53;
+    this.count[43] = 42;
+    this.count[44] = 28;
+    this.count[45] = 19;
+    this.count[46] = 54;
+    this.count[47] = 967;
+    this.count[48] = 74;
+    this.count[49] = 9;
+    this.count[50] = 706;
+    this.count[51] = 81;
+    this.count[52] = 177;
+    this.count[53] = 39;
+    this.count[54] = 93;
+    this.count[55] = 54;
+    this.count[56] = 61;
+    this.count[57] = 47;
+    this.count[58] = 61;
+    this.count[59] = 131;
+    this.count[60] = 50;
+    this.count[61] = 240;
+    this.count[62] = 73;
+    this.count[63] = 137;
+    this.count[64] = 126;
+    this.count[65] = 56;
+    this.count[66] = 182;
+    this.count[67] = 38;
+    this.count[68] = 49;
+    this.count[69] = 64;
+    this.count[70] = 26;
+    this.count[71] = 111;
+    this.count[72] = 97;
+    this.count[73] = 37;
+    this.count[74] = 100;
+    this.count[75] = 27;
+    this.count[76] = 48;
+    this.count[77] = 1436;
+    this.count[79] = 9;
+    this.count[82] = 46;
+    this.count[83] = 2;
+    this.count[86] = 61;
+    this.count[87] = 5;
+    this.count[89] = 30;
+
 
     this.letters.forEach((item) => {
         if (item === 92) item = 82; // Севастополь + Крым
@@ -224,8 +305,18 @@ export default {
     this.count.forEach( (i, id) => {
       if (id) {
         const region = document.getElementById(`${id}`);
-        // console.log(`Cant find ${id}`);
-        console.log(id, i, i/largest*100);
+
+        // new Popover({
+        //   button: region,
+        //   position: 'top',
+        //   className: '',
+        //   align: 'left', // optionally aligns popover relative to button
+        //   template: `${getRegion(id)} - ${i} заказов` // optional
+        // }).render()
+
+        // new bootstrap.Popover(region, { content: `${getRegion(id)} - ${i} заказов`})
+        // // console.log(`Cant find ${id}`);
+        // console.log(id, i, i/largest*100);
         const cssClass = this.getCssClass(i/largest*100);
         region.classList.add(cssClass);
       }

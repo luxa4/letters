@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@popperjs/core": "^2.10.2",
     "aws-sdk": "^2.930.0",
     "axios": "^0.21.1",
     "babel-core": "^6.26.3",
@@ -15,11 +16,13 @@
     "bwip-js": "^3.0.4",
     "core-js": "^3.6.5",
     "file-saver": "^2.0.5",
+    "jquery": "^3.6.0",
     "jszip": "^3.6.0",
     "jszip-sync": "^3.2.1-sync",
     "mock-aws-s3": "^4.0.2",
     "nock": "^13.1.0",
     "pdfmake": "^0.1.70",
+    "popover": "^2.4.1",
     "vue": "^2.6.12",
     "vue-axios": "^3.2.4",
     "vue-router": "^3.5.2",
