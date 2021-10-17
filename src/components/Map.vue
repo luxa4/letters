@@ -1,5 +1,5 @@
 <template>
-  <div id="map" style="height: 600px; overflow: hidden;">
+  <div style="height: 600px; overflow: hidden; position: relative">
     <div>
       <svg class="map" width="100%" height="600px" viewBox="0 0 803 415" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g :transform="`translate(${xT},${yT}) scale(${scale})`" class="content" draggable="true" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -172,6 +172,7 @@
 import { getRegion } from "../helper";
 import { getOrders } from "../services";
 import { Order } from "../model/Order";
+import bootstrap from "bootstrap/dist/js/bootstrap";
 
 export default {
   name: "Map",
@@ -189,7 +190,9 @@ export default {
       elem: null,
       svg: null,
       letters: [],
-      count: []
+      count: [],
+      popovers: [],
+
     }
   },
   async mounted() {
@@ -306,21 +309,23 @@ export default {
       if (id) {
         const region = document.getElementById(`${id}`);
 
-        // new Popover({
-        //   button: region,
-        //   position: 'top',
-        //   className: '',
-        //   align: 'left', // optionally aligns popover relative to button
-        //   template: `${getRegion(id)} - ${i} заказов` // optional
-        // }).render()
-
-        // new bootstrap.Popover(region, { content: `${getRegion(id)} - ${i} заказов`})
-        // // console.log(`Cant find ${id}`);
-        // console.log(id, i, i/largest*100);
+        this.popovers[id] = new bootstrap.Popover(region, {
+          title: `${getRegion(id)}`,
+          content: `${i} заказов`,
+          template: `<div class="popover" role="tooltip">
+                        <div class="popover-arrow"></div>
+                        <h3 class="popover-header"></h3>
+                        <div class="popover-body"></div>
+                      </div>`,
+          placement: 'top',
+          trigger: 'click',
+          offset: [0,-(region.getBoundingClientRect().height/2)]
+        })
         const cssClass = this.getCssClass(i/largest*100);
         region.classList.add(cssClass);
       }
     })
+    // console.log(this.popovers);
 
     this.svg = document.querySelector('.map')
     this.svg.addEventListener('mousedown', this.startDrag);
@@ -340,14 +345,19 @@ export default {
       if (percent < 80) return 'percent80'
       return 'percent90'
     },
-    onRegion(id) {
+    onRegion() {
       // const largest = Math.max.apply(Math, this.count.filter(i => i != false));
       // const percent = this.count[id]/largest * 100
-      const regionName = getRegion(id)
-      console.log(`${regionName} - `,id)
+      // const regionName = getRegion(id)
+
     },
     startDrag(event) {
       this.isDragging = true;
+
+      this.popovers.forEach(i => {
+        i.hide();
+      });
+
       this.elem = document.querySelector('.content');
       this.offset = this.getMousePosition(event);
       this.offset.x -= this.xT
@@ -367,19 +377,9 @@ export default {
     },
     scalePlus() {
       if (this.scale < this.maxScale) this.scale += 0.25;
-      // if (this.svg.classList.contains('x2')) {
-      //   this.svg.classList.add('x3')
-      // } else {
-      //   this.svg.classList.add('x2')
-      // }
     },
     scaleMinus() {
       if (this.scale > this.minScale) this.scale -= 0.25;
-      // if (this.svg.classList.contains('x3')) {
-      //   this.svg.classList.remove('x3')
-      // } else {
-      //   this.svg.classList.remove('x2')
-      // }
     },
     getMousePosition(event) {
       let CTM = this.svg.getScreenCTM();
@@ -392,61 +392,60 @@ export default {
 }
 </script>
 
+<style>
+@font-face {
+  font-family: 'Neucha';
+  src: url("../assets/fonts/Neucha-Regular.ttf");
+  font-style: normal;
+  font-weight: normal;
+}
+
+.popover {
+  font-family: 'Neucha', san-serif;
+  font-size: 20px;
+  outline: none;
+  border: none;
+}
+.popover-header {
+  font-size: 20px;
+}
+</style>
+
 <style scoped>
 .region {
   cursor: pointer;
   fill: rgb(162,217,247);
-  -webkit-transform: scale(1);
-  -webkit-transform-origin: 50% 50%;
-  -webkit-transition:.3s;
-  transform: scale(1);
-  transform-origin: 50% 50%;
-  transition:.3s;
-  transform-box: fill-box;
-}
-
-.x2 {
-  -webkit-transform: scale(2);
-  -webkit-transform-origin: 50% 50%;
-  -webkit-transition:.3s;
-  transform: scale(2);
-  transform-origin: 50% 50%;
-  transition:.3s;
-}
-
-.x3 {
-  -webkit-transform: scale(2.5);
-  -webkit-transform-origin: 50% 50%;
-  -webkit-transition:.3s;
-  transform: scale(2.5);
-  transform-origin: 50% 50%;
-  transition:.3s;
 }
 
 .map {
-  position: relative;
-  -webkit-transform: scale(1);
-  -webkit-transform-origin: 50% 50%;
-  -webkit-transition:.3s;
-  transform: scale(1);
-  transform-origin: 50% 50%;
-  transition:.3s;
+  -webkit-transform-origin: center;
+  transform-origin: center;
   transform-box: fill-box;
+}
 
+.content {
+  position: relative;
+  -webkit-transform-origin: center;
+  -webkit-transition: transform .1s;
+  transform-origin: center;
+  transition: transform .1s;
+  transform-box: fill-box;
 }
 
 .controls {
   position: absolute;
   right: 60px;
-  top: 20%;
+  top: 40%;
   font-size: 31px;
 }
 
-.content {
-
-}
-
 .control {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   padding: 2px 10px;
   background: darkgray;
   color: azure;

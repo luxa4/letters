@@ -12,7 +12,14 @@ export default {
 </script>
 
 <style>
+@import "~normalize.css";
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+* {
+  outline: none;
+}
+
+
+
 #app {
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
