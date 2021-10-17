@@ -2,7 +2,7 @@
   <div class="hello">
     <div class="container">
       <Logo @onShowControls="toggleControls"/>
-      <div v-if="showControls">
+      <div class="panel" v-if="showControls">
         <div v-if="letters_count">
         {{ status ? status : ''}}
         <div class="progress">
@@ -35,7 +35,11 @@
             variant="success">
             Начать волшебство
         </b-button>
+        <div style="text-align: center; margin-top: 15px">
+        <router-link class="btn btn-danger" to="/map">Карта заказов</router-link>
+        </div>
       </div>
+
       <canvas style="display: none" id="mycanvas"></canvas>
     </div>
   </div>
@@ -80,6 +84,7 @@ import {elevenA5} from "@/components/SvgImg/img11A5";
 import {elevenC5} from "@/components/SvgImg/img11C5";
 import {Letter} from "../model/Letter";
 import bwipjs from "bwip-js";
+import {plural} from "../helper";
 export default {
   name: 'CreateLetter',
   data() {
@@ -195,7 +200,7 @@ export default {
     },
     findLetters() {
       return `Найдено ${this.letters_count}
-       ${this.plural(this.letters_count, 'письмо', 'письма', 'писем')}!`
+       ${plural(this.letters_count, 'письмо', 'письма', 'писем')}!`
     }
   },
   mounted() {
@@ -209,6 +214,12 @@ export default {
   methods: {
     toggleControls() {
       this.showControls = !this.showControls;
+      setTimeout(()=> {
+        const panelElem = document.querySelector('.panel');
+        if (panelElem) {
+          panelElem.classList.add('active');
+        }
+      }, 200)
     },
     async startPdfZip() {
       this.disabled = true;
@@ -595,27 +606,17 @@ export default {
 
       return twoC5;
     },
-    plural (number, one, two, five) {
-      console.log('Enter in plural', number)
-      let n = Math.floor(Math.abs(number));
-      n %= 100;
-
-      if (n >= 5 && n <= 20) {
-        return five;
-      }
-
-      n %= 10;
-
-      if (n === 1) {
-        return one;
-      }
-
-      if (n >= 2 && n <= 4) {
-        return two;
-      }
-
-      return five;
-    }
   }
 }
 </script>
+
+<style scoped>
+.panel {
+  opacity: 0;
+  transition: opacity .3s linear;
+}
+.active {
+  opacity: 1;
+}
+
+</style>

@@ -18,8 +18,6 @@ export default {
   outline: none;
 }
 
-
-
 #app {
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;

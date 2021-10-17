@@ -1,6 +1,6 @@
 <template>
   <div style="height: 600px; overflow: hidden; position: relative">
-    <div>
+    <div id="map">
       <svg class="map" width="100%" height="600px" viewBox="0 0 803 415" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g :transform="`translate(${xT},${yT}) scale(${scale})`" class="content" draggable="true" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g>
@@ -169,7 +169,7 @@
 </template>
 
 <script>
-import { getRegion } from "../helper";
+import {getRegion, plural} from "../helper";
 import { getOrders } from "../services";
 import { Order } from "../model/Order";
 import bootstrap from "bootstrap/dist/js/bootstrap";
@@ -310,8 +310,9 @@ export default {
         const region = document.getElementById(`${id}`);
 
         this.popovers[id] = new bootstrap.Popover(region, {
+          container: document.querySelector(`#map`),
           title: `${getRegion(id)}`,
-          content: `${i} заказов`,
+          content: `${i} ${plural(i, 'заказ', 'заказa', 'заказов')}`,
           template: `<div class="popover" role="tooltip">
                         <div class="popover-arrow"></div>
                         <h3 class="popover-header"></h3>
@@ -377,9 +378,15 @@ export default {
     },
     scalePlus() {
       if (this.scale < this.maxScale) this.scale += 0.25;
+      this.popovers.forEach(i => {
+        i.update();
+      });
     },
     scaleMinus() {
       if (this.scale > this.minScale) this.scale -= 0.25;
+      this.popovers.forEach(i => {
+        i.update();
+      });
     },
     getMousePosition(event) {
       let CTM = this.svg.getScreenCTM();
