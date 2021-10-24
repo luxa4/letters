@@ -6,7 +6,7 @@ export function getOrders(createdFrom, createdTo, offset = 0) {
     return axios.get(url, { params: {
         token: token,
         createdFrom: createdFrom,
-        createdTo: createdTo,
+        createdTo: +createdTo + 86399,
         offset: offset
     }
     });
