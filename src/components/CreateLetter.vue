@@ -91,7 +91,8 @@ export default {
     return {
       showControls: false,
       status: '',
-      letters: null,
+      letters: [],
+      orders: null,
       disabled: false,
       date: null,
       letters_count: null,
@@ -236,11 +237,19 @@ export default {
       const { data } = await getOrders(startDay, endDay);
 
 
-      this.letters = data.items
-          .filter(i => i.items[0]?.name?.includes('письмо')
-              && i.shippingPerson.countryCode === 'RU'
-              && !i.items[0]?.name?.includes('ЦК'))
-          .map(i => new Letter(i));
+      this.orders = data.items;
+
+      this.orders.forEach(i => {
+        if (i.shippingPerson.countryCode === 'RU') {
+          i.items.forEach( order => {
+            if (order?.name?.includes('исьмо') && !order?.name?.includes('ЦК')) {
+              this.letters.push(Object.assign(order, i.shippingPerson, {order_id : i.id}, { orderType: order.name}));
+            }
+          })
+        }
+      })
+
+      this.letters = this.letters.map(i => new Letter(i));
 
       this.status = `Обработано ${this.letters.length} `;
       this.letters_count = this.letters.length;
@@ -283,7 +292,7 @@ export default {
       // Создаем ПДФ конверты и помещаем в массив
       this.letters.forEach( (letter, id) => {
         this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`
-        const letterType = this.getEnvelopType(letter.type, letter.type_extra);
+        const letterType = letter.type;
         const aztecCode = this.getAztecCode(letter.order_id);
         pdfArray[id] = this.createTo(letterType, letter, aztecCode);
       })
@@ -301,7 +310,7 @@ export default {
         })
         this.count++;
 
-        const letterType = this.getEnvelopType(this.letters[i].type, this.letters[i].type_extra);
+        const letterType = this.letters[i].type;
         // Добавляем в архив
         this.myZip.file(`${letterType}_${this.letters[i].order_id}.pdf`, pdfBlobs[i]);
       }
@@ -571,15 +580,15 @@ export default {
 
     getPicture( letter, envelope_type ) {
       if (envelope_type === 'A4') {
-        if (letter.type_extra.includes('1')) return oneA4;
-        if (letter.type_extra.includes('2')) return fiveA4;
-        if (letter.type_extra.includes('3')) return threeA4;
-        if (letter.type_extra.includes('4')) return elevenA4;
-        if (letter.type_extra.includes('5')) return tenA4;
-        if (letter.type_extra.includes('6')) return sixA4;
-        if (letter.type_extra.includes('7')) return sevenA4;
-        if (letter.type_extra.includes('8')) return eightA4;
-        if (letter.type_extra.includes('9')) return nineA4;
+        if (letter.picture.includes('1')) return oneA4;
+        if (letter.picture.includes('2')) return fiveA4;
+        if (letter.picture.includes('3')) return threeA4;
+        if (letter.picture.includes('4')) return elevenA4;
+        if (letter.picture.includes('5')) return tenA4;
+        if (letter.picture.includes('6')) return sixA4;
+        if (letter.picture.includes('7')) return sevenA4;
+        if (letter.picture.includes('8')) return eightA4;
+        if (letter.picture.includes('9')) return nineA4;
       }
 
       if (envelope_type === 'A5') {
