@@ -223,6 +223,8 @@ export default {
       }, 200)
     },
     async startPdfZip() {
+      this.letters = [];
+      this.orders = null;
       this.disabled = true;
       this.isCreating = true;
       this.count = 0;
