@@ -314,7 +314,7 @@ export default {
 
         const letterType = this.letters[i].type;
         // Добавляем в архив
-        this.myZip.file(`${letterType}_${this.letters[i].order_id}.pdf`, pdfBlobs[i]);
+        this.myZip.file(`${i + 1}_${letterType}_${this.letters[i].order_id}.pdf`, pdfBlobs[i]);
       }
 
     },
