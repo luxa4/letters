@@ -15,7 +15,7 @@ export class Letter {
     selectType(item) {
         if (item.selectedOptions.filter(i => i.name.includes('изайн конверта'))?.[0]?.value.includes('рафтовый')) {
             return 'C5'
-        } else if (item.selectedOptions.filter(i => i.name.includes('изайн конверта'))?.[0]?.value.includes('листом')) {
+        } else if (item.selectedOptions.filter(i => i.name.includes('изайн конверта'))?.[0]?.value.includes('листом C5')) {
             return 'A5'
         }
 
