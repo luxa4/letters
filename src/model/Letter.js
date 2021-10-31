@@ -13,10 +13,24 @@ export class Letter {
 
 
     selectType(item) {
-        if (item.selectedOptions.filter(i => i.name.includes('изайн конверта'))?.[0]?.value.includes('рафтовый')) {
+        if (item.selectedOptions.filter(i => i.name
+            .toLowerCase()
+            .includes('дизайн конверта'))?.[0]?.value
+            .toLowerCase()
+            .includes('крафтовый')) {
             return 'C5'
-        } else if (item.selectedOptions.filter(i => i.name.includes('изайн конверта'))?.[0]?.value.includes('листом C5')) {
+        } else if (item.selectedOptions.filter(i => i.name
+            .toLowerCase()
+            .includes('дизайн конверта'))?.[0]?.value
+            .toLowerCase()
+            .includes('белым')) {
             return 'A5'
+        } else if (item.selectedOptions.filter(i => i.name
+            .toLowerCase()
+            .includes('дизайн конверта'))?.[0]?.value
+            .toLowerCase()
+            .includes('большой')) {
+            return 'A4'
         }
 
         return 'A4'
