@@ -200,8 +200,8 @@ export default {
       return Math.round(this.count * 100 / this.letters_count);
     },
     findLetters() {
-      return `Найдено ${this.letters_count}
-       ${plural(this.letters_count, 'письмо', 'письма', 'писем')}!`
+      return `Найдено ${this.orders.length} ${plural(this.orders.length, 'заказ', 'заказа', 'заказов')}
+       и ${this.letters_count} ${plural(this.letters_count, 'письмо', 'письма', 'писем')}!`
     }
   },
   mounted() {
