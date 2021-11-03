@@ -277,7 +277,7 @@ export default {
     getAztecCode(order) {
         let aztecCanvas = bwipjs.toCanvas('mycanvas', {
           bcid:        'azteccode',
-          text:        order,
+          text:        `ORDER-${order}`,
           scale:       1,
           width:       14,
           height:      14,
