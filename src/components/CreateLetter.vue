@@ -1,46 +1,59 @@
 <template>
-<div class="box">
-  <Logo @onShowControls="showControls = !showControls"/>
-  <div class="panel active" v-if="showControls">
-    <div v-if="lettersCount">
-      {{ status ? status : ''}}
-      <div class="progress">
-        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-             :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
-             :style="`width: ${ isNaN(progressBar) ? 0 : progressBar }%`">
-          {{ isNaN(progressBar) ? 0 : progressBar }} %
-        </div>
+<div class="navigate">
+  <div class="order-panel">
+    <div class="logo">
+      <div style="width: 400px; height: 400px; position: relative">
+        <img width="400" height="400" src="../assets/img/10.png" alt=""/>
+        <div @click="showControls = !showControls" class="btnSec"/>
       </div>
     </div>
-    <div v-if="lettersCount" class="mt-2">
-      <h3>{{ findLetters }}</h3>
-    </div>
-    <div v-if="lettersCount === 0">
-      <h3>Писем не найдено</h3>
-    </div>
-    <div style="margin-bottom: 15px; margin-top: 15px">
-      <date-picker
-        placeholder="Укажите период заказов"
-        valueType="X"
-        rangeSeparator=" по "
-        v-model="date"
-        type="date"
-        format="DD-MM-YYYY"
-        range/>
-    </div>
-    <b-button
-      @click="startPdfZip"
-      :disabled="disabled"
-      variant="success">
-      Начать волшебство
-    </b-button>
-    <div style="text-align: center; margin-top: 15px">
-      <router-link class="btn btn-danger" to="/map">
-        Карта заказов
-      </router-link>
+    <div class="panel active" v-if="showControls">
+      <div style="margin-bottom: 15px; margin-top: 15px">
+        <date-picker
+          placeholder="Укажите период заказов"
+          valueType="X"
+          rangeSeparator=" по "
+          v-model="date"
+          type="date"
+          format="DD-MM-YYYY"
+          range/>
+      </div>
+      <b-button
+        @click="startPdfZip"
+        :disabled="disabled"
+        variant="success">
+        Начать волшебство
+      </b-button>
+      <!--<div style="text-align: center; margin-top: 15px">
+        <router-link class="btn btn-danger" to="/map">
+          Карта заказов
+        </router-link>
+      </div>-->
     </div>
   </div>
-  <canvas style="display: none" id="mycanvas"/>
+  <div class="order-result">
+    <div class="hide" >
+      <div v-if="lettersCount">
+        {{ status ? status : ''}}
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+               :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
+               :style="`width: ${ isNaN(progressBar) ? 0 : progressBar }%`">
+            {{ isNaN(progressBar) ? 0 : progressBar }} %
+          </div>
+        </div>
+      </div>
+      <div v-if="lettersCount" class="mt-2">
+        <!--        <ChartPie-->
+        <!--          :chartData="chartData"/>-->
+        <h3>{{ findLetters }}</h3>
+      </div>
+      <div v-if="lettersCount === 0">
+        <h3>Писем не найдено</h3>
+      </div>
+    </div>
+  </div>
+  <canvas hidden id="qr-code"/>
   <canvas hidden data-convert-img />
   <img data-img="A4-1" hidden src="/img/A4-1.png" alt=""/>
   <img data-img="A4-2" hidden src="/img/A4-2.png" alt=""/>
@@ -66,7 +79,6 @@
   <img data-img="C5-7" hidden src="/img/C5-7.png" alt=""/>
   <img data-img="C5-8" hidden src="/img/C5-8.png" alt=""/>
   <img data-img="C5-9" hidden src="/img/C5-9.png" alt=""/>
-
 </div>
 </template>
 
@@ -75,7 +87,6 @@ import Letter from '@/model/Letter';
 
 import { getOrders } from '@/services';
 
-import Logo from '@/components/Logo';
 
 import { saveAs } from 'file-saver';
 import DatePicker from 'vue2-datepicker';
@@ -85,11 +96,21 @@ import 'vue2-datepicker/locale/ru';
 import regionJson from '@/region.json';
 import bwipjs from 'bwip-js';
 import { plural } from '@/helper';
+// import ChartPie from '@/components/ChartPie';
 
 export default {
   name: 'CreateLetter',
   data() {
     return {
+      chartData: {
+        labels: ['VueJs', 'EmberJs', 'ReactJs', 'AngularJs'],
+        datasets: [
+          {
+            backgroundColor: ['#41B883', '#E46651', '#00D8FF', '#DD1B16'],
+            data: [40, 20, 80, 10]
+          }
+        ]
+      },
       img: null,
       showControls: false,
       status: '',
@@ -222,11 +243,19 @@ export default {
     this.regionList = regionJson;
   },
   components: {
-    Logo,
     DatePicker,
+    // ChartPie
   },
   methods: {
     async startPdfZip() {
+      if (document.querySelector('.hide.active')) {
+        document.querySelector('.hide.active').classList.remove('active');
+      }
+
+
+      document.querySelector('.order-result').classList.add('animation-result');
+
+
       this.letters = [];
       this.orders = [];
       this.disabled = true;
@@ -257,6 +286,11 @@ export default {
       this.letters = this.letters.map(i => new Letter(i));
 
       this.lettersCount = this.letters.length;
+
+      this.$nextTick(() => {
+        document.querySelector('.hide').classList.add('active');
+      });
+
       this.status = `Обработано ${this.lettersCount} `;
 
       if (this.lettersCount) {
@@ -278,7 +312,7 @@ export default {
           });
     },
     getAztecCode(order) {
-        let aztecCanvas = bwipjs.toCanvas('mycanvas', {
+        let aztecCanvas = bwipjs.toCanvas('qr-code', {
           bcid:        'azteccode',
           text:        `ORDER-${order}`,
           scale:       1,
@@ -630,20 +664,69 @@ export default {
 
 
 <style scoped>
-.box {
-  position: relative;
+.hide {
+  opacity: 0;
+  transition: opacity 0.8s ease 2s;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: 18px;
+}
+
+.btnSec {
+  position: absolute;
+  height: 10px;
+  width: 10px;
+  top: 257px;
+  right: 142px;
+  border-radius: 10px;
+}
+
+
+.navigate {
+  display: flex;
+}
+
+.order-panel {
+  height: 520px;
+  margin-right: 30px;
+}
+
+.order-result {
+  width: 0;
+  width: 0;
+  background: #dee2e6;
+  border-radius: 20px;
+  padding: 0;
+}
+
+.animation-result {
+  animation: result 2s ease  forwards;
+}
+
+@keyframes result {
+  0% {
+    width: 0;
+    padding: 0;
+  }
+  100% {
+    width: 300px;
+    padding: 13px;
+  }
 }
 
 .panel {
-  position: absolute;
   width: 100%;
   margin: 0 auto;
   bottom: 0;
   opacity: 0;
   transition: opacity .3s linear;
 }
+
 .active {
   opacity: 1;
 }
-
 </style>
