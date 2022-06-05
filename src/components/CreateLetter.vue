@@ -2,7 +2,7 @@
 <div class="box">
   <Logo @onShowControls="showControls = !showControls"/>
   <div class="panel active" v-if="showControls">
-    <div v-if="letters_count">
+    <div v-if="lettersCount">
       {{ status ? status : ''}}
       <div class="progress">
         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -12,10 +12,10 @@
         </div>
       </div>
     </div>
-    <div v-if="letters_count" class="mt-2">
+    <div v-if="lettersCount" class="mt-2">
       <h3>{{ findLetters }}</h3>
     </div>
-    <div v-if="letters_count === 0">
+    <div v-if="lettersCount === 0">
       <h3>Писем не найдено</h3>
     </div>
     <div style="margin-bottom: 15px; margin-top: 15px">
@@ -41,7 +41,32 @@
     </div>
   </div>
   <canvas style="display: none" id="mycanvas"/>
-  <ReactSVG hidden id="ss" />
+  <canvas hidden data-convert-img />
+  <img data-img="A4-1" hidden src="/img/A4-1.png" alt=""/>
+  <img data-img="A4-2" hidden src="/img/A4-2.png" alt=""/>
+  <img data-img="A4-3" hidden src="/img/A4-3.png" alt=""/>
+  <img data-img="A4-5" hidden src="/img/A4-5.png" alt=""/>
+  <img data-img="A4-6" hidden src="/img/A4-6.png" alt=""/>
+  <img data-img="A4-7" hidden src="/img/A4-7.png" alt=""/>
+  <img data-img="A4-8" hidden src="/img/A4-8.png" alt=""/>
+  <img data-img="A4-9" hidden src="/img/A4-9.png" alt=""/>
+  <img data-img="A5-1" hidden src="/img/A5-1.png" alt=""/>
+  <img data-img="A5-2" hidden src="/img/A5-2.png" alt=""/>
+  <img data-img="A5-3" hidden src="/img/A5-3.png" alt=""/>
+  <img data-img="A5-5" hidden src="/img/A5-5.png" alt=""/>
+  <img data-img="A5-6" hidden src="/img/A5-6.png" alt=""/>
+  <img data-img="A5-7" hidden src="/img/A5-7.png" alt=""/>
+  <img data-img="A5-8" hidden src="/img/A5-8.png" alt=""/>
+  <img data-img="A5-9" hidden src="/img/A5-9.png" alt=""/>
+  <img data-img="C5-1" hidden src="/img/C5-1.png" alt=""/>
+  <img data-img="C5-2" hidden src="/img/C5-2.png" alt=""/>
+  <img data-img="C5-3" hidden src="/img/C5-3.png" alt=""/>
+  <img data-img="C5-5" hidden src="/img/C5-5.png" alt=""/>
+  <img data-img="C5-6" hidden src="/img/C5-6.png" alt=""/>
+  <img data-img="C5-7" hidden src="/img/C5-7.png" alt=""/>
+  <img data-img="C5-8" hidden src="/img/C5-8.png" alt=""/>
+  <img data-img="C5-9" hidden src="/img/C5-9.png" alt=""/>
+
 </div>
 </template>
 
@@ -51,7 +76,6 @@ import Letter from '@/model/Letter';
 import { getOrders } from '@/services';
 
 import Logo from '@/components/Logo';
-import ReactSVG from '@/components/react.svg';
 
 import { saveAs } from 'file-saver';
 import DatePicker from 'vue2-datepicker';
@@ -73,7 +97,7 @@ export default {
       orders: null,
       disabled: false,
       date: null,
-      letters_count: null,
+      lettersCount: null,
       regionList: null,
       countryList: null,
       progress: 0,
@@ -83,6 +107,10 @@ export default {
       myAztec: null,
       parametersA4: {
         marginPicture: [0, 150, 0, 0],
+        pictureSize: {
+          width: 436,
+          height: 388
+        },
         marginAztec: [245,-37,0,0],
         marginTextFromWho: [50, -497, 0, 0],
         marginTextFrom: [50, 15, 0, 0],
@@ -113,6 +141,10 @@ export default {
       },
       parametersA5: {
         marginPicture: [-1, 13, 0, 0],
+        pictureSize: {
+          width: 352,
+          height: 374
+        },
         marginAztec: [220,-37,0,0],
         marginTextFromWho: [28, -365, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
@@ -143,6 +175,10 @@ export default {
       },
       parametersC5: {
         marginPicture: [-1, 29, 0, 0],
+        pictureSize: {
+          width: 365,
+          height: 387
+        },
         marginAztec: [220,-37,0,0],
         marginTextFromWho: [28, -380, 0, 0],
         marginTextFrom: [28, 12, 0, 0],
@@ -175,26 +211,24 @@ export default {
   },
   computed: {
     progressBar() {
-      return Math.round(this.count * 100 / this.letters_count);
+      return Math.round(this.count * 100 / this.lettersCount);
     },
     findLetters() {
       return `Найдено ${this.orders.length} ${plural(this.orders.length, 'заказ', 'заказа', 'заказов')}
-       и ${this.letters_count} ${plural(this.letters_count, 'письмо', 'письма', 'писем')}!`;
+       и ${this.lettersCount} ${plural(this.lettersCount, 'письмо', 'письма', 'писем')}!`;
     }
   },
   mounted() {
     this.regionList = regionJson;
-    this.img = document.querySelector('#ss').outerHTML;
   },
   components: {
     Logo,
     DatePicker,
-    ReactSVG
   },
   methods: {
     async startPdfZip() {
       this.letters = [];
-      this.orders = null;
+      this.orders = [];
       this.disabled = true;
       this.isCreating = true;
       this.count = 0;
@@ -222,10 +256,10 @@ export default {
 
       this.letters = this.letters.map(i => new Letter(i));
 
-      this.status = `Обработано ${this.letters.length} `;
-      this.letters_count = this.letters.length;
+      this.lettersCount = this.letters.length;
+      this.status = `Обработано ${this.lettersCount} `;
 
-      if (this.letters_count) {
+      if (this.lettersCount) {
         await this.createPDF();
       }
       this.disabled = false;
@@ -256,16 +290,58 @@ export default {
         return aztecCanvas.toDataURL('image/png');
     },
 
+    getImage(letterFormat, picture) {
+      const canvas = document.querySelector('canvas[data-convert-img]');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const image = this.getImgForCanvas(letterFormat, picture);
+
+      canvas.width = this.getCanvasSize(letterFormat).width;
+      canvas.height = this.getCanvasSize(letterFormat).height;
+
+      ctx.drawImage(image, 0, 0);
+
+      return canvas.toDataURL('image/png', 1.0);
+    },
+
+    getCanvasSize(letterFormat) {
+      let size = {};
+
+      if (letterFormat === 'A4') {
+          size = {
+            width: 582,
+            height: 517
+          };
+      } else if (letterFormat === 'A5') {
+        size = {
+          width: 469,
+          height: 499
+        };
+      } else {
+        size = {
+          width: 487,
+          height: 516
+        };
+      }
+
+      return size;
+    },
+
+    getImgForCanvas(letterFormat, picture) {
+      const number = this.getNumberPicture(picture);
+
+      return document.querySelector(`img[data-img=${letterFormat}-${number}]`);
+    },
+
     async createFiles() {
       let pdfArray = [];
       let pdfBlobs = [];
 
-      // Создаем ПДФ конверты и помещаем в массив
+      // Создаем ПДФ конверты и помещаем в массив pdfArray
       this.letters.forEach( (letter, id) => {
-        this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`;
-        const letterType = letter.type;
+        this.status = `Создание PDF - ${id + 1} из ${this.lettersCount}`;
         const aztecCode = this.getAztecCode(letter.order_id);
-        pdfArray[id] = this.createTo(letterType, letter, aztecCode);
+        pdfArray[id] = this.createTo(letter, aztecCode);
       });
 
       // ПДФ файлы преобразуем в blob и добавляем в архив
@@ -281,21 +357,20 @@ export default {
         });
         this.count++;
 
-        const letterType = this.letters[i].type;
         // Добавляем в архив
-        this.myZip.file(`${i + 1}_${letterType}_${this.letters[i].order_id}.pdf`, pdfBlobs[i]);
+        this.myZip.file(`${i + 1}_${this.letters[i].letterFormat}_${this.letters[i].order_id}.pdf`, pdfBlobs[i]);
       }
 
     },
 
-    getLetterParameters(envelope_type) {
-      if (envelope_type === 'A4') return this.parametersA4;
-      if (envelope_type === 'A5') return this.parametersA5;
+    getLetterParameters(letterFormat) {
+      if (letterFormat === 'A4') return this.parametersA4;
+      if (letterFormat === 'A5') return this.parametersA5;
       return this.parametersC5;
     },
 
-    createTo(envelope_type, letter, aztecCode) {
-      const parameters = this.getLetterParameters(envelope_type);
+    createTo(letter, aztecCode) {
+      const parameters = this.getLetterParameters(letter.letterFormat);
       const pdfMake = require('pdfmake/build/pdfmake.js');
 
       if (pdfMake.vfs == undefined) {
@@ -306,21 +381,12 @@ export default {
       pdfMake.fonts = {
         Andantino: {
           normal: 'Andantino script.ttf',
-          bold: 'Andantino script.ttf',
-          italics: 'Andantino script.ttf',
-          bolditalics: 'Andantino script.ttf'
         },
         Pechkin: {
           normal: 'Pechkin_35011.ttf',
-          bold: 'Pechkin_35011.ttf',
-          italics: 'Pechkin_35011.ttf',
-          bolditalics: 'Pechkin_35011.ttf'
         },
         Arial: {
-          normal: 'arial_italic.ttf',
-          bold: 'arial_italic.ttf',
           italics: 'arial_italic.ttf',
-          bolditalics: 'arial_italic.ttf'
         }
       };
 
@@ -328,7 +394,9 @@ export default {
         content: [
           // Picture
           {
-            svg: this.img,
+            image: this.getImage(letter.letterFormat, letter.picture),
+            width: parameters.pictureSize.width,
+            height: parameters.pictureSize.height,
             margin: parameters.marginPicture
           },
           {
@@ -531,15 +599,9 @@ export default {
       // pdfMake.createPdf(docDefinition).open();
     },
 
-    getEnvelopType(type, extraType) {
-      if (type.includes('конверте С4')) return 'A4';
-      if (type.toLowerCase().includes('классическое') && extraType.toLowerCase().includes('крафтовый')) return 'C5';
-      return 'A5';
-    },
-
     getRegion( { region_code, city } ) {
       const region = this.regionList.find(region => region.code === region_code);
-      // Если город столица региона - область не указываем
+      // Если город - столица региона - область не указываем
       if (city.includes(region.capital) &&  city.trim().length < region.capital.length + 3) return '';
       return region.region;
     },
@@ -549,46 +611,23 @@ export default {
       return country.country;
     },
 
-    // getPicture( letter, envelope_type ) {
-    //   if (envelope_type === 'A4') {
-    //     if (letter.picture.includes('1')) return oneA4;
-    //     if (letter.picture.includes('2')) return fiveA4;
-    //     if (letter.picture.includes('3')) return threeA4;
-    /*    if (letter.picture.includes('4')) return elevenA4;*/
-    /*    if (letter.picture.includes('5')) return tenA4;*/
-    /*    if (letter.picture.includes('6')) return sixA4;*/
-    /*    if (letter.picture.includes('7')) return sevenA4;*/
-    /*    if (letter.picture.includes('8')) return eightA4;*/
-    /*    if (letter.picture.includes('9')) return nineA4;*/
-    /*  }*/
+    getNumberPicture(picture) {
+      if (picture.includes('1')) return 1;
+      if (picture.includes('2')) return 2;
+      if (picture.includes('3')) return 3;
+      if (picture.includes('4')) return 4;
+      if (picture.includes('5')) return 5;
+      if (picture.includes('6')) return 6;
+      if (picture.includes('7')) return 7;
+      if (picture.includes('8')) return 8;
+      if (picture.includes('9')) return 9;
 
-    /*  if (envelope_type === 'A5') {*/
-    /*    if (letter.picture.includes('1')) return oneA5;*/
-    /*    if (letter.picture.includes('2')) return fiveA5;*/
-    /*    if (letter.picture.includes('3')) return threeA5;*/
-    /*    if (letter.picture.includes('4')) return elevenA5;*/
-    /*    if (letter.picture.includes('5')) return tenA5;*/
-    /*    if (letter.picture.includes('6')) return sixA5;*/
-    /*    if (letter.picture.includes('7')) return sevenA5;*/
-    /*    if (letter.picture.includes('8')) return eightA5;*/
-    /*    if (letter.picture.includes('9')) return nineA5;*/
-    /*  }*/
-
-    /*  if (letter.picture.includes('1')) return oneC5;*/
-    /*  if (letter.picture.includes('2')) return fiveC5;*/
-    //   if (letter.picture.includes('3')) return threeC5;
-    //   if (letter.picture.includes('4')) return elevenC5;
-    //   if (letter.picture.includes('5')) return tenC5;
-    //   if (letter.picture.includes('6')) return sixC5;
-    //   if (letter.picture.includes('7')) return sevenC5;
-    //   if (letter.picture.includes('8')) return eightC5;
-    //   if (letter.picture.includes('9')) return nineC5;
-    //
-    //   return twoC5;
-    // },
+      return 1;
+    },
   }
 };
 </script>
+
 
 <style scoped>
 .box {

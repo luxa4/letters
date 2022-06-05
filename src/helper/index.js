@@ -1,6 +1,5 @@
-export function getRegion(region_code) {
-  const regionList = require('../region.json');
-  const region = regionList.find(region => region.code === region_code);
+export function getRegion(regionList, region_code) {
+  const region = regionList.find(({ code }) => code === region_code);
   return region.region;
 }
 

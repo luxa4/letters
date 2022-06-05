@@ -1,16 +1,17 @@
 <template>
-  <div class="logo">
-    <div style="width: 400px; height: 400px; position: relative">
-      <img width="400" height="400" src="../assets/img/10.png" alt="">
+<div class="logo">
+  <div style="width: 400px; height: 400px; position: relative">
+    <img width="400" height="400" src="../assets/img/10.png" alt=""/>
     <div @click="$emit('onShowControls')" class="btnSec"/>
-    </div>
   </div>
+</div>
 </template>
 
 <script>
 export default {
 name: 'Logo'
-}
+};
+
 </script>
 
 <style scoped>
