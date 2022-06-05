@@ -32,7 +32,7 @@
     </div>
   </div>
   <div class="order-result">
-    <div class="hide" >
+    <div class="hide">
       <div v-if="lettersCount">
         {{ status ? status : ''}}
         <div class="progress">
@@ -662,71 +662,64 @@ export default {
 };
 </script>
 
+<style lang="sass" scoped>
+.btn
+  width: 320px
 
-<style scoped>
-.hide {
-  opacity: 0;
-  transition: opacity 0.8s ease 2s;
-}
+.hide
+  opacity: 0
+  transition: opacity 0.8s ease 2s
 
-.logo {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  padding-bottom: 18px;
-}
+.logo
+  display: flex
+  justify-content: center
+  align-content: center
+  padding-bottom: 18px
 
-.btnSec {
-  position: absolute;
-  height: 10px;
-  width: 10px;
-  top: 257px;
-  right: 142px;
-  border-radius: 10px;
-}
+.btnSec
+  position: absolute
+  height: 10px
+  width: 10px
+  top: 257px
+  right: 142px
+  border-radius: 10px
 
+.navigate
+  display: flex
 
-.navigate {
-  display: flex;
-}
+.order-panel
+  height: 520px
+  margin-right: 30px
 
-.order-panel {
-  height: 520px;
-  margin-right: 30px;
-}
+.order-result
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 0
+  background: #dee2e6
+  border-radius: 20px
+  padding: 0
+  box-shadow: 0 0 7px -3px rgba(0, 0, 0, .5)
 
-.order-result {
-  width: 0;
-  width: 0;
-  background: #dee2e6;
-  border-radius: 20px;
-  padding: 0;
-}
+.animation-result
+  animation: result 2s ease  forwards
 
-.animation-result {
-  animation: result 2s ease  forwards;
-}
+@keyframes result
+  0%
+    width: 0
+    padding: 0
 
-@keyframes result {
-  0% {
-    width: 0;
-    padding: 0;
-  }
-  100% {
-    width: 300px;
-    padding: 13px;
-  }
-}
+  100%
+    width: 400px
+    padding: 13px
 
-.panel {
-  width: 100%;
-  margin: 0 auto;
-  bottom: 0;
-  opacity: 0;
-  transition: opacity .3s linear;
-}
+.panel
+  width: 100%
+  margin: 0 auto
+  bottom: 0
+  opacity: 0
+  transition: opacity .3s linear
 
-.active {
-  opacity: 1;
-}
+.active
+  opacity: 1
 </style>

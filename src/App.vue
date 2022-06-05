@@ -29,8 +29,6 @@ export default {
   font-size: 14px;
   text-align: center;
   color: #2c3e50;
-}
-.btn {
-  width: 320px;
+  background: #d9d6d6;
 }
 </style>
