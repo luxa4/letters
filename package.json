@@ -24,9 +24,11 @@
     "normalize.css": "^8.0.1",
     "pdfmake": "^0.1.70",
     "popover": "^2.4.1",
+    "svg-to-pdfkit": "^0.1.8",
     "vue": "^2.6.12",
     "vue-axios": "^3.2.4",
     "vue-router": "^3.5.2",
+    "vue-svg-loader": "^0.16.0",
     "vue2-datepicker": "^3.9.0"
   },
   "devDependencies": {

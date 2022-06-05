@@ -1,94 +1,72 @@
 <template>
-  <div class="hello">
-    <div class="container">
-      <Logo @onShowControls="toggleControls"/>
-      <div class="panel" v-if="showControls">
-        <div v-if="letters_count">
-        {{ status ? status : ''}}
-        <div class="progress">
-          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-               :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
-               :style="`width: ${ isNaN(progressBar) ? 0 : progressBar }%`">
-            {{ isNaN(progressBar) ? 0 : progressBar }} %
-          </div>
-        </div>
-        </div>
-        <div v-if="letters_count" class="mt-2">
-          <h3>{{ findLetters }}</h3>
-        </div>
-        <div v-if="letters_count === 0">
-          <h3>Писем не найдено</h3>
-        </div>
-        <div style="margin-bottom: 15px; margin-top: 15px">
-          <date-picker
-              placeholder="Укажите период заказов"
-              value-type="X"
-              range-separator=" по "
-              v-model="date"
-              type="date"
-              format="DD-MM-YYYY"
-              range/>
-        </div>
-        <b-button
-            @click="startPdfZip"
-            :disabled="disabled"
-            variant="success">
-            Начать волшебство
-        </b-button>
-        <div style="text-align: center; margin-top: 15px">
-        <router-link class="btn btn-danger" to="/map">Карта заказов</router-link>
+<div class="box">
+  <Logo @onShowControls="showControls = !showControls"/>
+  <div class="panel active" v-if="showControls">
+    <div v-if="letters_count">
+      {{ status ? status : ''}}
+      <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+             :aria-valuenow="progressBar" aria-valuemin="0" aria-valuemax="100"
+             :style="`width: ${ isNaN(progressBar) ? 0 : progressBar }%`">
+          {{ isNaN(progressBar) ? 0 : progressBar }} %
         </div>
       </div>
-
-      <canvas style="display: none" id="mycanvas"></canvas>
+    </div>
+    <div v-if="letters_count" class="mt-2">
+      <h3>{{ findLetters }}</h3>
+    </div>
+    <div v-if="letters_count === 0">
+      <h3>Писем не найдено</h3>
+    </div>
+    <div style="margin-bottom: 15px; margin-top: 15px">
+      <date-picker
+        placeholder="Укажите период заказов"
+        valueType="X"
+        rangeSeparator=" по "
+        v-model="date"
+        type="date"
+        format="DD-MM-YYYY"
+        range/>
+    </div>
+    <b-button
+      @click="startPdfZip"
+      :disabled="disabled"
+      variant="success">
+      Начать волшебство
+    </b-button>
+    <div style="text-align: center; margin-top: 15px">
+      <router-link class="btn btn-danger" to="/map">
+        Карта заказов
+      </router-link>
     </div>
   </div>
+  <canvas style="display: none" id="mycanvas"/>
+  <ReactSVG hidden id="ss" />
+</div>
 </template>
 
 <script>
-import { getOrders } from "../services";
-import Logo from "@/components/Logo";
+import Letter from '@/model/Letter';
+
+import { getOrders } from '@/services';
+
+import Logo from '@/components/Logo';
+import ReactSVG from '@/components/react.svg';
+
 import { saveAs } from 'file-saver';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
-import 'vue2-datepicker/locale/ru';
-import regionJson from '../region.json';
 
-import {oneA4} from "@/components/SvgImg/img1A4";
-import {oneA5} from "@/components/SvgImg/img1A5";
-import {oneC5} from "@/components/SvgImg/img1C5";
-import {twoC5} from "@/components/SvgImg/img2C5";
-import {threeA4} from "@/components/SvgImg/img3A4";
-import {threeA5} from "@/components/SvgImg/img3A5";
-import {threeC5} from "@/components/SvgImg/img3C5";
-import {fiveA4} from "@/components/SvgImg/img5A4";
-import {fiveA5} from "@/components/SvgImg/img5A5";
-import {fiveC5} from "@/components/SvgImg/img5C5";
-import {sixA4} from "@/components/SvgImg/img6A4";
-import {sixA5} from "@/components/SvgImg/img6A5";
-import {sixC5} from "@/components/SvgImg/img6C5";
-import {sevenA4} from "@/components/SvgImg/img7A4";
-import {sevenA5} from "@/components/SvgImg/img7A5";
-import {sevenC5} from "@/components/SvgImg/img7C5";
-import {eightA4} from "@/components/SvgImg/img8A4";
-import {eightA5} from "@/components/SvgImg/img8A5";
-import {eightC5} from "@/components/SvgImg/img8C5";
-import {nineA4} from "@/components/SvgImg/img9A4";
-import {nineA5} from "@/components/SvgImg/img9A5";
-import {nineC5} from "@/components/SvgImg/img9C5";
-import {tenA4} from "@/components/SvgImg/img10A4";
-import {tenA5} from "@/components/SvgImg/img10A5";
-import {tenC5} from "@/components/SvgImg/img10C5";
-import {elevenA4} from "@/components/SvgImg/img11A4";
-import {elevenA5} from "@/components/SvgImg/img11A5";
-import {elevenC5} from "@/components/SvgImg/img11C5";
-import {Letter} from "../model/Letter";
-import bwipjs from "bwip-js";
-import {plural} from "../helper";
+import 'vue2-datepicker/locale/ru';
+import regionJson from '@/region.json';
+import bwipjs from 'bwip-js';
+import { plural } from '@/helper';
+
 export default {
   name: 'CreateLetter',
   data() {
     return {
+      img: null,
       showControls: false,
       status: '',
       letters: [],
@@ -193,7 +171,7 @@ export default {
         marginRussia: [340, 1, 0, 0],
         pageSize: 'C5'
       }
-    }
+    };
   },
   computed: {
     progressBar() {
@@ -201,27 +179,19 @@ export default {
     },
     findLetters() {
       return `Найдено ${this.orders.length} ${plural(this.orders.length, 'заказ', 'заказа', 'заказов')}
-       и ${this.letters_count} ${plural(this.letters_count, 'письмо', 'письма', 'писем')}!`
+       и ${this.letters_count} ${plural(this.letters_count, 'письмо', 'письма', 'писем')}!`;
     }
   },
   mounted() {
     this.regionList = regionJson;
-    // this.countryList = countryJson;
+    this.img = document.querySelector('#ss').outerHTML;
   },
   components: {
     Logo,
-    DatePicker
+    DatePicker,
+    ReactSVG
   },
   methods: {
-    toggleControls() {
-      this.showControls = !this.showControls;
-      setTimeout(()=> {
-        const panelElem = document.querySelector('.panel');
-        if (panelElem) {
-          panelElem.classList.add('active');
-        }
-      }, 200)
-    },
     async startPdfZip() {
       this.letters = [];
       this.orders = null;
@@ -229,15 +199,14 @@ export default {
       this.isCreating = true;
       this.count = 0;
 
-      let zip = require("jszip-sync/dist/jszip.min.js");
+      let zip = require('jszip-sync/dist/jszip.min.js');
       this.myZip = new zip();
 
-      this.status = 'Поиск писем...'
+      this.status = 'Поиск писем...';
 
       const [ startDay, endDay ] = this.date;
 
       const { data } = await getOrders(startDay, endDay);
-
 
       this.orders = data.items;
 
@@ -245,11 +214,11 @@ export default {
         if (i.shippingPerson.countryCode === 'RU') {
           i.items.forEach( order => {
             if (order?.name?.includes('исьмо') && !order?.name?.includes('ЦК')) {
-              this.letters.push(Object.assign(order, i.shippingPerson, {order_id : i.id}, { orderType: order.name}));
+              this.letters.push(Object.assign(order, i.shippingPerson, { order_id : i.id }, { orderType: order.name }));
             }
-          })
+          });
         }
-      })
+      });
 
       this.letters = this.letters.map(i => new Letter(i));
 
@@ -268,11 +237,11 @@ export default {
     },
 
     createZIP() {
-      this.myZip.generateAsync( {type: 'blob' } )
+      this.myZip.generateAsync( { type: 'blob' } )
           .then((blob) => {
             this.status = '';
-            saveAs(blob, `orders${1}.zip`)
-          })
+            saveAs(blob, `orders${1}.zip`);
+          });
     },
     getAztecCode(order) {
         let aztecCanvas = bwipjs.toCanvas('mycanvas', {
@@ -293,23 +262,23 @@ export default {
 
       // Создаем ПДФ конверты и помещаем в массив
       this.letters.forEach( (letter, id) => {
-        this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`
+        this.status = `Создание PDF - ${id + 1} из ${this.letters.length}`;
         const letterType = letter.type;
         const aztecCode = this.getAztecCode(letter.order_id);
         pdfArray[id] = this.createTo(letterType, letter, aztecCode);
-      })
+      });
 
-      // ПДФ файлы перобразуем в blob и добавляем в архив
+      // ПДФ файлы преобразуем в blob и добавляем в архив
       for (let i = 0; i < pdfArray.length; i++) {
-        this.status = `Упаковка PDF в архив - ${i + 1} из ${pdfArray.length}`
+        this.status = `Упаковка PDF в архив - ${i + 1} из ${pdfArray.length}`;
 
         pdfBlobs[i] = await new Promise(resolve => {
           setTimeout(() => {
             pdfArray[i].getBlob((blob) => {
               resolve(blob);
             });
-          },0)
-        })
+          },0);
+        });
         this.count++;
 
         const letterType = this.letters[i].type;
@@ -327,10 +296,10 @@ export default {
 
     createTo(envelope_type, letter, aztecCode) {
       const parameters = this.getLetterParameters(envelope_type);
-      const pdfMake = require('pdfmake/build/pdfmake.js')
+      const pdfMake = require('pdfmake/build/pdfmake.js');
 
       if (pdfMake.vfs == undefined) {
-        let pdfFonts = require('pdfmake/build/vfs_fonts.js')
+        let pdfFonts = require('pdfmake/build/vfs_fonts.js');
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
       }
 
@@ -353,13 +322,13 @@ export default {
           italics: 'arial_italic.ttf',
           bolditalics: 'arial_italic.ttf'
         }
-      }
+      };
 
       const docDefinition = {
         content: [
           // Picture
           {
-            svg: this.getPicture(letter, envelope_type),
+            svg: this.img,
             margin: parameters.marginPicture
           },
           {
@@ -444,12 +413,12 @@ export default {
 
           // PostalCode
           {
-            svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">\n' +
-                ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">\n' +
-                '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>\n' +
-                ' </g>\n' +
+            svg: '<svg width="173mm" height="74mm" version="1.1" viewBox="0 0 61.76 26.462" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">' +
+                ' <g transform="translate(-72.686 -83.531)" clip-rule="evenodd" shape-rendering="geometricPrecision">' +
+                '  <rect class="fil0 str0" x="73.038" y="83.884" width="61.054" height="18.647" fill="none" image-rendering="optimizeQuality" stroke="#5b5b5b" stroke-dasharray="1.4112, 2.1168" stroke-miterlimit="22.926" stroke-width=".7056"/>' +
+                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18527 1132.6 18727 1832.6 18727 1832.6 18527" fill="#2b2a29" image-rendering="optimizeQuality"/>' +
+                '  <polygon class="fil3" transform="matrix(.01 0 0 .01 61.533 -79.28)" points="1132.6 18827 1132.6 18927 1832.6 18927 1832.6 18827" fill="#2b2a29" image-rendering="optimizeQuality"/>' +
+                ' </g>' +
                 '</svg>',
             margin: parameters.marginPostalPic
           },
@@ -557,7 +526,7 @@ export default {
         defaultStyle: {
           font: 'Andantino'
         }
-      }
+      };
       return  pdfMake.createPdf(docDefinition);
       // pdfMake.createPdf(docDefinition).open();
     },
@@ -568,7 +537,7 @@ export default {
       return 'A5';
     },
 
-    getRegion( {region_code, city} ) {
+    getRegion( { region_code, city } ) {
       const region = this.regionList.find(region => region.code === region_code);
       // Если город столица региона - область не указываем
       if (city.includes(region.capital) &&  city.trim().length < region.capital.length + 3) return '';
@@ -580,49 +549,57 @@ export default {
       return country.country;
     },
 
-    getPicture( letter, envelope_type ) {
-      if (envelope_type === 'A4') {
-        if (letter.picture.includes('1')) return oneA4;
-        if (letter.picture.includes('2')) return fiveA4;
-        if (letter.picture.includes('3')) return threeA4;
-        if (letter.picture.includes('4')) return elevenA4;
-        if (letter.picture.includes('5')) return tenA4;
-        if (letter.picture.includes('6')) return sixA4;
-        if (letter.picture.includes('7')) return sevenA4;
-        if (letter.picture.includes('8')) return eightA4;
-        if (letter.picture.includes('9')) return nineA4;
-      }
+    // getPicture( letter, envelope_type ) {
+    //   if (envelope_type === 'A4') {
+    //     if (letter.picture.includes('1')) return oneA4;
+    //     if (letter.picture.includes('2')) return fiveA4;
+    //     if (letter.picture.includes('3')) return threeA4;
+    /*    if (letter.picture.includes('4')) return elevenA4;*/
+    /*    if (letter.picture.includes('5')) return tenA4;*/
+    /*    if (letter.picture.includes('6')) return sixA4;*/
+    /*    if (letter.picture.includes('7')) return sevenA4;*/
+    /*    if (letter.picture.includes('8')) return eightA4;*/
+    /*    if (letter.picture.includes('9')) return nineA4;*/
+    /*  }*/
 
-      if (envelope_type === 'A5') {
-        if (letter.picture.includes('1')) return oneA5;
-        if (letter.picture.includes('2')) return fiveA5;
-        if (letter.picture.includes('3')) return threeA5;
-        if (letter.picture.includes('4')) return elevenA5;
-        if (letter.picture.includes('5')) return tenA5;
-        if (letter.picture.includes('6')) return sixA5;
-        if (letter.picture.includes('7')) return sevenA5;
-        if (letter.picture.includes('8')) return eightA5;
-        if (letter.picture.includes('9')) return nineA5;
-      }
+    /*  if (envelope_type === 'A5') {*/
+    /*    if (letter.picture.includes('1')) return oneA5;*/
+    /*    if (letter.picture.includes('2')) return fiveA5;*/
+    /*    if (letter.picture.includes('3')) return threeA5;*/
+    /*    if (letter.picture.includes('4')) return elevenA5;*/
+    /*    if (letter.picture.includes('5')) return tenA5;*/
+    /*    if (letter.picture.includes('6')) return sixA5;*/
+    /*    if (letter.picture.includes('7')) return sevenA5;*/
+    /*    if (letter.picture.includes('8')) return eightA5;*/
+    /*    if (letter.picture.includes('9')) return nineA5;*/
+    /*  }*/
 
-      if (letter.picture.includes('1')) return oneC5;
-      if (letter.picture.includes('2')) return fiveC5;
-      if (letter.picture.includes('3')) return threeC5;
-      if (letter.picture.includes('4')) return elevenC5;
-      if (letter.picture.includes('5')) return tenC5;
-      if (letter.picture.includes('6')) return sixC5;
-      if (letter.picture.includes('7')) return sevenC5;
-      if (letter.picture.includes('8')) return eightC5;
-      if (letter.picture.includes('9')) return nineC5;
-
-      return twoC5;
-    },
+    /*  if (letter.picture.includes('1')) return oneC5;*/
+    /*  if (letter.picture.includes('2')) return fiveC5;*/
+    //   if (letter.picture.includes('3')) return threeC5;
+    //   if (letter.picture.includes('4')) return elevenC5;
+    //   if (letter.picture.includes('5')) return tenC5;
+    //   if (letter.picture.includes('6')) return sixC5;
+    //   if (letter.picture.includes('7')) return sevenC5;
+    //   if (letter.picture.includes('8')) return eightC5;
+    //   if (letter.picture.includes('9')) return nineC5;
+    //
+    //   return twoC5;
+    // },
   }
-}
+};
 </script>
 
 <style scoped>
+.box {
+  position: relative;
+}
+
 .panel {
+  position: absolute;
+  width: 100%;
+  margin: 0 auto;
+  bottom: 0;
   opacity: 0;
   transition: opacity .3s linear;
 }
